@@ -4,6 +4,14 @@ What changed in this project and why, newest first. A commit shows the differenc
 gives the reason. The `handoff` skill adds to it at every checkpoint, and the `write-okf-concept`
 skill has the format.
 
+## 2026-10-20
+* **Kickoff**: [the plan](/PLAN.md), [the deliverables](/DELIVERABLES.md) (43 requirements, RQ-01
+  to RQ-43) and [the ladder](/METHOD.md) adjusted, from the assessment's text, because the owner
+  called `kickoff`. The owner decided: interview in CDT; build on private GitHub with CI and the
+  site as an artifact, moving to GitLab and Pages at the end; Claude Code in fresh containers for
+  the agent test; docs.qrypt.com read for the audit. Every item of
+  [the research review](/brief/research-review.md) is settled in the plan.
+
 ## 2026-10-19
 * **Creation**: [the brief](/brief/guide.md), from the owner's Partner Copilot files, research
   blueprint and five screenshots, with [a review](/brief/research-review.md) of where the research
