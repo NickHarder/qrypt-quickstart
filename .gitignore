@@ -1,0 +1,18 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+# Eval reports from `make evals` (the committed record is evals/baseline.json)
+evals/out/
+# The TypeScript layer's packages, which `make bootstrap` installs from package-lock.json
+node_modules/
+# The Rust crate's build output
+target/
+# Personal, per-machine agent settings
+.claude/settings.local.json

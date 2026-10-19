@@ -1,0 +1,4 @@
+{
+  "about": "Advisories npm audit reports against package-lock.json that stay for now: each with the date it was accepted and why. src/pipeline/advisories.ts fails on any other, and on a fix that is not a breaking change. Empty is the goal.",
+  "advisories": []
+}

@@ -1,0 +1,17 @@
+# An example case for the example system in evals/target.py. Replace both with the project's own.
+id: G-01
+category: grounding
+type: invariant
+tier: core
+difficulty: straightforward
+statement: A figure in the answer is quoted exactly as the source writes it.
+failure_mode: The system rounds or rewrites a number from the source.
+input:
+  prompt: |
+    Source: "The March invoice total was 1,284.50 EUR."
+    Question: What was the March invoice total?
+expect:
+  contains: ["1,284.50"]
+  must_not_contain: ["1,285", "1,284.5 "]
+  refuses: false
+  min_length: 1

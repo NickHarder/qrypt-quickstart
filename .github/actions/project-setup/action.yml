@@ -1,0 +1,18 @@
+# The toolchain this project's own checks need in CI (scripts/checks.conf), before the `checks` job
+# runs them. This file is the project's: the kit wrote it once, and no update touches it again.
+#
+# Add the steps a check needs, each action named by its commit with the version beside it, as the
+# kit's own workflow does. For example, for TypeScript:
+#
+#     - uses: actions/setup-node@<commit>  # v6.0.0
+#       with:
+#         node-version: 24
+#     - shell: bash
+#       run: npm ci
+name: Project setup
+description: Installs what this project's own checks need.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "project setup - nothing to install yet (.github/actions/project-setup/action.yml)"

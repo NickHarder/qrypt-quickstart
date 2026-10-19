@@ -1,0 +1,27 @@
+# Written by Copier; `copier update` reads it. Do not edit by hand.
+_commit: v0.21.1
+_src_path: gh:NickHarder/ai-kit
+ci_provider: github
+description: Python, Node and Rust quickstart, agent-verified llms.txt and onboarding
+    funnel for Qrypt Quantum Entropy.
+enable_demo: true
+enable_evals: true
+enable_mcp_scaffold: false
+enable_mutation_tests: false
+enable_semgrep_ci: true
+github_owner_handle: NickHarder
+is_api_project: false
+languages:
+- python
+- typescript
+- rust
+module_name: qrypt_quickstart
+owner_id: nickharder
+project_name: Qrypt Quickstart
+project_slug: qrypt-quickstart
+python_version: '3.12'
+rust_dir: rust
+service_dir: .
+skill_run_cap_tokens: 1000000
+typescript_dir: web
+vendor_skills: true

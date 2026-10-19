@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example page for the demo kit</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f4f6fa;
+        color: #101828;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      main {
+        width: 960px;
+        padding: 56px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 12px 40px rgba(16, 24, 40, 0.12);
+      }
+      h1 { margin: 0 0 8px; font-size: 44px; }
+      p.note { margin: 0 0 36px; font-size: 22px; color: #475467; }
+      label { display: block; margin-bottom: 10px; font-size: 24px; font-weight: 600; }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 18px 20px;
+        font-size: 28px;
+        border: 2px solid #98a2b3;
+        border-radius: 12px;
+      }
+      button {
+        margin-top: 20px;
+        padding: 16px 36px;
+        font-size: 26px;
+        font-weight: 600;
+        color: #ffffff;
+        background: #1849a9;
+        border: 0;
+        border-radius: 12px;
+      }
+      #answer {
+        margin-top: 36px;
+        padding: 24px 28px;
+        font-size: 30px;
+        line-height: 1.35;
+        background: #eff8ff;
+        border-left: 8px solid #1849a9;
+        border-radius: 8px;
+      }
+      #answer small { display: block; margin-top: 10px; font-size: 20px; color: #475467; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Example page</h1>
+      <p class="note">A stand-in for a product, so the demo kit can be tried end to end.</p>
+      <label for="question">Question</label>
+      <input id="question" type="text" autocomplete="off" />
+      <button id="ask" type="button">Ask</button>
+      <div id="answer" data-testid="answer" hidden></div>
+    </main>
+    <script>
+      const answerBox = document.getElementById("answer");
+      document.getElementById("ask").addEventListener("click", () => {
+        answerBox.innerHTML =
+          'The March invoice total was 1,284.50 EUR.<small>Source: "The March invoice total was 1,284.50 EUR."</small>';
+        answerBox.hidden = false;
+      });
+    </script>
+  </body>
+</html>

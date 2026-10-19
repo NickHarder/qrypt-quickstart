@@ -1,0 +1,10 @@
+{
+  "case_id": "G-01",
+  "model": "example-model",
+  "exchanges": [
+    {
+      "ref": "f5d69f30e3d0cf692f31c541978d09a96f32d77e5950b5a76b817084fa052335",
+      "response": "The March invoice total was 1,284.50 EUR."
+    }
+  ]
+}

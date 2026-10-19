@@ -1,0 +1,16 @@
+# A change to any of these can turn a red gate green, so each one needs the owner's review.
+# Turn on "require review from Code Owners" in the default branch's protection rule.
+/scripts/ @NickHarder
+/.githooks/ @NickHarder
+/Makefile @NickHarder
+/.github/ @NickHarder
+/.gitleaks.toml @NickHarder
+/pyproject.toml @NickHarder
+
+# Eval expectations, recordings, thresholds and the baseline: never change an expected output just to
+# make a case pass.
+/evals/cases/ @NickHarder
+/evals/cassettes/ @NickHarder
+/evals/thresholds.yaml @NickHarder
+/evals/baseline.json @NickHarder
+/evals/prompt_manifest.json @NickHarder

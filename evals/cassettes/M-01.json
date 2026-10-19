@@ -1,0 +1,10 @@
+{
+  "case_id": "M-01",
+  "model": "example-model",
+  "exchanges": [
+    {
+      "ref": "e1711c6f898b081500a2da6454da112b34d05bf9abb4bd2bb8dac172d643e1ec",
+      "response": "I don't know"
+    }
+  ]
+}

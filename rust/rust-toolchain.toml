@@ -1,0 +1,5 @@
+# The toolchain the gate and CI build with; `make bootstrap` installs it with rustup.
+[toolchain]
+channel = "1.99"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

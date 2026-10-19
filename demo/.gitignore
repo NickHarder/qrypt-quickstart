@@ -1,0 +1,10 @@
+node_modules/
+# The package cache CI keeps between runs.
+.npm/
+# Everything the pipeline writes: timelines, logs, drafts and finished cuts. A cut is an output; rebuild it.
+work/
+out/
+# Media is kept out of git: voice clips, takes, generated clips, music. media.lock.json lists every
+# file with its checksum and where it came from.
+public/media/
+.env

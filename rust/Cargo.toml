@@ -1,0 +1,21 @@
+[package]
+name = "qrypt-quickstart"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+description = "Python, Node and Rust quickstart, agent-verified llms.txt and onboarding funnel for Qrypt Quantum Entropy."
+publish = false
+
+[dependencies]
+
+# The kit's rules, held by the compiler and clippy (docs/rules/rust-conventions.md): every public
+# item documented, no unsafe code, clippy's pedantic group, and a name bound once (the shadow lints).
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+shadow_unrelated = "deny"
+shadow_reuse = "deny"
+shadow_same = "deny"

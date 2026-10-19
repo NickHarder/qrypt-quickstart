@@ -1,0 +1,767 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_seconds": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "scenes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "TitleCard"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "subtitle": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "title"
+                ],
+                "additionalProperties": false,
+                "description": "The opening card: the title, and optionally one line under it."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "EndCard"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "links": {
+                    "default": [],
+                    "maxItems": 4,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "title"
+                ],
+                "additionalProperties": false,
+                "description": "The closing card: the title again, and up to four places to find the work."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "ScreenRecording"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "take": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                  },
+                  "beat": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                  },
+                  "trim": {
+                    "type": "object",
+                    "properties": {
+                      "head_seconds": {
+                        "default": 0,
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "tail_seconds": {
+                        "default": 0,
+                        "type": "number",
+                        "minimum": 0
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "key_phrases": {
+                    "default": [],
+                    "maxItems": 3,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 60
+                        },
+                        "at_seconds": {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        "for_seconds": {
+                          "default": 3,
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "at_seconds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "take",
+                  "beat"
+                ],
+                "additionalProperties": false,
+                "description": "A beat of a real Playwright recording of the product. `take` and `beat` name a beat in beats.json; the take must be recorded first. Product footage is never generated."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "Statement"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "detail": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "additionalProperties": false,
+                "description": "One large sentence: the claim a viewer should leave with."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "CodeHighlight"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "from_line": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "to_line": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "highlight": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  }
+                },
+                "required": [
+                  "file",
+                  "from_line",
+                  "to_line"
+                ],
+                "additionalProperties": false,
+                "description": "An excerpt of a real file in the repository, read when the cut is built, with some lines marked. At most 18 lines of at most 100 characters."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "Terminal"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "command": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "output_file": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "from_line": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "to_line": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "command",
+                  "output_file"
+                ],
+                "additionalProperties": false,
+                "description": "A command and its real output, revealed line by line. The output is read from a file the command wrote when it was run; it is never typed into the storyboard. At most 18 lines."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "MetricCards"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "metrics": {
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 16
+                        },
+                        "label": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 60
+                        },
+                        "source": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "scope": {
+                          "type": "string",
+                          "enum": [
+                            "one user",
+                            "load test",
+                            "eval run",
+                            "production"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "label",
+                        "source",
+                        "scope"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "metrics"
+                ],
+                "additionalProperties": false,
+                "description": "One to four numbers. Each must say what it was measured on (scope) and where it comes from (source); both are shown on screen."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]*$"
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pause_before_seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "min_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              },
+              "component": {
+                "type": "string",
+                "const": "Illustration"
+              },
+              "props": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "caption": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "additionalProperties": false,
+                "description": "A generated or licensed still or clip, for a moment the product cannot show. It is always drawn with a tag that says illustration, and must be listed in media.lock.json."
+              }
+            },
+            "required": [
+              "id",
+              "lines",
+              "component",
+              "props"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "poster": {
+      "type": "object",
+      "properties": {
+        "scene": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "at_seconds": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "scene",
+        "at_seconds"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "title",
+    "target_seconds",
+    "scenes"
+  ],
+  "additionalProperties": false,
+  "description": "A demo storyboard. Each scene names one catalog component and gives exactly the props that component declares; anything else is rejected. Also enforced: scene ids are unique; line keys are unique across the storyboard; a scene with no lines sets min_seconds. A scene lasts as long as its lines take to say."
+}

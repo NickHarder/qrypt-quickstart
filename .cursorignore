@@ -1,0 +1,6 @@
+# Cursor's agent does not read these: a key it read would go to the model provider and into the chat.
+# Its terminal still can, as Claude Code's shell can reach what .claude/settings.json does not name.
+# AGENTS.md has the rule for both: an agent never reads `.env`.
+.env
+.env.*
+!.env.example

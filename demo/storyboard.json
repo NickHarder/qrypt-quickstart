@@ -1,0 +1,41 @@
+{
+  "title": "Qrypt Quickstart",
+  "target_seconds": { "min": 5, "max": 300 },
+  "poster": { "scene": "open", "at_seconds": 1.2 },
+  "scenes": [
+    {
+      "id": "open",
+      "component": "TitleCard",
+      "props": {
+        "title": "Qrypt Quickstart",
+        "subtitle": "An example storyboard. Replace every scene with the project's own."
+      },
+      "lines": [
+        {
+          "key": "open",
+          "text": "This is the example opening line. The scene lasts exactly as long as it takes to say."
+        }
+      ]
+    },
+    {
+      "id": "ask",
+      "component": "ScreenRecording",
+      "props": { "take": "example", "beat": "ask" },
+      "lines": [
+        {
+          "key": "ask",
+          "text": "This scene is a real recording of the example page, made by the example take."
+        }
+      ]
+    },
+    {
+      "id": "close",
+      "component": "EndCard",
+      "props": {
+        "title": "Qrypt Quickstart",
+        "links": ["README.md"]
+      },
+      "lines": [{ "key": "close", "text": "And this is the example closing line." }]
+    }
+  ]
+}

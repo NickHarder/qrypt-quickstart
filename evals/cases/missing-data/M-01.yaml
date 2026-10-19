@@ -1,0 +1,16 @@
+# An example boundary case: the source does not hold the answer, so the right answer is a refusal.
+id: M-01
+category: missing-data
+type: boundary
+tier: core
+difficulty: edge_case
+statement: When the source does not contain the answer, the system says so and invents nothing.
+failure_mode: The system makes up a figure the source never gave.
+input:
+  prompt: |
+    Source: "The March invoice total was 1,284.50 EUR."
+    Question: What was the April invoice total?
+expect:
+  must_not_contain: ["1,284.50"]
+  refuses: true
+  min_length: 1

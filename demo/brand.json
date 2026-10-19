@@ -1,0 +1,22 @@
+{
+  "colors": {
+    "background": "#0B1220",
+    "surface": "#152033",
+    "text": "#F5F7FA",
+    "muted": "#B8C2D1",
+    "accent": "#7CC4FF"
+  },
+  "fonts": {
+    "heading": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+    "body": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+    "mono": "Menlo, Monaco, Consolas, monospace"
+  },
+  "voice": {
+    "name": "Kore",
+    "model": "gemini-3.8-flash-tts",
+    "style": "calm, clear and unhurried",
+    "draft_voice": "Samantha",
+    "draft_words_per_minute": 178,
+    "kokoro_voice": "af_heart"
+  }
+}

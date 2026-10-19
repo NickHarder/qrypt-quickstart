@@ -1,0 +1,27 @@
+# What the eval gate requires (the runner reads this file).
+#
+# Raise a floor in the same change as the cases that earn it. Never lower one to make a run pass.
+
+# The model the recordings were made with. It is hashed into every recording's ref, so changing it turns
+# every case into a cassette miss until the cases are recorded again (which costs money).
+model: example-model
+
+# Every core-tier case passes on every commit.
+core:
+  all_must_pass: true
+
+# The share of the cases in a run that must pass.
+pass_rate_min: 1.0
+
+# What the trace requires (scripts/okf_bundle.py enforces it, in the gate's lint group). A case says
+# what it guards and which key metric it feeds, and `make trace` shows the chain from the north star
+# down, with each gap in it. A gap is only a note until its floor is on. Turn a floor on in the
+# change that earns it. Turn one off only with the reason stated in the same change; the owner
+# reviews this file.
+trace:
+  every_case_names_a_use_case_or_finding: false
+  every_case_names_a_metric: false
+  every_use_case_has_a_case: false
+  every_metric_has_a_case_or_a_computation: false
+  north_star_has_a_core_case: false
+  every_guardrail_has_a_boundary_or_regression_case: false

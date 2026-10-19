@@ -1,0 +1,14 @@
+{
+  "G-01": {
+    "status": "pass",
+    "prompts": {
+      "answer": "1.0.0"
+    }
+  },
+  "M-01": {
+    "status": "pass",
+    "prompts": {
+      "answer": "1.0.0"
+    }
+  }
+}

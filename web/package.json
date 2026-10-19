@@ -1,0 +1,19 @@
+{
+  "name": "qrypt-quickstart",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Python, Node and Rust quickstart, agent-verified llms.txt and onboarding funnel for Qrypt Quantum Entropy.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
