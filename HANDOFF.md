@@ -23,8 +23,9 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 4, llms.txt | Done: `llms.txt` and `llms-full.txt`, built from `site/*.md` and the snippet files, linked from the quickstart | `tests/test_llms_txt.py` |
 | Phase 5, claims and quality | Done: `CLAIMS.md`, documented commands run as written, browser tests, Lighthouse (load p95 1,024 ms, accessibility 100) | `make lighthouse`, `tests/test_claims.py` |
 | Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
+| Phase 7, live check | Code ready and tested against the mock (`make live-check`); not run live: waits on the owner's token and go, 12 KiB | `tests/test_live_check.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
-| Next | Phase 7: the live check, its code tested against the mock now and run live once the owner says the token is in | `docs/PLAN.md` |
+| Next | Phase 8 needs the token too; until it comes, the agent harness can be built and tested against the mock | `docs/PLAN.md` |
 
 ## How to check your work
 

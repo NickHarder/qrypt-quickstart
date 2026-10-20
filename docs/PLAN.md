@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:54:57Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:19:10Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -283,12 +283,17 @@ Tuesday 2026-10-20, 17:00 to 19:00 CDT.
 As soon as the token is in `.env`, and no later than Tuesday 2026-10-20 at 19:00 CDT. About
 30 minutes.
 
-- **Tests and eval cases, written first:** a test that totals `evidence/live_usage.csv` and fails
-  at 8,192 KiB; a test that no committed file holds a token-shaped string.
-- **What runs live:** each snippet 5 times, timed (10 KiB); the site's curl smoke test once (1 KiB);
-  one request without `Accept` to record Qrypt's answer (at most 1 KiB); one request with a bad
-  token to see the real 401 (0 KiB).
-- **Files:** `evidence/live_runs.csv`, `evidence/live_usage.csv`, `scripts/live_check.py`.
+- **Tests and eval cases, written first:** `tests/test_live_check.py`, against the mock with a
+  planted token: the committed ledger stays at or under 8,192 KiB; the check refuses before any
+  request when the ledger would pass the stop, and without a token; nothing it writes holds the
+  token (an exact-value scrubber); every request it makes has a ledger row.
+- **What runs live:** each snippet 5 times, timed (10 KiB); one request recording the answer's
+  shape (1 KiB; it replaces "the site's curl smoke test", since the site documents no curl
+  command); one request without `Accept` to record Qrypt's answer (at most 1 KiB); two requests
+  with a wrong token, with the snippets' `User-Agent` and with Python's default one, to see the
+  real 401 and whether the edge refuses either client (0 KiB).
+- **Files:** `src/qrypt_quickstart/live_check.py` (`make live-check`), `evidence/live_runs.csv`,
+  `evidence/live_probes.json`, `evidence/live_usage.csv`.
 - **Verify:** `make live-check` (prints the runtimes and the running total), `make gate`.
 - **Effort:** 0.5 hours. **Cost:** $0, 12 KiB of entropy.
 

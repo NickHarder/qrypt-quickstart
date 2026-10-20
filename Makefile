@@ -199,3 +199,9 @@ demo-record:
 # Lighthouse's mobile preset, 10 runs on the built site: evidence/lighthouse/ (RQ-20, RQ-21).
 lighthouse:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.lighthouse_benchmark
+
+.PHONY: live-check
+# Phase 7, live: each snippet 5 times against Qrypt, and four probes; 12 KiB, ledger-guarded.
+# Only with the owner's approval: it spends the owner's entropy (src/qrypt_quickstart/live_check.py).
+live-check:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.live_check

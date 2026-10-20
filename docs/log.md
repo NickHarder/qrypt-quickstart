@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 7's code: `make live-check` runs each snippet 5 times against Qrypt and four
+  probes (the answer's shape, a request without `Accept`, a wrong token from two clients), within
+  12 KiB, refusing before any request when the ledger would pass 8,192 KiB, and scrubbing the token
+  from all it writes. Tested against the mock only; the owner said the token is not in yet, so it
+  has not run live ([the plan](/PLAN.md)).
 * **Change**: Phase 6: `PRD.md`, the onboarding PRD (2,217 words): problem from the audit's
   evidence, personas and jobs-to-be-done, the funnel and its instrumentation shown cell for cell as
   [the key metrics](/KEY_METRICS.md) specify them (a test keeps the two equal), scope, out of scope,
