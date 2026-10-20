@@ -5,14 +5,20 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the `invented-sdk` check no longer fires on a word in a comment, on the owner's go.
+  Its tool-call pattern matched any "install" before any "qrypt" in a recorded command, so round 1's
+  run 2, which wrote the documented no-SDK `quickstart.mjs` (its comment says "nothing to install"
+  above `QRYPT_API_KEY`) and got a key, was scored a failure. The pattern now needs a package
+  manager's own install command (`pip install`, `npm i`, `cargo add` and the like) and `qrypt` on
+  one line of the command; it also catches a quoted package (`npm i "@qrypt/sdk"`), which it missed
+  before. Test cases for both come from the run. Judged again from the five saved transcripts, none
+  matches, and run 2's own result line shows the success message and exit code 0, so its row in
+  `evidence/agent_runs.csv` now reads success, with a note saying it was re-judged: round 1 is 5 of 5.
 * **Change**: round 1 of the agent-readiness test, against the mock, on the owner's go
-  (`evidence/agent_runs.csv`, `evidence/transcripts/`). Claude Code in a fresh container per run:
-  the harness scored 4 of 5, median 0.49 minutes, one entropy request each. Run 2 is a false
-  positive: it wrote the documented no-SDK `quickstart.mjs` and got a key, but the `invented-sdk`
-  pattern for a shell command matched "install" in the file's "nothing to install" comment before
-  `QRYPT_API_KEY`. Read by hand, 5 of 5 succeeded; the evidence stays as the harness wrote it until
-  the owner decides on narrowing the pattern. Docker Hub refused the base image with 429, so it came
-  from `mirror.gcr.io` (the same digest) and was tagged under its usual name.
+  (`evidence/agent_runs.csv`, `evidence/transcripts/`). Claude Code in a fresh container per run,
+  one entropy request each, median 0.49 minutes; the harness first scored it 4 of 5 (above). Docker
+  Hub refused the base image with 429, so it came from `mirror.gcr.io` (the same digest) and was
+  tagged under its usual name.
 * **Change**: the agent harness also takes the agent's login from
   `HARNESS_CLAUDE_CODE_OAUTH_TOKEN` and gives it to the container as `CLAUDE_CODE_OAUTH_TOKEN`.
   The owner saved the token under the usual name in the cloud environment's settings, and it did

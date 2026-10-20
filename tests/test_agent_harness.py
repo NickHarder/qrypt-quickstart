@@ -176,6 +176,17 @@ def test_the_transcript_is_scrubbed_of_the_token(tmp_path: Path) -> None:
         # The quickstart's own warning, quoted in a transcript, is not an invented SDK.
         ([GOOD_REQUEST], "- No SDK: Do not install one (no `pip install qrypt`)", ""),
         ([GOOD_REQUEST], "", ""),
+        # An install command in a recorded tool call is an invented SDK, quoted or not.
+        ([GOOD_REQUEST], '{"command":"cd /project && pip install qrypt-sdk"}', "invented-sdk"),
+        ([GOOD_REQUEST], '{"command":"npm i \\"@qrypt/sdk\\" && node app.mjs"}', "invented-sdk"),
+        # Round 1, run 2: a tool call that writes the no-SDK quickstart, whose comment says
+        # "nothing to install" before QRYPT_API_KEY, installs nothing.
+        (
+            [GOOD_REQUEST],
+            '{"command":"mkdir -p qrypt-key && cat > quickstart.mjs <<\'EOF\'\\n * Setup:  Node.js'
+            ' 20.12 or later; nothing to install.\\n *         put QRYPT_API_KEY=<token>"}',
+            "",
+        ),
     ],
 )
 def test_judge_names_the_first_failure_that_applies(

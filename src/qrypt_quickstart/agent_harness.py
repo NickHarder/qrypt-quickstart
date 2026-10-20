@@ -69,13 +69,19 @@ SKIPPED_DIRECTORIES: Final = frozenset({"node_modules", ".venv", "venv", "__pyca
 # An invented SDK is something the agent did, not text it read (the quickstart itself warns
 # "no `pip install qrypt`", and a transcript quotes what the agent reads): an install command at
 # the start of a line or in a recorded tool call, or an import of a `qrypt` package in its code.
+# In a tool call, the package manager's own install command and `qrypt` must share one line of the
+# JSON-quoted command (an escaped quote allowed, an escaped newline not): round 1's run 2 wrote a
+# file whose comment said "nothing to install" above `QRYPT_API_KEY`, and installed nothing.
+INSTALL_COMMAND: Final = r"(?:pip3?|python3? -m pip|npm|yarn|pnpm|cargo)\s+(?:install|i|add)\b"
 INVENTED_SDK_PATTERNS: Final = [
     re.compile(
-        r"^\s*(?:\$\s*)?(?:pip3?|python3? -m pip|npm|yarn|pnpm|cargo)\s+(?:install|i|add)\b"
-        r"[^\n]*qrypt",
+        r"^\s*(?:\$\s*)?" + INSTALL_COMMAND + r"[^\n]*qrypt",
         re.IGNORECASE | re.MULTILINE,
     ),
-    re.compile(r'"command"\s*:\s*"[^"]*\b(?:install|add)\b[^"]*qrypt', re.IGNORECASE),
+    re.compile(
+        r'"command"\s*:\s*"(?:[^"\\]|\\.)*?\b' + INSTALL_COMMAND + r'(?:[^"\\]|\\[^n])*?qrypt',
+        re.IGNORECASE,
+    ),
     re.compile(
         r"^\s*(?:import qrypt|from qrypt\b|.*require\(['\"]@?qrypt|.*from ['\"]@?qrypt)",
         re.IGNORECASE | re.MULTILINE,

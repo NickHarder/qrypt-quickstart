@@ -1,6 +1,6 @@
 round_name,run_number,agent,target,started_at,wall_clock_minutes,succeeded,failure_category,entropy_requests,largest_size_kib,notes
 1,1,claude-code,mock,2026-10-20T17:46:10Z,0.43,True,,1,1,
-1,2,claude-code,mock,2026-10-20T17:46:36Z,0.35,False,invented-sdk,1,1,
+1,2,claude-code,mock,2026-10-20T17:46:36Z,0.35,True,,1,1,re-judged from its transcript: first scored invented-sdk by a pattern that matched a comment (docs/log.md 2026-10-20)
 1,3,claude-code,mock,2026-10-20T17:46:57Z,0.72,True,,1,1,
 1,4,claude-code,mock,2026-10-20T17:47:41Z,0.53,True,,1,1,
 1,5,claude-code,mock,2026-10-20T17:48:13Z,0.49,True,,1,1,
