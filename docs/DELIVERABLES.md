@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-19T23:58:00Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:04:05Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -79,7 +79,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-25 | `QRYPT_API_KEY` in `.env` only; `.env` ignored; a committed `.env.example`; no token in screenshots, recordings or agent-run logs | Security | Not yet | Phase 1, Phase 8 | `make gate` (gitleaks); a test that no committed transcript holds a token-shaped string |
 | RQ-26 | Generated keys never printed, logged or written to disk | Security | Not yet | Phases 1, 2, 10 | The output test of RQ-01; a test that the run writes no file |
 | RQ-27 | Analytics, if used: no cookies or personal identifiers, disclosed on the site | Security | Not yet | Not built (see the plan's "Not doing"); applies only if RQ-40 is built | The plan's reason; revisited only if time is left |
-| RQ-28 | Docs versioned in the repo; the site builds from the repo on push | Code quality | Not yet | Phase 1 | The CI job that builds the site and uploads it as an artifact on every push |
+| RQ-28 | Docs versioned in the repo; the site builds from the repo on push | Code quality | Met | Phase 1 | CI run 39350395398 on push of `9fd2119`, green; its `site` job uploaded the `quickstart-site` artifact |
 | RQ-29 | PRD, agent-readiness report and backlog in plain language a busy engineering lead reads in 10 minutes | Code quality | Not yet | Phases 6, 8, 9 | A test caps each file's word count at 2,500 words |
 | RQ-30 | README: how to run the snippets, build the site and reproduce the agent-readiness test | Code quality | Not yet | Phase 11 | `README.md`; a test runs its shell blocks against the mock |
 | RQ-31 | `AI_USAGE.md`: the AI tools, what for, the prompts and configuration that shaped the work, and the exact prompt and agent of the readiness test | AI disclosure | Not yet | Phase 11 | `AI_USAGE.md` |

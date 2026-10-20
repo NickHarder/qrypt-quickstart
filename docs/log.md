@@ -5,6 +5,8 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: [the deliverables](/DELIVERABLES.md) mark RQ-28 met: the first CI run on a push built
+  the site and kept it as an artifact.
 * **Change**: Phase 1, the tracer bullet: the Python quickstart, the mock, the site builder, the
   e2e run and CI on every push, because the plan names it first. The builder moved from TypeScript
   to Python (DV-05 in [the architecture](/ARCHITECTURE.md)); the snippet's exceptions to the Python
