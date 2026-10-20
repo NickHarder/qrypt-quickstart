@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Creation**: [the users](/USERS.md), Gate 2, as a draft for the owner, because the ladder names
+  it next and the audit is committed: five personas (the developer primary, the agent, engineering,
+  support, the grader), four anti-personas, five moments and six use cases, each traced to the
+  audit's findings and the deliverables. Fields the brief, the audit and the plan do not answer
+  (a developer's day, the internal teams' tools, sales) are marked open for the owner, not invented.
 * **Creation**: [the audit](/AUDIT.md), Gate 1, as a draft for the owner, with its five areas
   under `audit/` and [the profile of Qrypt's documented contract](/audit/qrypt_docs_profile.py),
   because the ladder names the audit next and no product code may come before it. It read

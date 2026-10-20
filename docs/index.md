@@ -18,6 +18,10 @@ okf_version: "0.2"
 
 * [Plan: Qrypt quickstart, onboarding PRD and agent-readiness test](PLAN.md) - How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 
+# Users
+
+* [Users: who the Qrypt quickstart serves, and when](USERS.md) - The developer new to Qrypt, the AI coding agent acting for them, the internal stakeholders and the grader, with the users the quickstart refuses, the moments it serves and the use cases that trace to the audit and the deliverables.
+
 # Subdirectories
 
 * [audit](audit/index.md) - 5 concepts: Audit Area.
