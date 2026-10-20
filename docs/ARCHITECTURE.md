@@ -3,7 +3,7 @@ type: Architecture
 title: "Architecture: snippets, mock, site builder, agent harness and CI"
 description: How the Qrypt quickstart is built from five small parts, where the token and the key may and may not go, what each dependency's failure looks like to the user, and the tracer bullet that proves the design first.
 tags: [architecture, gate]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:10Z }
 sources:
   - id: audit
@@ -24,6 +24,9 @@ sources:
   - id: ci
     resource: ../.github/workflows/ci.yml
     title: The CI workflow as the kit rendered it
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:36Z }
+approved_sha256: 00372226932137e7e81eadabb2c8eab0e679b03aa9a0f03297599a3de6ec8826
 ---
 
 # How to read this draft

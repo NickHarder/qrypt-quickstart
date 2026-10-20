@@ -3,7 +3,7 @@ type: Users
 title: "Users: who the Qrypt quickstart serves, and when"
 description: The developer new to Qrypt, the AI coding agent acting for them, the internal stakeholders and the grader, with the users the quickstart refuses, the moments it serves and the use cases that trace to the audit and the deliverables.
 tags: [users, gate]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
 sources:
   - id: assessment
@@ -27,6 +27,9 @@ sources:
   - id: deliverables
     resource: /DELIVERABLES.md
     title: Deliverables
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:35Z }
+approved_sha256: 1b08ce75e679f55f838a4e1a073d5ea54ea446e07c12c86347026d911535cb09
 ---
 
 # How to read this draft

@@ -3,7 +3,7 @@ type: Audit Area
 title: "Audit area: performance"
 description: What bounds the quickstart's 3-second runtime and the agent's 10-minute target, from Qrypt's one documented region, its rate limit, the size of its answer and the cost of starting each runtime.
 tags: [audit, performance]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T17:31:58Z }
 sources:
   - id: qrypt-eaas
@@ -15,6 +15,9 @@ sources:
   - id: assessment
     resource: /brief/assessment-text.md
     title: The assessment's full text
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:34Z }
+approved_sha256: f655ad03b27def82a5028ac6d82a5f58054f298c97249d497e3d351a1cab44c8
 ---
 
 # What this area had to answer

@@ -3,7 +3,7 @@ type: Audit Area
 title: "Audit area: security"
 description: Where the Qrypt token and the generated key could leak in the first-run path, in Qrypt's own examples and in this project's agent test, and what the repository's scans can and cannot catch.
 tags: [audit, security]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
 sources:
   - id: qrypt-eaas
@@ -18,6 +18,9 @@ sources:
   - id: assessment
     resource: /brief/assessment-text.md
     title: The assessment's full text
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:35Z }
+approved_sha256: 4241aabc75cedd2db2c7d1c2cf69154108d328fe6196ff96b62acda7a904aff2
 ---
 
 # What this area had to answer

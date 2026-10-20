@@ -3,7 +3,7 @@ type: Audit Area
 title: "Audit area: architecture"
 description: The one integration point Qrypt offers, what its documentation leaves undefined, the edge in front of it, the SDK that is not for entropy, and what the repository is missing before the first slice.
 tags: [audit, architecture]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
 sources:
   - id: qrypt-eaas
@@ -24,6 +24,9 @@ sources:
   - id: plan
     resource: /PLAN.md
     title: The plan
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:33Z }
+approved_sha256: e80f5b5789e6f583561f9173a686e9d1d090c0bc92f40cb001210297526154ef
 ---
 
 # What this area had to answer

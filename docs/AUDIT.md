@@ -3,7 +3,7 @@ type: Audit
 title: "Audit: Qrypt's first-run path, before any product code"
 description: What a first-time developer or agent meets in Qrypt's documented entropy API, and in this repository before its first slice, with a reproduction for each finding and the decision it forces in the plan.
 tags: [audit, gate]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:00Z }
 sources:
   - id: qrypt-eaas
@@ -15,6 +15,9 @@ sources:
   - id: plan
     resource: /PLAN.md
     title: The plan
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:32Z }
+approved_sha256: ebfba7b6d64ea11342bb170b94e8a56a222db149cc16d4b5d88c7a7925c148a0
 ---
 
 # Scope

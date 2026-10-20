@@ -3,7 +3,7 @@ type: Audit Area
 title: "Audit area: compliance"
 description: What has to stay private, what reaches a model provider, how long agent transcripts are kept, and what the project can log of its own Qrypt usage when Qrypt publishes no meter.
 tags: [audit, compliance]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
 sources:
   - id: qrypt-eaas
@@ -21,6 +21,9 @@ sources:
   - id: assessment
     resource: /brief/assessment-text.md
     title: The assessment's full text
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:33Z }
+approved_sha256: 322f64fca6e2bfcc2c3993a294eea12259ff7b6705b58804994bacb90fd79ec4
 ---
 
 # What this area had to answer

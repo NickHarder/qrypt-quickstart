@@ -3,7 +3,7 @@ type: Key Metrics
 title: "Key metrics: the activation funnel and the agent's readiness"
 description: The one specification of the five-stage activation funnel (event, trigger, payload, join key, formula and target for each stage) and the two agent-readiness metrics, with the north star, the drivers, the guardrails, what was rejected and where each one is watched.
 tags: [metrics, gate]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
 sources:
   - id: assessment
@@ -24,6 +24,9 @@ sources:
   - id: plan
     resource: /PLAN.md
     title: The plan
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:36Z }
+approved_sha256: 83e27680075758303171fff44b0f8e05d0da118673991c4ed2236f85f202e761
 ---
 
 # How to read this draft

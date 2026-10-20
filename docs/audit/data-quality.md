@@ -3,7 +3,7 @@ type: Audit Area
 title: "Audit area: data quality"
 description: The quality of the data a first-time developer or agent reads, Qrypt's documented contract and its examples, profiled by a committed script, with what is wrong, what is missing, what cannot be found and what agrees with the brief.
 tags: [audit, data-quality]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
 sources:
   - id: qrypt-eaas
@@ -18,6 +18,9 @@ sources:
   - id: partner-notes
     resource: /brief/partner-notes.md
     title: Partner notes on Qrypt
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:34Z }
+approved_sha256: 0103256ab05579690cec294546cc99777af91be17046daadd92a26b4f5fa8522
 ---
 
 # What this area had to answer

@@ -3,7 +3,7 @@ type: Plan
 title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
-status: draft
+status: stable
 generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T04:14:45Z }
 sources:
   - id: assessment
@@ -21,6 +21,9 @@ sources:
   - id: gitlab-pages-access
     resource: https://docs.gitlab.com/user/project/pages/pages_access_control/
     title: GitLab Pages access control, read 2026-10-19
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:32Z }
+approved_sha256: 4294d3607673b712af19781a6e29b1ac5f6732f58ceed929d0dd69fc41eec09d
 ---
 
 # Context

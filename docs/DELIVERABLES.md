@@ -3,7 +3,7 @@ type: Deliverables
 title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
-status: draft
+status: stable
 generated: { by: claude-code/2.1.304, at: 2026-10-20T19:14:09Z }
 sources:
   - id: assessment
@@ -12,6 +12,9 @@ sources:
   - id: plan
     resource: PLAN.md
     title: The plan
+verified:
+  - { by: human:nickharder, at: 2026-10-20T21:46:41Z }
+approved_sha256: 2caaa43bf62dd52362f3ceb076c586648b3a0fed31b3c17ab5aca1f9fd262097
 ---
 
 # How to read this
