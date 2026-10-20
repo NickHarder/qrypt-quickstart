@@ -10,8 +10,11 @@ RUN apt-get update \
 # The agent under test, pinned so both rounds run the same version.
 RUN npm install --global @anthropic-ai/claude-code@2.1.304
 
-RUN useradd --create-home agent
 COPY entrypoint.sh /usr/local/bin/harness-entrypoint
-RUN chmod 755 /usr/local/bin/harness-entrypoint
+RUN chmod 755 /usr/local/bin/harness-entrypoint \
+ && useradd --create-home agent
+
+# The agent runs without root; the harness opens the throwaway project folder to this user.
+USER agent
 WORKDIR /project
 ENTRYPOINT ["/usr/local/bin/harness-entrypoint"]

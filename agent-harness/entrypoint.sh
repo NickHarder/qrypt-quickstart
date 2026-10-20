@@ -1,19 +1,20 @@
 #!/bin/sh
-# Starts one agent run in the harness's container.
+# Starts one agent run in the harness's container, as the image's user without root.
 #
 # When the harness mounts its certificate authority (the mock run: api-eus.qrypt.com is mapped to
-# the mock on the host), the container trusts it for every client an agent might use: the system
-# store (Python's ssl, curl), requests (REQUESTS_CA_BUNDLE) and Node.js (NODE_EXTRA_CA_CERTS). Real
-# certificates stay trusted, so package installs still work. Then the agent runs as a user without
-# root, in the project folder.
+# the mock on the host), every client an agent might use trusts it beside the real authorities:
+# OpenSSL through Python's ssl (SSL_CERT_FILE), requests (REQUESTS_CA_BUNDLE), curl
+# (CURL_CA_BUNDLE) and Node.js (NODE_EXTRA_CA_CERTS). pip keeps its own bundle, so package installs
+# from PyPI are unchanged.
 set -eu
 
 if [ -f /harness/ca.pem ]; then
-  cp /harness/ca.pem /usr/local/share/ca-certificates/qrypt-agent-harness.crt
-  update-ca-certificates >/dev/null
-  export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+  combined_bundle="$HOME/trusted-authorities.pem"
+  cat /etc/ssl/certs/ca-certificates.crt /harness/ca.pem > "$combined_bundle"
+  export SSL_CERT_FILE="$combined_bundle"
+  export REQUESTS_CA_BUNDLE="$combined_bundle"
+  export CURL_CA_BUNDLE="$combined_bundle"
   export NODE_EXTRA_CA_CERTS=/harness/ca.pem
 fi
 
-chown -R agent /project
-exec env HOME=/home/agent runuser -u agent -- "$@"
+exec "$@"

@@ -248,6 +248,7 @@ arguments = sys.argv[1:]
 pathlib.Path({record!r}).write_text(json.dumps(arguments))
 mounts = [a.split("=", 1)[1] for a in arguments if a.startswith("--volume=")]
 project = next(m.split(":")[0] for m in mounts if m.endswith(":/project"))
+pathlib.Path({record!r} + ".mode").write_text(oct(pathlib.Path(project).stat().st_mode & 0o777))
 document = (pathlib.Path(project) / "qrypt-quickstart.md").read_text()
 program = re.search(r"```python\\n(.*?)```", document, re.S).group(1)
 (pathlib.Path(project) / "main.py").write_text(program)
@@ -283,6 +284,7 @@ def test_the_container_mode_runs_docker_with_the_project_mounted_and_judges_the_
             certificate_authority=tmp_path / "ca.pem",
         )
     docker_arguments = json.loads(record.read_text())
+    assert (tmp_path / "docker-arguments.txt.mode").read_text() == "0o777"
     assert run.succeeded, run
     assert "--add-host=api-eus.qrypt.com:host-gateway" in docker_arguments
     assert docker_arguments[-3:-1] == ["claude", "-p"]

@@ -251,6 +251,8 @@ def run_agent_once(
             argument.replace(PROMPT_PLACEHOLDER, PROMPT) for argument in agent_command
         ]
         if isolation == "container":
+            # The image runs as a user without root; this throwaway folder must be theirs to write.
+            project_directory.chmod(0o777)
             command = container_command(
                 project_directory=project_directory,
                 image=image,
