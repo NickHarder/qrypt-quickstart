@@ -38,12 +38,14 @@ import time
 from pathlib import Path
 from typing import Final
 
+from dotenv import dotenv_values
 from pydantic import BaseModel, ConfigDict
 
 from .config import REPOSITORY_ROOT
 from .harness_certificates import write_authority_and_server_certificate
-from .live_check import scrub
+from .live_check import LIVE_API_URL, scrub
 from .mock_server import SUCCESS_TOKEN, MockQryptServer, RecordedRequest
+from .recording_relay import RecordingRelay
 from .site_builder import render_text
 
 BRIEF_PROMPT: Final = "Generate an AES-256 key using Qrypt quantum entropy in a new project"
@@ -241,6 +243,8 @@ def run_agent_once(
     Returns:
         The judged run.
     """
+    if isinstance(mock_server, RecordingRelay):
+        mock_server.start_run(f"round {round_name} run {run_number}")
     first_request_index = len(mock_server.recorded_requests)
     with tempfile.TemporaryDirectory() as work_root:
         project_directory = Path(work_root) / "project"
@@ -380,12 +384,23 @@ def container_command(
     return [*command, image, *agent_arguments]
 
 
-def main() -> None:
-    """Run one round of the agent-readiness test against the mock and append it to the log.
+def owner_token() -> str:
+    """Return the owner's Qrypt token from the environment or the repository's `.env`.
 
-    The live target needs a recording relay between the agent's program and Qrypt (so that every
-    request is judged and the budget holds even if an agent loops); until it exists, this refuses
-    the live target rather than run the agent against Qrypt unrecorded.
+    Only the live round reads it, to write it into each run's project, as a developer would.
+    """
+    from_environment = os.environ.get("QRYPT_API_KEY", "")
+    from_file = dotenv_values(REPOSITORY_ROOT / ".env").get("QRYPT_API_KEY") or ""
+    return (from_environment or from_file).strip()
+
+
+def main() -> None:
+    """Run one round of the agent-readiness test and append it to the log.
+
+    Against the mock by default. With `--target live`, each run's project holds the owner's token,
+    and the agent's program reaches Qrypt through the recording relay, which judges every request
+    the same way, caps each run at 64 KiB and stops at the ledger's 8,192 KiB. A live round spends
+    the owner's entropy: run it only with the owner's approval.
     """
     parser = argparse.ArgumentParser(description="Run one round of the agent-readiness test.")
     parser.add_argument("--round", required=True, dest="round_name")
@@ -397,21 +412,32 @@ def main() -> None:
     parser.add_argument("--image", default="qrypt-agent-harness")
     parser.add_argument("--timeout-minutes", type=float, default=DEFAULT_TIMEOUT_SECONDS / 60)
     arguments = parser.parse_args()
-    if arguments.target == "live":
-        sys.exit("agent-harness: the live target needs the recording relay, not built yet")
+    is_live = arguments.target == "live"
+    token = owner_token() if is_live else MOCK_TOKEN
+    if not token:
+        sys.exit("agent-harness: a live round needs QRYPT_API_KEY in the environment or .env")
     with tempfile.TemporaryDirectory() as certificates_directory:
-        if arguments.isolation == "container":
-            authority, certificate, private_key = write_authority_and_server_certificate(
-                Path(certificates_directory), host_name=QRYPT_HOST
+        is_container = arguments.isolation == "container"
+        generated_authority, certificate, private_key = write_authority_and_server_certificate(
+            Path(certificates_directory), host_name=QRYPT_HOST
+        )
+        # In a container the server is api-eus.qrypt.com on the host gateway, over HTTPS; in a
+        # folder it is a plain local port that QRYPT_API_URL names.
+        port = HTTPS_PORT if is_container else 0
+        tls_certificate = (certificate, private_key) if is_container else None
+        host = "0.0.0.0" if is_container else "127.0.0.1"  # noqa: S104  containers reach the host gateway
+        authority: Path | None = generated_authority if is_container else None
+        server: MockQryptServer = (
+            RecordingRelay(
+                upstream_url=LIVE_API_URL,
+                ledger=EVIDENCE_DIRECTORY / "live_usage.csv",
+                port=port,
+                tls_certificate=tls_certificate,
+                host=host,
             )
-            server = MockQryptServer(
-                port=HTTPS_PORT,
-                tls_certificate=(certificate, private_key),
-                host="0.0.0.0",  # noqa: S104  containers reach the host gateway
-            )
-        else:
-            authority = None
-            server = MockQryptServer()
+            if is_live
+            else MockQryptServer(port=port, tls_certificate=tls_certificate, host=host)
+        )
         with server:
             for run_number in range(1, arguments.runs + 1):
                 run = run_agent_once(
@@ -419,7 +445,7 @@ def main() -> None:
                     run_number=run_number,
                     agent_command=shlex.split(arguments.agent_command),
                     api_url=server.url,
-                    token=MOCK_TOKEN,
+                    token=token,
                     transcripts_directory=EVIDENCE_DIRECTORY / "transcripts",
                     mock_server=server,
                     agent_name=arguments.agent_name,

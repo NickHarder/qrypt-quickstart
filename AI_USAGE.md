@@ -67,7 +67,9 @@ the site and the PRD make about Qrypt and its source.
   ```
 
 - **Target:** the local mock first, with `api-eus.qrypt.com` mapped to it inside the container;
-  Qrypt's live API once the owner's token is in and a recording relay is built.
+  then Qrypt's live API, once the owner's token is in, through the recording relay
+  (`src/qrypt_quickstart/recording_relay.py`), which passes each request through unchanged and caps
+  a run at 64 KiB.
 - **Judging:** by `src/qrypt_quickstart/agent_harness.py`, from the requests the recording server
   received and the key bytes it served: success, or the first failure category that applies.
   Transcripts are kept with the token's value scrubbed.

@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the recording relay for live agent rounds: it stands in for `api-eus.qrypt.com`,
+  forwards each request to Qrypt unchanged, records it so live runs are judged like mock runs,
+  ledgers it, and refuses past 64 KiB a run or the 8,192 KiB stop. The mock's handler was split so
+  the relay overrides only the answer; `make agent-round TARGET=live` uses it
+  ([the plan](/PLAN.md)).
 * **Change**: `README.md` (the grader quick-start, where each deliverable is, how to run the
   snippets, build the site and reproduce the agent test) and `AI_USAGE.md` (the tools, the prompts
   and decisions that shaped the work, the agent test's exact prompt and command), each held by a

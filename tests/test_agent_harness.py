@@ -24,7 +24,9 @@ from qrypt_quickstart.agent_harness import (
     run_agent_once,
     write_runs,
 )
+from qrypt_quickstart.live_check import ledger_total_kib
 from qrypt_quickstart.mock_server import MockQryptServer, RecordedRequest
+from qrypt_quickstart.recording_relay import RecordingRelay
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 PLANTED_TOKEN: Final = "mock-200"  # noqa: S105  the mock's success token, not a secret
@@ -290,3 +292,24 @@ def test_the_container_mode_runs_docker_with_the_project_mounted_and_judges_the_
     assert docker_arguments[-3:-1] == ["claude", "-p"]
     assert docker_arguments[-1].startswith(BRIEF_PROMPT)
     assert not any(PLANTED_TOKEN in argument for argument in docker_arguments)
+
+
+def test_a_run_through_the_relay_is_judged_like_a_mock_run_and_ledgered(tmp_path: Path) -> None:
+    ledger = tmp_path / "live_usage.csv"
+    with (
+        MockQryptServer() as upstream,
+        RecordingRelay(upstream_url=upstream.url, ledger=ledger) as relay,
+    ):
+        run = run_agent_once(
+            round_name="2",
+            run_number=3,
+            agent_command=stand_in(GOOD_AGENT),
+            api_url=relay.url,
+            token=PLANTED_TOKEN,
+            transcripts_directory=tmp_path / "transcripts",
+            mock_server=relay,
+            target="live",
+        )
+    assert run.succeeded, run
+    assert ledger_total_kib(ledger) == 1
+    assert "agent round 2 run 3" in ledger.read_text()

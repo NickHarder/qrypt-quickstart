@@ -152,6 +152,26 @@ class MockQryptServer:
         finally:
             self._http_server.server_close()
 
+    def answer(self, *, path: str, query: str, headers: dict[str, str]) -> tuple[int, bytes, bytes]:
+        """Decide the answer to one request, as Qrypt's documentation says the endpoint would.
+
+        Args:
+            path: The request's path.
+            query: The request's query string, without the `?`.
+            headers: The request's `Accept`, `Authorization` and `User-Agent` ("" when missing).
+
+        Returns:
+            The HTTP status, the entropy served (empty unless 200), and the encoded body.
+        """
+        size_kib = parse_size_kib(query)
+        token = headers["Authorization"].removeprefix("Bearer ").strip()
+        status, served_bytes = choose_answer(
+            path=path, size_kib=size_kib, accept=headers["Accept"], token=token
+        )
+        if status == 200 and token in BAD_BODIES:
+            return status, served_bytes, BAD_BODIES[token]
+        return status, served_bytes, encode_answer(status, served_bytes, size_kib)
+
     def _record(self, recorded_request: RecordedRequest) -> None:
         """Append one request to the record, safely across the server's threads."""
         with self._recording_lock:
@@ -165,47 +185,27 @@ class MockQryptServer:
             """Answers each GET as Qrypt's endpoint would, for the token it carries."""
 
             def do_GET(self) -> None:
-                """Answer one GET request."""
+                """Answer one GET request, and record it with what was served."""
                 split_url = urlsplit(self.path)
-                size_kib = parse_size_kib(split_url.query)
-                authorization = self.headers.get("Authorization", "")
-                token = authorization.removeprefix("Bearer ").strip()
-                status, served_bytes = choose_answer(
-                    path=split_url.path,
-                    size_kib=size_kib,
-                    accept=self.headers.get("Accept", ""),
-                    token=token,
+                request_headers = {
+                    name: self.headers.get(name, "")
+                    for name in ("Accept", "Authorization", "User-Agent")
+                }
+                status, served_bytes, encoded_body = mock_server.answer(
+                    path=split_url.path, query=split_url.query, headers=request_headers
                 )
                 mock_server._record(
                     RecordedRequest(
                         path=split_url.path,
-                        size_kib=size_kib,
-                        accept=self.headers.get("Accept", ""),
-                        authorization=authorization,
-                        user_agent=self.headers.get("User-Agent", ""),
+                        size_kib=parse_size_kib(split_url.query),
+                        accept=request_headers["Accept"],
+                        authorization=request_headers["Authorization"],
+                        user_agent=request_headers["User-Agent"],
                         status=status,
                         served_bytes=served_bytes,
                     )
                 )
-                if status == 200 and token in BAD_BODIES:
-                    self._send_body(status, BAD_BODIES[token])
-                else:
-                    self._send_answer(status, served_bytes, size_kib)
-
-            def _send_answer(self, status: int, served_bytes: bytes, size_kib: int | None) -> None:
-                """Write the status line, the headers and the JSON body."""
-                if status == 200:
-                    blocks = [
-                        served_bytes[offset : offset + BYTES_PER_KIB]
-                        for offset in range(0, len(served_bytes), BYTES_PER_KIB)
-                    ]
-                    body: dict[str, object] = {
-                        "random": [base64_text(block) for block in blocks],
-                        "size": size_kib,
-                    }
-                else:
-                    body = {"error": ERROR_REASONS.get(status, "Error")}
-                self._send_body(status, json.dumps(body).encode())
+                self._send_body(status, encoded_body)
 
             def _send_body(self, status: int, encoded_body: bytes) -> None:
                 """Write the status line, the headers and a body given as bytes."""
@@ -224,6 +224,22 @@ class MockQryptServer:
 def base64_text(block: bytes) -> str:
     """Return a block of bytes as standard base64 text, as Qrypt sends it."""
     return base64.b64encode(block).decode("ascii")
+
+
+def encode_answer(status: int, served_bytes: bytes, size_kib: int | None) -> bytes:
+    """Return the JSON body Qrypt sends: base64 blocks of 1,024 bytes, or an error (a guess)."""
+    if status == 200:
+        blocks = [
+            served_bytes[offset : offset + BYTES_PER_KIB]
+            for offset in range(0, len(served_bytes), BYTES_PER_KIB)
+        ]
+        body: dict[str, object] = {
+            "random": [base64_text(block) for block in blocks],
+            "size": size_kib,
+        }
+    else:
+        body = {"error": ERROR_REASONS.get(status, "Error")}
+    return json.dumps(body).encode()
 
 
 def choose_answer(*, path: str, size_kib: int | None, accept: str, token: str) -> tuple[int, bytes]:

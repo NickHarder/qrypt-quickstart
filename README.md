@@ -85,7 +85,9 @@ make agent-round ROUND=1                # 5 runs against the mock, logged to evi
 ```
 
 Against the mock, `api-eus.qrypt.com` maps to the mock inside the container, so the agent's program
-calls Qrypt's real URL unchanged.
+calls Qrypt's real URL unchanged. `make agent-round ROUND=1 TARGET=live` runs the same round against
+Qrypt through a recording relay, which passes every request through unchanged, records it, and
+refuses past 64 KiB a run or 8,192 KiB in all; it spends your entropy and needs `QRYPT_API_KEY`.
 
 ## Checks
 

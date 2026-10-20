@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:33:47Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:55:12Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -323,10 +323,13 @@ Tuesday 2026-10-20, 19:00 to 22:00 CDT.
   throwaway authority the container trusts, so the agent's program calls Qrypt's real URL. The
   harness is proved with stand-in agents and a stand-in `docker` (`tests/test_agent_harness.py`);
   no Docker daemon runs where it was built, so the image itself is unproved until the first round.
-- **Against Qrypt**, the rounds need one more piece, not built yet: a recording relay between the
-  agent's program and Qrypt, so each request is judged the same way and a per-run cap holds even
-  if an agent loops. Until it exists the harness refuses the live target.
-- **Files:** `src/qrypt_quickstart/agent_harness.py`, `src/qrypt_quickstart/harness_certificates.py`,
+- **Against Qrypt** (`make agent-round ROUND=1 TARGET=live`), the agent's program reaches Qrypt
+  through the recording relay (`src/qrypt_quickstart/recording_relay.py`): it passes each request
+  and answer through unchanged, records them so the same judge decides, writes a ledger row for
+  each, and answers 403 itself, without forwarding, past 64 KiB in a run or the ledger's 8,192 KiB.
+  Proved with the mock upstream (`tests/test_recording_relay.py`).
+- **Files:** `src/qrypt_quickstart/agent_harness.py`, `src/qrypt_quickstart/recording_relay.py`,
+  `src/qrypt_quickstart/harness_certificates.py`,
   `agent-harness/`, `evidence/agent_runs.csv`, `evidence/transcripts/`, `AGENT_READINESS.md`, the
   revised `site/` pages.
 - **Verify:** `make gate`; the counts in `AGENT_READINESS.md` against the CSV.
