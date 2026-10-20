@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the quickstart page's "Get a token" step names the portal's real steps, from the
+  owner's walk: the trial, the temporary password set anew at first login, API Keys in the side bar
+  under Dashboard, Create API key, Entropy as the service, Create key, copy. The walkthrough's
+  steps 4 and 5 are filled in, with one more friction: the quickstart says "token" and the portal
+  says "API key". A claims row sources the steps to the walk.
 * **Change**: `evidence/portal_walkthrough.md` starts the record of the real path to an Entropy
   token, step by step, with each friction and what Qrypt could change. The owner's first finding:
   the temporary-password email puts a password that ends in a period inside a sentence that ends

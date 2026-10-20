@@ -53,6 +53,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-32 | (the only SDK is C/C++, for key generation) | `PRD.md` | SDK |
 | Q-33 | There is no llms.txt at docs.qrypt.com (HTTP 404), and no self-service step to a token is documented: the page says to contact Qrypt. | `PRD.md` | `curl` of docs.qrypt.com/llms.txt, HTTP 404 on 2026-10-19; EaaS: tokens come from contacting Qrypt |
 | Q-34 | Qrypt sells quantum entropy as one REST endpoint. | `PRD.md` | EaaS: one endpoint, `GET /api/v1/quantum-entropy` |
+| Q-36 | In the portal's side bar, under Dashboard, open API Keys, then Create API key. | `site/index.html` | The owner's walk of the portal, 2026-10-20 (`evidence/portal_walkthrough.md`, steps 4 and 5) |
 | Q-35 | Cloudflare in front of the API may refuse some HTTP clients with a 403 | `PRD.md` | `docs/audit/architecture.md`: the API answers through Cloudflare, and another Cloudflare-fronted site refused Python's default client; "may" until the live check |
 
 ## Claims about the tools the quickstart uses
