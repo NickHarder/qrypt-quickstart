@@ -11,7 +11,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "allowJs": true,
+    "checkJs": true
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "../quickstart/node"]
 }

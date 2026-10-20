@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "take": "quickstart",
+    "key": "landing",
+    "start": 0.261,
+    "end": 7.864
+  },
+  {
+    "take": "quickstart",
+    "key": "tabs",
+    "start": 7.864,
+    "end": 13.671
+  },
+  {
+    "take": "quickstart",
+    "key": "troubleshooting",
+    "start": 13.697,
+    "end": 19.698
+  },
+  {
+    "take": "quickstart",
+    "key": "agents",
+    "start": 19.755,
+    "end": 27.357
+  }
+]

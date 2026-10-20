@@ -1,1 +1,72 @@
-{}
+{
+  "takes/quickstart.webm": {
+    "sha256": "629f156541612ab9ea8d1b3bc8ebd52fe1c24a998e73cc3ce8378fe4474f6aa5",
+    "bytes": 3994352,
+    "provenance": "recorded"
+  },
+  "voice/gemini/agent-run.wav": {
+    "sha256": "68dcb200a4936a0020a383114e5bc7b08aa2b50ea1bec283c36dcec87c5fb3bf",
+    "bytes": 518758,
+    "provenance": "voice"
+  },
+  "voice/gemini/agents.wav": {
+    "sha256": "b0edbea213251b068eb272625153ba232a72b45dcd42bcb53ecce3757fb215e5",
+    "bytes": 610918,
+    "provenance": "voice"
+  },
+  "voice/gemini/close.wav": {
+    "sha256": "44fb31a7fc12554210e56706b03375997807cc16b6c406f8334082fbe228e6f0",
+    "bytes": 368998,
+    "provenance": "voice"
+  },
+  "voice/gemini/error.wav": {
+    "sha256": "0e72e0e48169e7289e6d99e9322077d3968feb3d9aa3df55772884186b4c9e6a",
+    "bytes": 388198,
+    "provenance": "voice"
+  },
+  "voice/gemini/fresh-run.wav": {
+    "sha256": "48e5555c3aec6fb38bf62bb0e736be206d1f5ba0f60904064618e14f25206392",
+    "bytes": 415078,
+    "provenance": "voice"
+  },
+  "voice/gemini/funnel.wav": {
+    "sha256": "ab80b84655ed19b56c68fa261aafcb8360dfbe3b77e246f4baacfa63b168cf56",
+    "bytes": 528358,
+    "provenance": "voice"
+  },
+  "voice/gemini/hook.wav": {
+    "sha256": "12dab2e2031a3cb60136fcfab4620b269fa758323fa85f21fcfae2734db60156",
+    "bytes": 512998,
+    "provenance": "voice"
+  },
+  "voice/gemini/index.json": {
+    "sha256": "b48e50b19bf4595786ffc33d1a71610ac56cd2406eb4646866a4717519a9817d",
+    "bytes": 1442,
+    "provenance": "voice"
+  },
+  "voice/gemini/landing.wav": {
+    "sha256": "d241e28bc3a7ac35184b4b5ad19a80a7c725d1481647f5bb113bd43c71d97451",
+    "bytes": 345958,
+    "provenance": "voice"
+  },
+  "voice/gemini/problem.wav": {
+    "sha256": "877cbdfcfb9b24bfc23992dc48076e809159ebfe7c6c084bf51590546efe27c2",
+    "bytes": 607078,
+    "provenance": "voice"
+  },
+  "voice/gemini/proof.wav": {
+    "sha256": "b0a2fb5fdcb2b5e138ca735af41634b22468efc6f5ab8000847ba889b53b1978",
+    "bytes": 403558,
+    "provenance": "voice"
+  },
+  "voice/gemini/tabs.wav": {
+    "sha256": "d43436095317fdcbf34e163932baed939c2942b7a31e63959a531b54518690b7",
+    "bytes": 393958,
+    "provenance": "voice"
+  },
+  "voice/gemini/troubleshooting.wav": {
+    "sha256": "1ba34b2319b1d0e8e4a04ce1517335fa23f7302c4d3f50e3057ebebe2cfb9c27",
+    "bytes": 294118,
+    "provenance": "voice"
+  }
+}

@@ -14,5 +14,21 @@ description: Installs what this project's own checks need.
 runs:
   using: composite
   steps:
+    # The virtualenv the snippet checks, the e2e run and the site builder use, from uv.lock.
+    - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
+      with:
+        enable-cache: true
+        cache-dependency-glob: uv.lock
     - shell: bash
-      run: echo "project setup - nothing to install yet (.github/actions/project-setup/action.yml)"
+      run: uv sync --frozen
+    # Node for the Node snippet (its tests, `make e2e`) and web/'s Biome, which lints the snippet.
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
+      with:
+        node-version-file: web/.nvmrc
+        cache: npm
+        cache-dependency-path: web/package-lock.json
+    - shell: bash
+      run: npm ci --prefix web --no-audit --no-fund
+    # Rust for the Rust snippet (`make e2e`), on the toolchain rust/rust-toolchain.toml pins.
+    - shell: bash
+      run: rustup toolchain install 1.99 --profile minimal --component rustfmt,clippy

@@ -6,7 +6,21 @@ rust-version = "1.99"
 description = "Python, Node and Rust quickstart, agent-verified llms.txt and onboarding funnel for Qrypt Quantum Entropy."
 publish = false
 
+# The quickstart's crates, each pinned to an exact version (research review C6): a reader who runs
+# `cargo add` with these versions builds what CI tested.
 [dependencies]
+aes-gcm = "=0.11.1"
+base64 = "=0.23.1"
+dotenvy = "=0.15.7"
+serde_json = "=1.0.151"
+ureq = { version = "=3.4.2", features = ["platform-verifier"] }
+
+# The crate's one program is the Rust quickstart the site shows. Its items are laid out by hand
+# (`#[rustfmt::skip]`) to fit the brief's 25 lines, as the other two snippets are; clippy still
+# holds them to every lint above.
+[[bin]]
+name = "quickstart"
+path = "src/main.rs"
 
 # The kit's rules, held by the compiler and clippy (docs/rules/rust-conventions.md): every public
 # item documented, no unsafe code, clippy's pedantic group, and a name bound once (the shadow lints).

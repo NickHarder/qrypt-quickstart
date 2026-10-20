@@ -38,6 +38,43 @@ const fitsOneCaption = (captionText: string): boolean => {
 };
 
 /**
+ * Even out the last two captions of a sentence broken word by word, so its last words are not left
+ * alone on screen for less than the minimum time: their words are split where both captions fit and
+ * their lengths are closest.
+ */
+const balanceLastTwoCaptions = (sentenceCaptions: string[]): string[] => {
+  if (sentenceCaptions.length < 2) {
+    return sentenceCaptions;
+  }
+  const earlierCaptions = sentenceCaptions.slice(0, -2);
+  const lastTwoWords = sentenceCaptions.slice(-2).join(" ").split(" ");
+  const candidateSplits = lastTwoWords
+    .map((_, splitIndex) => ({
+      first: lastTwoWords.slice(0, splitIndex).join(" "),
+      second: lastTwoWords.slice(splitIndex).join(" "),
+    }))
+    .filter(
+      (split) =>
+        split.first !== "" &&
+        split.second !== "" &&
+        fitsOneCaption(split.first) &&
+        fitsOneCaption(split.second),
+    );
+  const mostEvenSplit = candidateSplits.reduce<{ first: string; second: string } | undefined>(
+    (best, split) =>
+      best === undefined ||
+      Math.abs(split.first.length - split.second.length) <
+        Math.abs(best.first.length - best.second.length)
+        ? split
+        : best,
+    undefined,
+  );
+  return mostEvenSplit === undefined
+    ? sentenceCaptions
+    : [...earlierCaptions, mostEvenSplit.first, mostEvenSplit.second];
+};
+
+/**
  * Break a line into captions. Whole sentences are kept together and share a caption while they fit,
  * so a two-word sentence is not flashed on its own; a sentence too long for one caption is broken
  * between words.
@@ -64,8 +101,9 @@ export const splitIntoCaptionTexts = (text: string): string[] => {
     } else if (fitsOneCaption(sentence)) {
       startNewCaption(sentence);
     } else {
-      // The sentence alone is too long: fill captions word by word.
+      // The sentence alone is too long: fill captions word by word, then even out the last two.
       startNewCaption("");
+      const firstCaptionOfSentence = captionTexts.length;
       for (const word of sentence.split(/\s+/)) {
         const withWord = currentCaption === "" ? word : `${currentCaption} ${word}`;
         if (fitsOneCaption(withWord) || currentCaption === "") {
@@ -74,6 +112,10 @@ export const splitIntoCaptionTexts = (text: string): string[] => {
           startNewCaption(word);
         }
       }
+      const sentenceCaptions = [...captionTexts.splice(firstCaptionOfSentence), currentCaption];
+      const balancedCaptions = balanceLastTwoCaptions(sentenceCaptions);
+      captionTexts.push(...balancedCaptions.slice(0, -1));
+      currentCaption = balancedCaptions.at(-1) ?? "";
     }
   }
   return currentCaption === "" ? captionTexts : [...captionTexts, currentCaption];

@@ -1,0 +1,10 @@
+{
+  "lighthouse_version": "13.5.0",
+  "run_count": 10,
+  "load_p95_milliseconds": 1024.1,
+  "load_target_milliseconds": 1500,
+  "lowest_accessibility_score": 100,
+  "accessibility_target_score": 95,
+  "meets_load_target": true,
+  "meets_accessibility_target": true
+}

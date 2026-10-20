@@ -12,11 +12,14 @@
     "mono": "Menlo, Monaco, Consolas, monospace"
   },
   "voice": {
-    "name": "Kore",
+    "name": "Orus",
     "model": "gemini-3.8-flash-tts",
     "style": "calm, clear and unhurried",
     "draft_voice": "Samantha",
     "draft_words_per_minute": 178,
-    "kokoro_voice": "af_heart"
+    "kokoro_voice": "af_heart",
+    "pronunciations": {
+      "Qrypt": "Crypt"
+    }
   }
 }

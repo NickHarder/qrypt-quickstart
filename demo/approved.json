@@ -1,1 +1,50 @@
-{}
+{
+  "agent-run": {
+    "hash": "cbe3168886aa830904fae4f22b293d6f14a00e6fc4d66b756fa8454f3d9a538f",
+    "approved_on": "2026-10-20"
+  },
+  "agents": {
+    "hash": "6a5955625ce982bed15b0b0c666ff0d4b38d4d655b14e297e2f24b1dbf5d9b23",
+    "approved_on": "2026-10-20"
+  },
+  "close": {
+    "hash": "fefd06b2e2b862951dfd026c5904443708dcb02d9671f2da585b5a4667f83398",
+    "approved_on": "2026-10-20"
+  },
+  "error": {
+    "hash": "e398b9c2beda6eb751330e660798e739beeb6842ce1d796c55974c23e6ec82bb",
+    "approved_on": "2026-10-20"
+  },
+  "fresh-run": {
+    "hash": "d24c428238b3d15928d4ffdab3fd6e029ff9b467ecef1b94c3c82e9b65f843aa",
+    "approved_on": "2026-10-20"
+  },
+  "funnel": {
+    "hash": "1856b05a5fa3e75bb9cc9b5f3490697b6c7fc5bcd15bc778fa2eb3225fdda3d3",
+    "approved_on": "2026-10-20"
+  },
+  "hook": {
+    "hash": "41b6967eb4259421890c7787890ff323f06a16859b3e28f345856247fc33105f",
+    "approved_on": "2026-10-20"
+  },
+  "landing": {
+    "hash": "04380a2e41a966d2a01819a6232da05a81e9df443ca9354c0ff7555844dbdae9",
+    "approved_on": "2026-10-20"
+  },
+  "problem": {
+    "hash": "196da5e7cd52de9ad4697643c99bb5052328b7a76fa76e29cf2aeb8182960b56",
+    "approved_on": "2026-10-20"
+  },
+  "proof": {
+    "hash": "2c34e387b158024b953204b6bab064da0c43d3c8f19db44b43e97990131c5e7d",
+    "approved_on": "2026-10-20"
+  },
+  "tabs": {
+    "hash": "e2089a765ed61c019bba051ae51a3a904e67c74edacbd637108d5398f23fe9dd",
+    "approved_on": "2026-10-20"
+  },
+  "troubleshooting": {
+    "hash": "086bfca6c67e4b386282b0c25d3652e2a830e41664642f357d28098685e5000c",
+    "approved_on": "2026-10-20"
+  }
+}

@@ -1,0 +1,6 @@
+   5.2 s  exit 0  git clone --quiet file:///home/user/qrypt-quickstart qrypt-quickstart
+   0.0 s  exit 0  cp .env.example .env
+  12.6 s  exit 0  pip install cryptography python-dotenv
+   0.1 s  exit 0  python quickstart/python/quickstart.py
+   0.1 s  exit 0  node quickstart/node/quickstart.mjs
+total 18.1 s

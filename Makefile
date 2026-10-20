@@ -131,6 +131,11 @@ kit-update:
 		copier update --skip-answered --defaults; \
 	fi
 
+.PHONY: e2e
+# The tracer bullet end to end: the mock, the quickstart, its line count, the site (scripts/e2e.sh).
+e2e:
+	@scripts/e2e.sh
+
 .PHONY: evals evals-baseline prompt-manifest
 EVALS_BIN := $(SERVICE_DIR)/.venv/bin/$(EVALS_COMMAND)
 
@@ -189,3 +194,31 @@ demo-assets:
 demo-record:
 	@cd demo && npm run --silent demo -- record --file "$(FILE)" --provenance "$(PROVENANCE)" --note "$(NOTE)"
 
+
+.PHONY: lighthouse
+# Lighthouse's mobile preset, 10 runs on the built site: evidence/lighthouse/ (RQ-20, RQ-21).
+lighthouse:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.lighthouse_benchmark
+
+.PHONY: grader-run
+# Phase 11: the README's grader quick-start from a fresh clone, each command as written, timed, against
+# the mock: evidence/grader_quickstart.md (RQ-35). It downloads the two pip packages; it calls no Qrypt.
+grader-run:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.grader_run
+
+.PHONY: live-check
+# Phase 7, live: each snippet (Python, Node, Rust) 5 times against Qrypt, 2 s apart, and four probes; 17 KiB, ledger-guarded.
+# Only with the owner's approval: it spends the owner's entropy (src/qrypt_quickstart/live_check.py).
+live-check:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.live_check
+
+.PHONY: agent-round
+# Phase 8: one round of the agent-readiness test, ROUND=1 or 2, in a fresh container per run;
+# AGENT=claude-code (the default), claude-code-haiku or gemini-cli (backlog item B-07)
+# (build the image first: docker build -t qrypt-agent-harness agent-harness/). TARGET=mock (the
+# default) or TARGET=live, which reaches Qrypt through the recording relay: 64 KiB a run at most,
+# stopping at the ledger's 8,192 KiB. It runs the agent with the owner's login (Gemini CLI's is
+# GEMINI_API_KEY), and a live round spends the owner's entropy: only with the owner's approval. In a cloud session, whose only way out
+# is an egress proxy: HARNESS_OPTIONS='--network host --extra-ca <the proxy's authority>'.
+agent-round:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.agent_harness --round $(ROUND) --target $(or $(TARGET),mock) --agent-name $(or $(AGENT),claude-code) $(HARNESS_OPTIONS)

@@ -1,0 +1,52 @@
+{
+  "answer_shape": {
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9c1810a96175b-IAD"
+    },
+    "answer_keys": [
+      "random",
+      "size"
+    ],
+    "size": 1,
+    "decoded_block_bytes": [
+      1024
+    ]
+  },
+  "without_accept": {
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9c18f1ced5009-IAD"
+    },
+    "answer_keys": [
+      "random",
+      "size"
+    ],
+    "size": 1,
+    "decoded_block_bytes": [
+      1024
+    ]
+  },
+  "bad_token_named_client": {
+    "status": 403,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9c19d4a9057f1-IAD"
+    },
+    "body_excerpt": "{\"error\": \"Forbidden or entropy quota reached\"}"
+  },
+  "bad_token_python_default_client": {
+    "status": 403,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "server": "cloudflare",
+      "cf-ray": "a4d9c1ab5e413138-IAD"
+    },
+    "body_excerpt": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1010/\", \"title\": \"Error 1010: Access denied\", \"status\": 403, \"detail\": \"The site owner has blocked access based on your browser's signature.\", \"instance\": \"a4d9c1ab5e413138\", \"error_cod"
+  }
+}

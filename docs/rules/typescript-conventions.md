@@ -4,7 +4,7 @@ title: TypeScript conventions
 description: How names, single assignment, types, documentation, errors and suppressions are written and checked in this project's TypeScript.
 tags: [typescript, conventions]
 status: stable
-generated: { by: ai-kit/v0.21.1 }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:36:48Z }
 ---
 # TypeScript conventions
 
@@ -57,3 +57,20 @@ The rest is how code is written here, wherever the TypeScript is.
 
 - Fix a finding rather than silence it. A suppression names its rule and gives its reason:
   `// biome-ignore lint/<group>/<rule>: <why>`. `@ts-ignore` is an error (Biome `noTsIgnore`).
+
+## The Node quickstart
+
+`quickstart/node/quickstart.mjs` is plain JavaScript a developer copies and runs with no build
+step, held to the brief's 25 lines excluding comments and imports. `web/`'s `tsc` type-checks it
+through JSDoc (`checkJs`), and Biome lints it with `web/`'s rules (`quickstart/biome.json`). Its
+exceptions, each because the limit or the reader requires it (docs/PLAN.md, review item C10):
+
+- It reads Qrypt's answer through a JSDoc `any`, not a Zod schema: Zod would be an install the
+  snippet does not need. An answer without a usable block throws, and the one handler below turns
+  that into a message.
+- One `uncaughtException` handler turns any thrown error (network, TLS, an odd answer) into one
+  line and exit code 1, instead of a `.catch` at each step; its parameter is a JSDoc `any`, because
+  a thrown value has no declared type. Every other stop is `exitWith(message)`. A developer reads a
+  message, never a stack trace (RQ-11).
+- It is laid out by hand: Biome's formatter is off for `quickstart/` (`quickstart/biome.json`) so
+  that its short message table fits the 25 lines; Biome's linter and `tsc` still check every line.

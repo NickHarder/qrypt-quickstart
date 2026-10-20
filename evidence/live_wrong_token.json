@@ -1,0 +1,25 @@
+{
+  "checked": "2026-10-20",
+  "endpoint": "GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1",
+  "how": "each program as published, run once from an empty folder with QRYPT_API_KEY set to a deliberately wrong token, 3 s apart",
+  "runs": [
+    {
+      "at": "2026-10-20T18:52:46Z",
+      "language": "python",
+      "exit_code": 1,
+      "printed": "Qrypt answered HTTP 403: wrong token or allotment spent."
+    },
+    {
+      "at": "2026-10-20T18:52:50Z",
+      "language": "node",
+      "exit_code": 1,
+      "printed": "Qrypt answered HTTP 403: wrong token or allotment spent."
+    },
+    {
+      "at": "2026-10-20T18:52:54Z",
+      "language": "rust",
+      "exit_code": 1,
+      "printed": "Qrypt answered HTTP 403: wrong token or allotment spent."
+    }
+  ]
+}

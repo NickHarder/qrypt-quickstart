@@ -3,7 +3,7 @@
 import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 CaseType = Literal["boundary", "invariant", "regression"]
 Tier = Literal["core", "scenario"]
@@ -18,9 +18,28 @@ class StrictModel(BaseModel):
 
 
 class CaseInput(StrictModel):
-    """What the system under test is given. Add fields here when it needs more than a prompt."""
+    """What the system under test is given: a prompt, and the page of the site a model reads first.
+
+    `document` is a path under `site/`, from the repository's root. When it is set, the case plays
+    the agent-readiness test in one turn: a model is given that page, rendered as a developer sees
+    it, and the brief's prompt, and writes the program.
+    """
 
     prompt: str
+    document: str | None = None
+
+    @field_validator("document")
+    @classmethod
+    def document_is_a_site_page(cls, document: str | None) -> str | None:
+        """Refuse a document that is not a page of `site/`.
+
+        Raises:
+            ValueError: If the path does not start with `site/` or climbs out of it.
+        """
+        if document is not None and (not document.startswith("site/") or ".." in document):
+            message = f"a case's document must be a page under site/: {document}"
+            raise ValueError(message)
+        return document
 
 
 class Expectation(StrictModel):

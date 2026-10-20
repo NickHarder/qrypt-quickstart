@@ -3,8 +3,9 @@
 # Every pull request runs every check, whatever it changed: a green run is the proof, with no path
 # filter to second-guess. The jobs do not wait for one another. No job is allowed to fail.
 #
-# Runs for pull requests, version tags and manual runs, never for a plain push: the same checks run on
-# the laptop first, through `make gate`.
+# Runs for pull requests, every push to any branch, version tags and manual runs. The brief asks for
+# the quickstart to be tested against the mock and the site built from the repository on every push
+# (docs/PLAN.md); the same checks run on the laptop first, through `make gate`.
 #
 # Every action is named by its commit, with the version beside it. A tag can be moved to other code
 # by whoever owns the action, and a commit cannot. To move to a newer version, change both.
@@ -13,6 +14,7 @@ name: CI
 on:
   pull_request:
   push:
+    branches: ["**"]
     tags: ["v*"]
   workflow_dispatch:
 
@@ -60,6 +62,21 @@ jobs:
       - uses: ./.github/actions/project-setup
       - run: scripts/gate.sh --checks lint --from project
       - run: scripts/gate.sh --checks tests --from project
+
+  # The quickstart site, built from site/ and the snippet files, kept as an artifact of the run: the
+  # preview. deploy.yml deploys it to GitHub Pages after this workflow passes on main (docs/DEPLOY.md).
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: ./.github/actions/project-setup
+      - run: .venv/bin/python -m qrypt_quickstart.site_builder --out build/site
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: quickstart-site
+          path: build/site
+          if-no-files-found: error
 
   # The TypeScript layer in web: strict types, Biome and vitest (the kit's checks
   # ts-types, ts-lint and ts-unit, as the gate runs them), then npm audit, which needs the network
@@ -216,6 +233,11 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
       - run: uv sync --frozen
+      # The browser tests (tests/test_site_in_a_browser.py) drive the Chromium build that the
+      # locked Playwright names, with the system libraries it needs.
+      - run: uv run playwright install --with-deps chromium
+      # The Rust snippet's tests build it with the toolchain rust/rust-toolchain.toml pins.
+      - run: rustup toolchain install 1.99 --profile minimal --component rustfmt,clippy
       - run: uv run pytest -q
 
   # Known vulnerabilities in the locked dependencies. No path filter: new advisories land without

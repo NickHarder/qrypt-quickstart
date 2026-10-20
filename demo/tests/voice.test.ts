@@ -188,6 +188,40 @@ describe("the Gemini provider", () => {
   });
 });
 
+describe("pronunciations", () => {
+  it("sends the voice the spoken form of a word, whole words only, and keeps the line as written", async () => {
+    const { client, requests } = recordingSpeechClient();
+    const provider = createGeminiProvider(client, "gemini-3.8-flash-tts", "Orus");
+    const brand = {
+      ...exampleBrand,
+      voice: { ...exampleBrand.voice, pronunciations: { Qrypt: "Crypt" } },
+    };
+    const storyboard = storyboardWithLines([
+      { key: "a", text: "Qrypt's API, and Qrypt quantum entropy, not Qrypts or qrypt.com." },
+    ]);
+    await voiceLines(storyboard, brand, provider, scratchMedia());
+    expect(requests[0]?.text).toBe(
+      "Crypt's API, and Crypt quantum entropy, not Qrypts or qrypt.com.",
+    );
+    expect(storyboard.scenes[0]?.lines[0]?.text).toContain("Qrypt's API");
+  });
+
+  it("voices a line again when its pronunciation changes", async () => {
+    const { client, requests } = recordingSpeechClient();
+    const provider = createGeminiProvider(client, "gemini-3.8-flash-tts", "Orus");
+    const storyboard = storyboardWithLines([{ key: "a", text: "Qrypt." }]);
+    const mediaDirectory = scratchMedia();
+    await voiceLines(storyboard, exampleBrand, provider, mediaDirectory);
+    const respelled = {
+      ...exampleBrand,
+      voice: { ...exampleBrand.voice, pronunciations: { Qrypt: "Crypt" } },
+    };
+    const secondRun = await voiceLines(storyboard, respelled, provider, mediaDirectory);
+    expect(secondRun.synthesizedKeys).toEqual(["a"]);
+    expect(requests.map((request) => request.text)).toEqual(["Qrypt.", "Crypt."]);
+  });
+});
+
 describe("the cost estimate", () => {
   const lines =
     storyboardWithLines([{ key: "a", text: "one two three four five six seven eight nine ten" }])

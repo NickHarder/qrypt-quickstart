@@ -1,4 +1,8 @@
 {
+  "agent": {
+    "version": "1.0.0",
+    "sha256": "22cb7101c68ca351941d66636f8a281101bd7c1d2a39d41f0ba9db0b89627b31"
+  },
   "answer": {
     "version": "1.0.0",
     "sha256": "cabaf1d78ff8aa149445ce52094a720820212403e6880d0d0e9d9a284035326b"

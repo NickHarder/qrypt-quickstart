@@ -3,7 +3,7 @@ type: Method
 title: "Method: gated, skill-driven delivery"
 description: The gates this project moves through, the skill behind each one, and the build order.
 status: stable
-generated: { by: ai-kit/v0.21.1 }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:10:00Z }
 ---
 
 # Method: gated, skill-driven delivery
@@ -16,12 +16,17 @@ both places.
 | Gate | Skill | Artifact |
 |---|---|---|
 | 0 | `kickoff` | `docs/PLAN.md`, this ladder adjusted to the project, `docs/DELIVERABLES.md` |
-| 1 | `audit-codebase` | `docs/AUDIT.md` (**hard gate**: no product code before it) |
-| 2 | `define-personas` | `docs/USERS.md` |
-| 3 | `plan-architecture` | `docs/ARCHITECTURE.md` |
-| 4 | `define-key-metrics` | `docs/KEY_METRICS.md` |
-| 5 | `write-evals`, then the build | The tracer bullet: one feature, end to end, with its test and its eval case, gate green |
-| 6 and on | `write-evals`, then the build | Vertical slices, one at a time |
+| 1 | `audit-codebase` | `docs/AUDIT.md` (**hard gate**: no product code before it). Adjusted: there is no codebase to audit, so the audit covers the system the project builds on, Qrypt's first-run path (docs.qrypt.com/eaas and the API contract it documents), read only, with no live call |
+| 2 | `define-personas` | `docs/USERS.md`, which `PRD.md` draws its personas and jobs-to-be-done from |
+| 3 | `plan-architecture` | `docs/ARCHITECTURE.md`, kept short: the snippets, the mock, the site builder and the agent harness |
+| 4 | `define-key-metrics` | `docs/KEY_METRICS.md`: the activation funnel's five stages, which `PRD.md` shows and a test keeps equal |
+| 5 | `write-evals`, then the build | The tracer bullet: the Python quickstart end to end (Phase 1 of `docs/PLAN.md`), with its test and its eval case, gate green |
+| 6 and on | `write-evals`, then the build | Vertical slices, one at a time (Phases 2 to 11 of `docs/PLAN.md`) |
+
+The brief names its own deliverables (`PRD.md`, `AGENT_READINESS.md`, `BACKLOG.md`, `CLAIMS.md`,
+`AI_USAGE.md`). They live at the repository's root, where a grader looks, and draw on the gate
+artifacts above; `docs/PLAN.md` gives the reason. No gate is removed: each one's artifact feeds a
+deliverable, and the gates run lean, one run each, because the timebox is two days.
 
 A gate skill runs on its own when this ladder names it as the next gate and the previous artifact is
 committed, its inputs exist, its estimate (`make skill-costs`) is not over the project's cap and its

@@ -1,0 +1,24 @@
+# The agent-readiness test in one turn, for a Node project: given only the quickstart page, a model
+# asked for Node.js uses the built-in fetch and node:crypto and installs no Qrypt package. It waits
+# here, outside evals/cases/, until its recording is made (a paid run the owner approves).
+id: AC-02
+category: agent-contract
+type: invariant
+tier: scenario
+difficulty: straightforward
+statement: >-
+  Given only the quickstart page and the brief's prompt with "Use Node.js", a model writes a Node
+  program that asks for size=1 with the Accept header, reads QRYPT_API_KEY, uses aes-256-gcm from
+  node:crypto, and installs no Qrypt package.
+failure_mode: >-
+  The model invents an npm package for Qrypt, drops the Accept header, asks for size=32 as if size
+  counted bytes, or logs the key.
+input:
+  prompt: Generate an AES-256 key using Qrypt quantum entropy in a new project. Use Node.js.
+  document: site/index.html
+expect:
+  contains: ["application/json", "size=1", "QRYPT_API_KEY", "aes-256-gcm"]
+  must_not_contain: ["npm install qrypt", "@qrypt/", "console.log(aesKey", "console.log(key", "size=32"]
+  min_length: 200
+guards: [UC-03]
+metrics: [DR-04]

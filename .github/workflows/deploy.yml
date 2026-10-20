@@ -1,0 +1,61 @@
+# Deploy the quickstart site to GitHub Pages, after CI passes on main (docs/DEPLOY.md).
+#
+# The path the set-up-deploy skill builds: CI checks every commit and keeps the site it built as the
+# `quickstart-site` artifact; this workflow deploys that very artifact, from CI's own run, with no
+# checkout and no code run here, into the `github-pages` environment, which the owner
+# protects with themselves as required reviewer, so no deploy reaches the public URL without their
+# approval in CI. Pages serves one site per repository: CI's site artifact on every run is the
+# preview, and this environment is production. A smoke test requests the page and llms.txt after
+# each deploy and fails the job on anything but success. No secret is needed: the job deploys with
+# the workflow's own token, scoped to Pages.
+#
+# Every action is named by its commit, with the version beside it, as in ci.yml.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+# One deploy at a time; a newer one waits rather than cancelling one in progress.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          name: quickstart-site
+          path: build/site
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: build/site
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1
+      - name: Smoke test the deployed site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          # steps.deployment.outputs.page_url ends in a slash.
+          curl --fail --silent --show-error --retry 5 --retry-delay 10 --retry-all-errors \
+            "$PAGE_URL" | grep --quiet "An AES-256 key from quantum entropy"
+          curl --fail --silent --show-error --retry 5 --retry-delay 10 --retry-all-errors \
+            "${PAGE_URL}llms.txt" | grep --quiet "Rules for AI coding agents"

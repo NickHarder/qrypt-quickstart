@@ -1,41 +1,206 @@
 {
   "title": "Qrypt Quickstart",
-  "target_seconds": { "min": 5, "max": 300 },
-  "poster": { "scene": "open", "at_seconds": 1.2 },
+  "target_seconds": {
+    "min": 30,
+    "max": 300
+  },
+  "poster": {
+    "scene": "hook",
+    "at_seconds": 1.5
+  },
   "scenes": [
     {
-      "id": "open",
-      "component": "TitleCard",
+      "id": "hook",
+      "component": "Terminal",
       "props": {
-        "title": "Qrypt Quickstart",
-        "subtitle": "An example storyboard. Replace every scene with the project's own."
+        "command": "python quickstart.py",
+        "output_file": "demo/terminal/quickstart-success.txt"
       },
       "lines": [
         {
-          "key": "open",
-          "text": "This is the example opening line. The scene lasts exactly as long as it takes to say."
+          "key": "hook",
+          "text": "One request to Qrypt, one AES-256 key, proven with AES-GCM, and the key never shown."
         }
       ]
     },
     {
-      "id": "ask",
-      "component": "ScreenRecording",
-      "props": { "take": "example", "beat": "ask" },
+      "id": "problem",
+      "component": "Statement",
+      "props": {
+        "text": "The endpoint is one GET.",
+        "detail": "What fails a first run is the header, the unit, the base64 step and the key handling."
+      },
       "lines": [
         {
-          "key": "ask",
-          "text": "This scene is a real recording of the example page, made by the example take."
+          "key": "problem",
+          "text": "Qrypt's entropy API is one request. First runs fail on the header, the size unit, the base64 step and the key."
         }
       ]
+    },
+    {
+      "id": "landing",
+      "component": "ScreenRecording",
+      "props": {
+        "take": "quickstart",
+        "beat": "landing"
+      },
+      "lines": [
+        {
+          "key": "landing",
+          "text": "One page, from getting a token to a first key, with a target of ten minutes."
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "component": "ScreenRecording",
+      "props": {
+        "take": "quickstart",
+        "beat": "tabs"
+      },
+      "lines": [
+        {
+          "key": "tabs",
+          "text": "Python, Node and Rust, twenty-five lines each, one click to copy."
+        }
+      ]
+    },
+    {
+      "id": "fresh-run",
+      "component": "Terminal",
+      "props": {
+        "command": "make grader-run",
+        "output_file": "demo/terminal/grader-run.txt"
+      },
+      "lines": [
+        {
+          "key": "fresh-run",
+          "text": "From a fresh clone, the README's commands ran in eighteen seconds, against a local mock of Qrypt."
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "component": "Terminal",
+      "props": {
+        "command": "python quickstart.py",
+        "output_file": "demo/terminal/quickstart-403-live.txt"
+      },
+      "lines": [
+        {
+          "key": "error",
+          "text": "A wrong token gets one line naming the likely cause first. No stack trace."
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "component": "ScreenRecording",
+      "props": {
+        "take": "quickstart",
+        "beat": "troubleshooting"
+      },
+      "lines": [
+        {
+          "key": "troubleshooting",
+          "text": "Every message the programs print has its cause and its fix here."
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "component": "ScreenRecording",
+      "props": {
+        "take": "quickstart",
+        "beat": "agents"
+      },
+      "lines": [
+        {
+          "key": "agents",
+          "text": "For AI coding agents, llms.txt carries the same rules: no SDK, both headers, size in KiB."
+        }
+      ]
+    },
+    {
+      "id": "agent-run",
+      "component": "Terminal",
+      "props": {
+        "command": "make agent-round ROUND=2-live TARGET=live",
+        "output_file": "demo/terminal/agent-round-2-live.txt"
+      },
+      "lines": [
+        {
+          "key": "agent-run",
+          "text": "Given only the Markdown and the brief's prompt, Claude Code got a key in five fresh containers out of five, against Qrypt."
+        }
+      ]
+    },
+    {
+      "id": "funnel",
+      "component": "Statement",
+      "props": {
+        "text": "Landing, token created, first successful call, first key, return within 7 days.",
+        "detail": "The north star: a first successful call within 7 days, for 50% of signups, from 25% (the brief's assumptions)."
+      },
+      "lines": [
+        {
+          "key": "funnel",
+          "text": "The PRD measures five stages, from landing to a return within a week. The north star is the first successful call."
+        }
+      ],
+      "min_seconds": 10.5
+    },
+    {
+      "id": "proof",
+      "component": "MetricCards",
+      "props": {
+        "title": "Measured",
+        "metrics": [
+          {
+            "value": "18.1 s",
+            "label": "Grader quick-start from a fresh clone, against the mock",
+            "source": "make grader-run, evidence/grader_quickstart.md",
+            "scope": "one user"
+          },
+          {
+            "value": "1,024 ms",
+            "label": "Page load, p95 of 10 mobile runs",
+            "source": "Lighthouse 13.5.0, evidence/lighthouse/",
+            "scope": "one user"
+          },
+          {
+            "value": "100",
+            "label": "Accessibility score, lowest of 10 runs",
+            "source": "Lighthouse 13.5.0, evidence/lighthouse/",
+            "scope": "one user"
+          }
+        ]
+      },
+      "lines": [
+        {
+          "key": "proof",
+          "text": "Measured: the page loads in about a second on mobile, and scores one hundred for accessibility."
+        }
+      ],
+      "min_seconds": 10.5
     },
     {
       "id": "close",
       "component": "EndCard",
       "props": {
         "title": "Qrypt Quickstart",
-        "links": ["README.md"]
+        "links": [
+          "README.md",
+          "llms.txt",
+          "PRD.md"
+        ]
       },
-      "lines": [{ "key": "close", "text": "And this is the example closing line." }]
+      "lines": [
+        {
+          "key": "close",
+          "text": "The code, the site, the PRD and the tests are all in the repository."
+        }
+      ]
     }
   ]
 }

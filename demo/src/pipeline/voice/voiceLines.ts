@@ -1,8 +1,8 @@
 /**
  * Voice every line of a storyboard, one clip per line, and measure each clip.
  *
- * A clip is made again only when its text, its style or the voice changed: each one is stored with a
- * hash of those three. So a second run costs nothing, and a rewrite of one line pays for one line.
+ * A clip is made again only when its spoken text, its style or the voice changed: each one is stored
+ * with a hash of those three. The spoken text is the line with the brand's pronunciations applied. So a second run costs nothing, and a rewrite of one line pays for one line.
  * The index is written after every line, so a run that stops part-way never pays twice for a clip.
  */
 import { createHash } from "node:crypto";
@@ -24,10 +24,26 @@ export type VoiceRun = {
 const allLines = (storyboard: Storyboard): Line[] =>
   storyboard.scenes.flatMap((scene) => scene.lines);
 
+const escapedForRegExp = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** The line as the voice should say it: each word the brand respells, replaced as a whole word. */
+export const spokenText = (text: string, brand: Brand): string =>
+  Object.entries(brand.voice.pronunciations ?? {}).reduce(
+    (spoken, [written, said]) =>
+      spoken.replace(new RegExp(`\\b${escapedForRegExp(written)}\\b`, "g"), said),
+    text,
+  );
+
 /** The hash that decides whether an existing clip still matches its line. */
-export const lineHash = (provider: VoiceProvider, line: Line, defaultStyle: string): string =>
+export const lineHash = (provider: VoiceProvider, line: Line, brand: Brand): string =>
   createHash("sha256")
-    .update(JSON.stringify([provider.fingerprint(), line.text, line.style ?? defaultStyle]))
+    .update(
+      JSON.stringify([
+        provider.fingerprint(),
+        spokenText(line.text, brand),
+        line.style ?? brand.voice.style,
+      ]),
+    )
     .digest("hex");
 
 const readIndex = (indexFile: string): VoiceIndex =>
@@ -44,9 +60,7 @@ export const linesNeedingVoice = (
   const index = readIndex(path.join(providerDirectory, "index.json"));
   return allLines(storyboard).filter((line) => {
     const clipFile = path.join(providerDirectory, `${line.key}.wav`);
-    return (
-      index[line.key]?.hash !== lineHash(provider, line, brand.voice.style) || !existsSync(clipFile)
-    );
+    return index[line.key]?.hash !== lineHash(provider, line, brand) || !existsSync(clipFile);
   });
 };
 
@@ -70,14 +84,18 @@ export const voiceLines = async (
     const clipFile = path.join(providerDirectory, `${line.key}.wav`);
     if (staleKeys.has(line.key)) {
       await provider.synthesize(
-        { key: line.key, text: line.text, style: line.style ?? brand.voice.style },
+        {
+          key: line.key,
+          text: spokenText(line.text, brand),
+          style: line.style ?? brand.voice.style,
+        },
         clipFile,
       );
       synthesizedKeys.push(line.key);
     }
     const durationSeconds = wavFileDurationSeconds(clipFile);
     index[line.key] = {
-      hash: lineHash(provider, line, brand.voice.style),
+      hash: lineHash(provider, line, brand),
       seconds: durationSeconds,
     };
     writeFileSync(indexFile, `${JSON.stringify(index, null, 2)}\n`, "utf8");

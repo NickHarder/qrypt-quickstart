@@ -16,3 +16,4 @@ node_modules/
 target/
 # Personal, per-machine agent settings
 .claude/settings.local.json
+build/
