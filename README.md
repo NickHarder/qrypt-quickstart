@@ -1,56 +1,102 @@
 # Qrypt Quickstart
 
-Python, Node and Rust quickstart, agent-verified llms.txt and onboarding funnel for Qrypt Quantum Entropy.
+A 25-line Python and Node quickstart, troubleshooting site, llms.txt and onboarding PRD for Qrypt quantum entropy.
 
-## The brief
+A developer new to Qrypt, or the AI coding agent working for them, gets from "never heard of Qrypt"
+to a working AES-256 key made from quantum entropy: one request for 1 KiB, a key proven with
+AES-GCM, and the key never printed. A take-home for Qrypt's Developer Quickstart & Onboarding Funnel
+brief (Product Manager role).
 
-A Gauntlet partner project for Qrypt Inc: get a new developer, or their AI coding agent, from
-"never heard of Qrypt" to a working AES-256 key made from quantum entropy, and prove it with data.
-The brief, the partner notes, the research and the design screenshots are in
-[`docs/brief/`](docs/brief/guide.md); start there. The plan comes from the `kickoff` skill.
+## Grader quick-start
 
-## Quick start
+You need Python 3.10 or later, Node.js 20.12 or later, and a Qrypt access token for the Entropy
+service. Clone the repository, then from its root:
 
 ```bash
-make bootstrap    # once per clone: what the gate needs, and the git hooks
-make gate         # everything a push must pass; $0, offline
+cp .env.example .env                       # then put your token after QRYPT_API_KEY= in .env
+pip install cryptography python-dotenv
+python quickstart/python/quickstart.py     # prints the success line
+node quickstart/node/quickstart.mjs        # prints the success line
 ```
 
-## What's here
+Each program asks Qrypt for `size=1` (1 KiB) and prints:
 
-Skills, which Claude Code and Cursor both run from `.claude/skills/`:
+```text
+Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown).
+```
 
-| Skill | What it does | Who starts it | Writes |
-|---|---|---|---|
-| `kickoff` | Turns your brief into the plan, the gate ladder and the deliverables | You, by name | `docs/PLAN.md`, `docs/DELIVERABLES.md` |
-| `audit-codebase` | Audits what the project builds on, one sub-agent per area, skipping the kit's unchanged files | An agent, within the cap | `docs/AUDIT.md` |
-| `define-personas` | The users, the moments in their day, the use cases | An agent, within the cap | `docs/USERS.md` |
-| `plan-architecture` | Trust boundaries, one request traced, the tracer bullet | An agent, within the cap | `docs/ARCHITECTURE.md` |
-| `define-key-metrics` | One north star, its drivers and guardrails, each with a real source | An agent, within the cap | `docs/KEY_METRICS.md`, `docs/metrics/` |
-| `write-evals` | Eval cases planned from the north star down, each naming what it guards | An agent, within the cap | cases under `evals/` |
-| `align` | Before a plan or a feature: what the repository settles, then only the questions that change the work, then the work | You, or an agent, when it fits | nothing: questions, then the work |
-| `handoff` | Says where things stand, so the next session starts from the repository | An agent, when it fits | `HANDOFF.md` |
-| `look-ahead` | Closes a change in one pull request: what else has to change with it | An agent, when it fits | the documents, tests, handoff and log of the branch |
-| `blockers` | What blocks the work now, and where the plan will need you | An agent, when it fits | nothing: a report |
-| `estimate-tokens` | What a skill will cost, from what it cost before | An agent, when it fits | nothing: a number |
-| `defend-decision` | Claim, evidence, alternative, why rejected, how to reverse | An agent, when it fits | a decision block in the document at hand |
-| `write-okf-concept` | Keeps every document a concept of the bundle | An agent, when it fits | any document under `docs/` |
-| `audit-security` | The slow security scan: secrets, static analysis, dependencies | You, by name | `docs/audit/security-review.md` |
-| `set-up-deploy` | The deploy path through CI: dev on every merge, production after your approval | You, by name | the deploy workflow, a decision record, the handoff |
-| `generate-demo` | The demo video from one storyboard | You, by name | `demo/`, the cut under `demo/out/` |
+No token yet? `make bootstrap` then `make e2e` runs both programs against a local mock of Qrypt's
+endpoint, builds the site and checks it shows the code that ran, in under a minute and offline.
+Something else printed? Every message is in `site/troubleshooting.html`.
 
-"Within the cap": a first run goes and sets the estimate; a second run, or one estimated over
-`SKILL_RUN_CAP_TOKENS` in `scripts/kit.conf`, asks you first.
+## Where each deliverable is
 
-The commands you will use most: `make bootstrap` once per clone, `make gate` before a push,
-`make blockers` for what waits on you, `make docs-status` for where each document stands, and
-`make docs-approve DOC=<file>` to approve one (yours alone). `make help` lists every command.
-Your code's own lint and tests, in any language, go in `scripts/checks.conf`, one a line; the gate and
-CI run them, and `make checks` lists them.
+| The brief asks for | Here |
+|---|---|
+| Quickstart code in two languages, at most 25 lines each | [`quickstart/python/quickstart.py`](quickstart/python/quickstart.py), [`quickstart/node/quickstart.mjs`](quickstart/node/quickstart.mjs) |
+| The quickstart site, with troubleshooting | [`site/`](site/index.html), built by `make e2e` into `build/site/`; [`site/troubleshooting.html`](site/troubleshooting.html) |
+| Agent-readable docs | [`site/llms.md`](site/llms.md) and [`site/llms-full.md`](site/llms-full.md), built into `llms.txt` and `llms-full.txt` |
+| The onboarding PRD | [`PRD.md`](PRD.md) |
+| The claims-to-source table, with the fact-check of AI-drafted claims | [`CLAIMS.md`](CLAIMS.md) |
+| The agent-readiness test, both rounds | `AGENT_READINESS.md` and `evidence/agent_runs.csv`, after the rounds run; the harness is [`src/qrypt_quickstart/agent_harness.py`](src/qrypt_quickstart/agent_harness.py) |
+| The prioritized backlog | `BACKLOG.md`, after the rounds |
+| AI usage | [`AI_USAGE.md`](AI_USAGE.md) |
+| Lighthouse report | [`evidence/lighthouse/`](evidence/lighthouse/summary.json): load p95 1,024 ms on mobile, accessibility 100 |
+| CI on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml): both programs against the mock for the success path and 400, 401, 403, 429, 500 and 503 |
 
-## Where to look
+## Run the snippets
 
-- [`HANDOFF.md`](HANDOFF.md): where things stand.
-- [`AGENTS.md`](AGENTS.md): the working rules and conventions, for people and for coding agents.
-- [`docs/index.md`](docs/index.md): what the project knows, a level at a time.
-  [`docs/METHOD.md`](docs/METHOD.md) is the gates this project moves through, and the build order.
+Against Qrypt, with your token, as above. Against the local mock, which plays Qrypt's endpoint and
+answers by token (`mock-200`, `mock-401`, `mock-429`, `mock-503` and others):
+
+```bash
+make bootstrap                                      # once per clone
+python -m qrypt_quickstart.mock_server --port 8765  # in one terminal
+QRYPT_API_URL=http://127.0.0.1:8765/api/v1/quantum-entropy QRYPT_API_KEY=mock-429 \
+  python quickstart/python/quickstart.py            # in another: prints the 429 message
+```
+
+`make e2e` runs both programs against the mock, counts their lines and builds the site, in one
+command. The tests in `tests/` run every error each program can meet, against the mock.
+
+## Build the site
+
+```bash
+make bootstrap
+.venv/bin/python -m qrypt_quickstart.site_builder --out build/site
+python -m http.server --directory build/site 8000   # then open http://127.0.0.1:8000
+```
+
+The builder fills each page's code blocks from the files in `quickstart/`, so the site always shows
+the code CI runs. CI builds the site on every push and keeps it as an artifact. `make lighthouse`
+measures it (10 mobile runs) into `evidence/lighthouse/`.
+
+## Reproduce the agent-readiness test
+
+Each run gives Claude Code, in a new Docker container, a project holding only `.env` and the
+quickstart's Markdown, with the brief's prompt (the exact prompt and command are in
+[`AI_USAGE.md`](AI_USAGE.md)). Every request its program makes reaches a recording server, and the
+harness judges the run from what happened: success, or the failure category.
+
+```bash
+docker build -t qrypt-agent-harness agent-harness/
+export CLAUDE_CODE_OAUTH_TOKEN=...      # from `claude setup-token`, or set ANTHROPIC_API_KEY
+make agent-round ROUND=1                # 5 runs against the mock, logged to evidence/agent_runs.csv
+```
+
+Against the mock, `api-eus.qrypt.com` maps to the mock inside the container, so the agent's program
+calls Qrypt's real URL unchanged.
+
+## Checks
+
+`make gate` is everything a push must pass: lint, types, every test (including the browser tests
+and the e2e run), the eval suite and a secrets scan; $0 and offline. `make live-check` is the one
+check that calls Qrypt (12 KiB, refused past an 8,192 KiB ledger stop); run it only with a token
+and on purpose.
+
+## For contributors
+
+[`AGENTS.md`](AGENTS.md) has the working rules, for people and coding agents.
+[`HANDOFF.md`](HANDOFF.md) says where the work stands. [`docs/index.md`](docs/index.md) is what the
+project knows: the plan, the audit, the users, the architecture, the key metrics and the
+deliverables, a level at a time. `make help` lists every command.

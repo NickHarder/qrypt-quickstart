@@ -12,6 +12,7 @@ outside:
   - { path: HANDOFF.md, read_by: "Every session, first. It is the state of the work, not knowledge" }
   - { path: src/qrypt_quickstart/prompts/, read_by: "The service, which loads each prompt by its name and its version" }
   - { path: PRD.md, read_by: "The grader and Qrypt's engineering lead, at the root, as the brief's onboarding PRD; tests/test_prd.py keeps its funnel equal to docs/KEY_METRICS.md" }
+  - { path: AI_USAGE.md, read_by: "The grader, at the root, as the brief's AI usage disclosure; a test keeps its agent prompt and command equal to the harness's" }
   - { path: CLAIMS.md, read_by: "The grader, at the root, as the brief's claims-to-source table; tests/test_claims.py checks it against the site" }
   - { path: site/, read_by: "The site builder (src/qrypt_quickstart/site_builder.py), which renders llms.md and llms-full.md into the site's llms.txt and llms-full.txt for AI coding agents" }
   - { path: evals/out/, read_by: "Nobody. The reports of the last eval run, never committed" }

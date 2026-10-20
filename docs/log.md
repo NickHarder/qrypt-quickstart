@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: `README.md` (the grader quick-start, where each deliverable is, how to run the
+  snippets, build the site and reproduce the agent test) and `AI_USAGE.md` (the tools, the prompts
+  and decisions that shaped the work, the agent test's exact prompt and command), each held by a
+  test; seven more requirements marked met in [the deliverables](/DELIVERABLES.md), four of them
+  done in earlier phases and not marked then.
 * **Change**: Phase 8's harness, against the mock: a fresh project per run holding only the token
   file and the quickstart's Markdown, the brief's prompt word for word, and one judge that decides
   each run from the requests the mock recorded and the key bytes it served, security first. A

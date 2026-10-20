@@ -14,6 +14,9 @@ DOCUMENT_NAMES: Final = [
     "HANDOFF.md",
     "README.md",
     "evals/README.md",
+    "PRD.md",
+    "CLAIMS.md",
+    "AI_USAGE.md",
 ]
 
 MARKDOWN_LINK: Final = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
