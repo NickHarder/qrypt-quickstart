@@ -21,7 +21,8 @@ REPORT: Final = REPOSITORY_ROOT / "AGENT_READINESS.md"
 RUN_LOG: Final = REPOSITORY_ROOT / "evidence" / "agent_runs.csv"
 TRANSCRIPTS: Final = REPOSITORY_ROOT / "evidence" / "transcripts"
 # Round 2 ran twice on the revised docs: against the mock, then against Qrypt ("2-live").
-ROUNDS: Final = ["1", "2", "2-live"]
+# Backlog item B-07 ran the revised docs with Claude Code on Haiku and with Gemini CLI.
+ROUNDS: Final = ["1", "2", "2-live", "b07-haiku", "b07-gemini"]
 RUNS_PER_ROUND: Final = 5
 # RQ-29: a busy engineering lead reads it in 10 minutes, the PRD's own cap (tests/test_prd.py).
 WORD_LIMIT: Final = 2500
@@ -31,9 +32,9 @@ SUMMARY_ROW: Final = re.compile(
     r" \| (?P<median>[\d.]+) \|",
     re.MULTILINE,
 )
-# A failed run is named in the taxonomy as `round-run`, with a commit of 7 to 40 hex digits.
+# A failed run is named in the taxonomy as `<round>-<run>`, with a commit of 7 to 40 hex digits.
 TAXONOMY_ROW: Final = re.compile(
-    r"^\| `(?P<run>\d-\d)` \|.*`(?P<commit>[0-9a-f]{7,40})`", re.MULTILINE
+    r"^\| `(?P<run>[\w-]+-\d)` \|.*`(?P<commit>[0-9a-f]{7,40})`", re.MULTILINE
 )
 
 

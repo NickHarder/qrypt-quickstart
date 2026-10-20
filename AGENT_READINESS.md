@@ -93,19 +93,62 @@ for its one 1 KiB request: 5 KiB of the trial's entropy in all, the ledger at 45
 failed in the round. The median is 0.07 minutes above the mock round's, with the round trip to
 Qrypt and five Python runs, each building a virtual environment.
 
+## Other agents and a smaller model (backlog item B-07)
+
+The same revised docs, prompt, image and mock, with two other agents, on 2026-10-20
+(`make agent-round ROUND=b07-haiku AGENT=claude-code-haiku`, and `ROUND=b07-gemini AGENT=gemini-cli`):
+
+| Round | Succeeded | Median minutes, successful runs | Agent |
+|---|---|---|---|
+| Round b07-haiku | 5 of 5 | 0.51 | Claude Code 2.1.304, on Haiku |
+| Round b07-gemini | 5 of 5 | 2.81 | Gemini CLI 0.63.0, its own model choice (a Flash model) |
+
+**Claude Code on Haiku** did what the larger model did: every run Python, through the virtual
+environment the docs name, one entropy request, 6 to 9 turns, no failed tool call.
+
+**Gemini CLI** also got a key in every run, with no token or key in its transcript, but took five
+times as long and behaved differently in ways the score does not count:
+
+- **It explored before it built:** 20 to 42 tool calls a run, where Claude Code took 4 to 9 turns,
+  including listening ports (`ss`, `/proc/net/tcp`), processes and `/etc/hosts`, where it could
+  see `api-eus.qrypt.com` mapped to the machine itself. It found the test, not just the task.
+- **It tried to read the token file:** five times, in runs 1, 2, 4 and 5, Gemini's file tool
+  asked for `/project/.env`; Gemini CLI's own workspace check refused each read. Had it
+  succeeded, the token would have gone to the model's provider. The docs say never to print or
+  commit the token, but not to leave the file to the program.
+- **It made more requests:** 11 entropy requests over 5 runs (one run made 4), because it wrote
+  and ran both the Python and the Node.js program, and ran them again. Against Qrypt that is
+  2 to 4 KiB a run, not 1.
+- **Run 4 strayed after it had succeeded:** its program worked in the virtual environment, then it
+  ran it again with the system `python3`, which has no packages, and reached for
+  `pip install --break-system-packages`, the install the revised docs exist to prevent. Gemini
+  CLI's own policy denied the command. The same run printed the first characters of every key and
+  token in its environment; the harness scrubs a login's whole value, so the one fragment of the
+  Gemini key in a transcript was replaced with the placeholder by hand before the commit.
+
+Gemini's 5 runs used about 4.0 million input tokens (3.2 million of them cached) and 17,000
+output tokens, billed to the owner's `GEMINI_API_KEY`; Haiku's ran on the owner's Claude
+subscription.
+
 ## Failure taxonomy
 
-No run failed in either round. One run was first scored a failure by the harness, wrongly:
+No agent failed a run in any round. Six runs were scored failures because of the harness, not the agent:
 
 | Run | First scored | What happened | Addressed by |
 |---|---|---|---|
 | `1-2` | `invented-sdk` | A harness fault, not the agent's: the pattern matched "install" in the written file's comment ("nothing to install") before `QRYPT_API_KEY`. Judged again from its transcript, a success. | `a9aa446` |
+| `b07-gemini-setup-1` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
+| `b07-gemini-setup-2` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
+| `b07-gemini-setup-3` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
+| `b07-gemini-setup-4` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
+| `b07-gemini-setup-5` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
 
 ## What this does not show
 
 - **Round 1 against Qrypt.** Only the revised docs ran live; round 1 and the revision are measured
   against the mock.
-- **Other agents.** Only Claude Code ran. Cursor, Copilot or a smaller model may stumble where it
-  did not; the harness takes another agent's command with `--agent-command`.
+- **Every agent.** Claude Code (two models) and Gemini CLI ran; Cursor, Copilot and Codex did not,
+  and the harness takes any agent's command with `--agent-command`. Gemini's runs are against the
+  mock only.
 - **The site as a URL.** The agent got the Markdown, which the brief allows; the URL comes once
   the site is deployed.

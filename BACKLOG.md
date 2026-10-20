@@ -61,8 +61,10 @@ RICE, on Intercom's scales: **reach** × **impact** × **confidence** ÷ **effor
   answer to a used-up allotment, where the docs say 401 (`evidence/live_probes.json`). The
   quickstart now says "wrong token or allotment spent" (`evidence/live_wrong_token.json`); other
   clients send a developer to ask for more entropy.
-- **B-07.** Only Claude Code has run the agent test. Another agent may stumble where it did not;
+- **B-07.** Only Claude Code had run the agent test. Another agent may stumble where it did not;
   the harness already takes another agent's command, so the effort is the runs and their report.
+  **Done 2026-10-20, against the mock:** Claude Code on Haiku 5 of 5, Gemini CLI 5 of 5, Gemini
+  slower and with findings of its own (`AGENT_READINESS.md`, "Other agents").
 - **B-08.** Live, Python's default `Python-urllib/3.x` User-Agent got Cloudflare's 403 `Error 1010:
   Access denied` before Qrypt read the token (`evidence/live_probes.json`). It looks like a token
   problem, and nothing in Qrypt's docs explains it.

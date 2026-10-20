@@ -5,6 +5,18 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: backlog item B-07, on the owner's go: the revised docs against the mock with two
+  other agents. Claude Code on Haiku: 5 of 5, median 0.51 minutes, as the larger model did.
+  Gemini CLI 0.63.0 (a Flash model, on the owner's `GEMINI_API_KEY`, about 4.0 million input
+  tokens): 5 of 5, median 2.81 minutes, after it probed the machine for the test, tried five times
+  to read the token file (its own workspace check refused), made 11 entropy requests in 5 runs,
+  and once reached for `pip install --break-system-packages` (its policy refused). The harness
+  gains the image's Gemini CLI, named agents (`AGENT=claude-code-haiku`, `AGENT=gemini-cli`), only
+  its own login in each container, and every login value scrubbed from transcripts; run 4's dump
+  of key prefixes left six characters of the Gemini key, replaced with the placeholder by hand.
+  The first five Gemini runs stopped at Gemini CLI's folder-trust check before calling the model
+  (the command lacked `--skip-trust`): a harness fault, kept in the log as round
+  `b07-gemini-setup` and in the report's taxonomy.
 * **Change**: the backlog (Phase 9), on the owner's go: ten items in `BACKLOG.csv`, ranked by RICE
   in `BACKLOG.md`, each with its evidence: the portal walkthrough, the live probes, the audit of
   Qrypt's docs and the agent rounds. Nine are Qrypt's to fix. Reach rests on the PRD's assumed 400

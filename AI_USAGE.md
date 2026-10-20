@@ -57,6 +57,16 @@ the site and the PRD make about Qrypt and its source.
   ```
 
   Permission prompts are off because the container is the sandbox: it holds only the project.
+- **Other agents** (backlog item B-07, against the mock): Claude Code on Haiku and Gemini CLI
+  (`@google/gemini-cli@0.63.0`, its model its own choice, on the owner's `GEMINI_API_KEY`), with the
+  same prompt, image and project; each container gets only its own agent's login. Their commands
+  (`AGENT_COMMANDS` in `src/qrypt_quickstart/agent_harness.py`):
+
+  ```text
+  claude -p {prompt} --model haiku --output-format stream-json --verbose --permission-mode bypassPermissions
+  gemini -p {prompt} --yolo --skip-trust --output-format stream-json
+  ```
+
 - **Prompt**, the brief's word for word, then one line naming the quickstart's Markdown (the brief
   allows "the quickstart URL (or its Markdown)"; the site is not deployed until the move to GitLab):
 
