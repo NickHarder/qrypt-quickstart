@@ -14,6 +14,10 @@ okf_version: "0.2"
 
 * [Deliverables of the Qrypt quickstart take-home](DELIVERABLES.md) - Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 
+# Key Metrics
+
+* [Key metrics: the activation funnel and the agent's readiness](KEY_METRICS.md) - The one specification of the five-stage activation funnel (event, trigger, payload, join key, formula and target for each stage) and the two agent-readiness metrics, with the north star, the drivers, the guardrails, what was rejected and where each one is watched.
+
 # Method
 
 * [Method: gated, skill-driven delivery](METHOD.md) - The gates this project moves through, the skill behind each one, and the build order.
@@ -32,6 +36,7 @@ okf_version: "0.2"
 * [brief](brief/index.md) - 7 concepts: Brief, Guide, Review.
 * [computations](computations/index.md) - 1 concept: Attested Computation.
 * [guides](guides/index.md) - 2 concepts: Guide.
+* [metrics](metrics/index.md) - 7 concepts: Metric.
 * [references](references/index.md) - 2 concepts: Executor, Reference.
 * [rules](rules/index.md) - 3 concepts: Rule.
 

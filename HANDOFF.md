@@ -62,6 +62,8 @@ In `AGENTS.md`.
 - 2026-10-19: the interview is in CDT; build on private GitHub (CI, the site as an artifact) and
   move to GitLab with Pages at the very end; Claude Code in fresh containers for the agent test.
   The rest is in `docs/PLAN.md`, "Decisions locked with the owner".
+- 2026-10-20: the owner said 'push gate commits without asking for the rest of the plan': pushes of
+  this branch's commits need no further ask; paid runs, installs, deploys and approvals still do.
 
 ## Known limitations
 

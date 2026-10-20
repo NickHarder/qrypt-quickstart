@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Creation**: [the key metrics](/KEY_METRICS.md), Gate 4, as a draft for the owner, on the
+  owner's go, with seven metrics under `metrics/`: the north star is the brief's activation
+  ([NS-01](/metrics/NS-01.md), stage 3); landing, token created and first key are drivers, with the
+  agent success rate; return within 7 days and the agent's median time are guardrails. It is the
+  funnel's one specification (event, trigger, payload, join key, formula, target), which settles the
+  review's D5: the unit is the account, joined by a keyed hash. The brief's 25% to 50% and
+  45 minutes are labelled its assumptions, the other stage targets the project's own; nothing is
+  measured yet. [The users](/USERS.md) and [the architecture](/ARCHITECTURE.md) now name the ids.
 * **Creation**: [the architecture](/ARCHITECTURE.md), Gate 3, as a draft for the owner, on the
   owner's go, because the ladder names it next and the users are committed: five parts (snippets,
   mock, site builder, agent harness, CI), a Python tracer bullet proved by `make e2e`, and four

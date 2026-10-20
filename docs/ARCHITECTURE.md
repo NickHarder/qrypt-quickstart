@@ -4,7 +4,7 @@ title: "Architecture: snippets, mock, site builder, agent harness and CI"
 description: How the Qrypt quickstart is built from five small parts, where the token and the key may and may not go, what each dependency's failure looks like to the user, and the tracer bullet that proves the design first.
 tags: [architecture, gate]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:25:13Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
 sources:
   - id: audit
     resource: /AUDIT.md
@@ -179,17 +179,16 @@ follow the same steps with `fetch` and `node:crypto`, and with `ureq` and `doten
 
 # 8. Traceability matrix
 
-Metrics have no ids yet: `docs/metrics/` comes at Gate 4, and the column names the stage it will
-hold.
+The metric column names the ids of [the key metrics](KEY_METRICS.md).
 
 | Use case | Capability | Data | Audit findings | Eval category | Metric |
 |---|---|---|---|---|---|
-| UC-01 | Python and Node snippets: `size=1`, both headers, named `User-Agent`, AES-GCM round trip, success line only | Token in `.env`; 1 KiB from the mock or the API; `quickstart/` files | DQ-01, DQ-02, DQ-06, SEC-03, ARCH-02, ARCH-04, ARCH-06 | `agent-contract`, `key-handling` | Gate 4: first successful call, first key, time to first key |
-| UC-01 | Site built from `site/` and `quickstart/` only, with tabs and copy buttons | `site/*.md`, the snippet files | CMP-01 | None: a site test | Gate 4: landing |
-| UC-02 | A message per status and per environment failure; the troubleshooting page | The mock's error routes; `site/troubleshooting.md` | ARCH-01, ARCH-02, SEC-04, PERF-02 | `error-handling` | Gate 4: first successful call |
-| UC-03 | `llms.txt` and the no-SDK sentence | `site/llms.md`, built to `/llms.txt` | DQ-05, ARCH-03 | `agent-contract`, `no-sdk` | Gate 4: agent success rate, agent median time |
-| UC-03 | Agent harness: a fresh container per run, the scrubber, the run log | Container `.env` (revocable token); `evidence/agent_runs.csv`; `evidence/transcripts/` | SEC-01, SEC-02, CMP-02 | One regression case per Round 1 failure | Gate 4: agent success rate |
-| UC-04 | The PRD's funnel, kept equal to `docs/KEY_METRICS.md` by a test; the `User-Agent` lets Qrypt count quickstart calls | `PRD.md`, `docs/KEY_METRICS.md` | DQ-04, CMP-03 | None: a test of `PRD.md` | Gate 4 decides |
+| UC-01 | Python and Node snippets: `size=1`, both headers, named `User-Agent`, AES-GCM round trip, success line only | Token in `.env`; 1 KiB from the mock or the API; `quickstart/` files | DQ-01, DQ-02, DQ-06, SEC-03, ARCH-02, ARCH-04, ARCH-06 | `agent-contract`, `key-handling` | NS-01, DR-02, DR-03, GR-01 |
+| UC-01 | Site built from `site/` and `quickstart/` only, with tabs and copy buttons | `site/*.md`, the snippet files | CMP-01 | None: a site test | DR-01 |
+| UC-02 | A message per status and per environment failure; the troubleshooting page | The mock's error routes; `site/troubleshooting.md` | ARCH-01, ARCH-02, SEC-04, PERF-02 | `error-handling` | NS-01 |
+| UC-03 | `llms.txt` and the no-SDK sentence | `site/llms.md`, built to `/llms.txt` | DQ-05, ARCH-03 | `agent-contract`, `no-sdk` | DR-04, GR-02 |
+| UC-03 | Agent harness: a fresh container per run, the scrubber, the run log | Container `.env` (revocable token); `evidence/agent_runs.csv`; `evidence/transcripts/` | SEC-01, SEC-02, CMP-02 | One regression case per Round 1 failure | DR-04 |
+| UC-04 | The PRD's funnel, kept equal to `docs/KEY_METRICS.md` by a test; the `User-Agent` lets Qrypt count quickstart calls | `PRD.md`, `docs/KEY_METRICS.md` | DQ-04, CMP-03 | None: a test of `PRD.md` | None: it specifies every metric |
 | UC-05 | CI on every push; the README's grader quick-start, its shell blocks run against the mock | `README.md`, the snippets, [ci.yml](../.github/workflows/ci.yml) | ARCH-04, ARCH-05 | None: a timed run from a fresh clone | None: RQ-35's timed run |
 | UC-06 | Claims table and claim ids on the site | `CLAIMS.md` | DQ-07 | None: Phase 5's test | None: RQ-24's count |
 

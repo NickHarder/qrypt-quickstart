@@ -4,7 +4,7 @@ title: "Users: who the Qrypt quickstart serves, and when"
 description: The developer new to Qrypt, the AI coding agent acting for them, the internal stakeholders and the grader, with the users the quickstart refuses, the moments it serves and the use cases that trace to the audit and the deliverables.
 tags: [users, gate]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:01Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
 sources:
   - id: assessment
     resource: /brief/assessment-text.md
@@ -277,7 +277,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Refusal behaviors | No token: exit non-zero, naming where to get one and how to set it (RQ-04). Never prints, logs or writes the key (AP-01). Never asks for more than `size=1` (AP-02) |
 | Several turns or chained tools | No: one run of one script |
 | Eval categories that guard it | `agent-contract` (the plan's first case: `size=1`, both headers, token from the environment, key never printed); `key-handling`[^plan] |
-| The metric that proves it | Gate 4 names it: the funnel's "first successful call" and "first key" stages, and time to first key |
+| The metric that proves it | NS-01 (first successful call), with DR-01, DR-02, DR-03 (first key) and GR-01 (return within 7 days): [the key metrics](KEY_METRICS.md) |
 
 ### UC-02: The error I am staring at
 
@@ -292,7 +292,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Refusal behaviors | No status is claimed for what Qrypt does not document, until Phase 7 records it (ARCH-01); no fix turns verification off; no retry loop |
 | Several turns or chained tools | No: one page, one entry |
 | Eval categories that guard it | `error-handling` (Phase 3's case: given the page and a 429, wait and do not loop, and tell 429 from 403)[^plan] |
-| The metric that proves it | Gate 4 names it: the funnel's "first successful call" stage, and the support-deflection assumption |
+| The metric that proves it | NS-01 (first successful call). Ticket deflection stays the brief's assumption, not a key metric: [the key metrics](KEY_METRICS.md) |
 
 ### UC-03: An agent writes the program from the quickstart alone
 
@@ -307,7 +307,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Refusal behaviors | The page and `llms.txt` say there is no SDK for the entropy service, never to print the key, never to read the token aloud, `size=1` only |
 | Several turns or chained tools | Yes, inside the agent: read the page, write files, install, run, read the output. The product itself makes no model call |
 | Eval categories that guard it | `agent-contract`; `no-sdk` (Phase 2's case: built-in `fetch` and `crypto`, no Qrypt package); a regression case for each Round 1 failure[^plan] |
-| The metric that proves it | Gate 4 names it: the agent success rate (at least 4 of 5) and the agent's median time to first key |
+| The metric that proves it | DR-04 (agent success rate, at least 4 of 5) and GR-02 (agent median time to first key, at most 10 minutes) |
 
 ### UC-04: Instrument the funnel from the PRD
 
@@ -322,7 +322,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Refusal behaviors | No illustrative number is shown as measured; no event carries a personal identifier |
 | Several turns or chained tools | No |
 | Eval categories that guard it | None: a test of `PRD.md` guards it (each stage's fields, equal to `docs/KEY_METRICS.md`, under 2,500 words)[^plan] |
-| The metric that proves it | Gate 4 decides whether one does; the acceptance is the brief's "no question back" |
+| The metric that proves it | None: the funnel is what P-03 builds, not a number that proves it; the acceptance is the brief's "no question back", and a test of `PRD.md` against [the key metrics](KEY_METRICS.md) |
 
 ### UC-05: Run the grader quick-start
 
