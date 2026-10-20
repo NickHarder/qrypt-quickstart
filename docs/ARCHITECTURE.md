@@ -4,7 +4,7 @@ title: "Architecture: snippets, mock, site builder, agent harness and CI"
 description: How the Qrypt quickstart is built from five small parts, where the token and the key may and may not go, what each dependency's failure looks like to the user, and the tracer bullet that proves the design first.
 tags: [architecture, gate]
 status: stable
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:10Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-20T23:01:43Z }
 sources:
   - id: audit
     resource: /AUDIT.md
@@ -180,6 +180,7 @@ follow the same steps with `fetch` and `node:crypto`, and with `ureq` and `doten
 | DV-03 | The audit's ARCH-02 mitigation: "Phase 7 sends one request with Python's default client" | A probe with the real token and `size=1` would take Phase 7 from 12 KiB to 13 ([the plan](PLAN.md), Phase 7's budget); the edge answers before the API reads the token, so a bad-token request shows the same refusal | The probe is a bad-token request with Python's default client, 0 KiB, beside the planned bad-token request with the named `User-Agent`; Phase 7 stays at 12 KiB |
 | DV-05 | The plan's site builder: `web/src/build-site.ts`, rendering `site/*.md` | The tracer bullet showed the eval target needs the same rendering as the site, and the target is Python (`src/qrypt_quickstart/evals/target.py`); a Markdown renderer would be one more install | `src/qrypt_quickstart/site_builder.py`, one function for the site and the eval; pages are HTML with include lines. `web/` keeps the Node snippet's tests and the browser checks (Phases 2 and 5) |
 | DV-04 | The agent test runs the quickstart against Qrypt, in a fresh environment[^assessment] | There is no Qrypt token yet ([the handoff](../HANDOFF.md), "Open, for the owner") | If none comes by 2026-10-20 18:00 CDT, both rounds run against the mock with its URL given to the agent, and `AGENT_READINESS.md` and the PRD say so (the plan's cut order, item 7) |
+| DV-06 | The plan's host: GitLab Pages, after the move to GitLab (DV-01) | Whether Gauntlet's internal GitLab serves Pages is unknown, and the submission is due 2026-10-21 13:30 CDT; the owner chose GitHub Pages on 2026-10-20 | `.github/workflows/deploy.yml` deploys `build/site` to GitHub Pages after CI passes on `main` ([the decision](DEPLOY.md)); the code still moves to GitLab from the `public` branch |
 
 # 8. Traceability matrix
 

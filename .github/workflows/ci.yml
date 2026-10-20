@@ -63,8 +63,8 @@ jobs:
       - run: scripts/gate.sh --checks lint --from project
       - run: scripts/gate.sh --checks tests --from project
 
-  # The quickstart site, built from site/ and the snippet files, kept as an artifact of the run. It
-  # deploys to a host only after the move to GitLab (docs/PLAN.md, Phase 11).
+  # The quickstart site, built from site/ and the snippet files, kept as an artifact of the run: the
+  # preview. deploy.yml deploys it to GitHub Pages after this workflow passes on main (docs/DEPLOY.md).
   site:
     runs-on: ubuntu-latest
     timeout-minutes: 10

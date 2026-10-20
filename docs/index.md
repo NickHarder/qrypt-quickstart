@@ -10,6 +10,10 @@ okf_version: "0.2"
 
 * [Audit: Qrypt's first-run path, before any product code](AUDIT.md) - What a first-time developer or agent meets in Qrypt's documented entropy API, and in this repository before its first slice, with a reproduction for each finding and the decision it forces in the plan.
 
+# Decision
+
+* [Deploying the site to GitHub Pages](DEPLOY.md) - How the quickstart site reaches its public URL, through CI and the owner's approval, and how to undo it.
+
 # Deliverables
 
 * [Deliverables of the Qrypt quickstart take-home](DELIVERABLES.md) - Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.

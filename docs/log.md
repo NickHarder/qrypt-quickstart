@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the deploy path, by the `set-up-deploy` skill on the owner's go: GitHub Pages, since
+  whether Gauntlet's internal GitLab serves Pages is unknown (`docs/DEPLOY.md`; DV-06 in the
+  architecture). `.github/workflows/deploy.yml` runs after CI passes on a push to `main`, builds
+  the site from that commit, deploys it into the `github-pages` environment the owner protects,
+  and smoke-tests the page and `llms.txt`; every action is pinned, and
+  `tests/test_deploy_workflow.py` holds it to all of that. Pages has one site per repository, so
+  CI's site artifact is the preview and the protected environment is production. Nothing was
+  deployed from the session.
 * **Change**: the `public` branch, for the public GitLab project (the owner's call): one commit
   with no history, since an older commit would still hold `docs/brief/`, of this branch's tree with
   that folder replaced by stubs of the same names, so every document that cites it, approved ones

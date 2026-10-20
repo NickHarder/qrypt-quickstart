@@ -50,6 +50,12 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 
 ## Open, for the owner
 
+**You act:** turn on GitHub Pages with GitHub Actions as its source, in the repository's Settings, Pages; a private repository needs a paid plan, and only a repository of the `public` branch may be made public (credential or account)
+
+**You act:** protect the `github-pages` environment with yourself as required reviewer, in Settings, Environments (approval)
+
+**You act:** merge this branch into `main`, then approve the first deploy in CI, and open the Pages URL logged out (approval)
+
 - Read and approve `docs/PLAN.md` (`make docs-approve DOC=docs/PLAN.md`, when you say so).
 - Review the backlog's scores and wording (`BACKLOG.md`): its reach shares and Qrypt's efforts are
   this project's estimates.
