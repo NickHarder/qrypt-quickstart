@@ -3,7 +3,7 @@ name: generate-demo
 description: Makes the project's demo video from one storyboard. It answers a rubric about the product, proposes the story, writes demo/storyboard.json against the component catalog, records the product, checks stills, renders a free draft, and once the owner has approved the scenes and the cost, makes the final voice-over and the finished cut with its poster frame. Use when the owner asks for a demo video, a walkthrough video or a re-cut of one, in a project that has the demo layer (a demo/ directory).
 disable-model-invocation: true
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Make the demo video
@@ -35,6 +35,8 @@ The owner decides the story, the wording, the pacing and the look. You propose, 
 - [references/story-shapes.md](references/story-shapes.md): the orders, lengths and pacing that have worked.
 - [references/honest-film.md](references/honest-film.md), before writing any line that states a number
   or showing anything that is not a recording.
+- [references/craft.md](references/craft.md): the hook, what makes each scene and frame worth
+  watching, the sound, and the share line. Honest film wins where the two disagree.
 - [references/remotion.md](references/remotion.md), only when a component has to change.
 
 ## Steps
@@ -44,8 +46,9 @@ The owner decides the story, the wording, the pacing and the look. You propose, 
 2. **Propose the story.** Before proposing, answer the rubric in writing, from the repository and the
    brief, not from imagination: what the product is, in one sentence; who it is for; the one beat of
    it in use (entry, the action, the result) that the recording must show; the strongest measured
-   number, with its source; the visual hook, the one screen worth a still; the shortest satisfying
-   length within the brief. Then a table: scene, component, what is on screen, the line, estimated
+   number, with its source; the visual hook, the one screen worth a still; what the first two
+   seconds show, and why a stranger keeps watching; the shortest satisfying length within the
+   brief. Then a table: scene, component, what is on screen, the line, estimated
    seconds (words divided by 2.5), and the reading time of its text (0.3 s a word, 0.8 s a label).
    Total it, and name the pacing option from the story shapes. Write no files yet. Wait for the
    owner's yes or notes.
@@ -63,8 +66,9 @@ The owner decides the story, the wording, the pacing and the look. You propose, 
 6. **Draft, after the stills.** `make demo-stills` (free, seconds): one still per scene settled and
    one at its end, in `demo/out/stills/`. Look at every one for text that overflows, elements that
    collide and low contrast, and fix the storyboard before any render. Then `make demo-draft`
-   (free): Kokoro reads every line on this machine. Give the owner `demo/out/draft.mp4`, the
-   poster `demo/out/draft.jpg` and the length of each scene from `demo/work/timeline.json`. Say
+   (free): Kokoro reads every line on this machine. Look at each still as a possible thumbnail,
+   and at each scene's last still beside the next scene's settled one (`references/craft.md`).
+   Give the owner `demo/out/draft.mp4`, the poster `demo/out/draft.jpg` and the length of each scene from `demo/work/timeline.json`. Say
    that the voice is a stand-in unless Kokoro is the final voice too.
 7. **Review, one scene at a time.** When the owner approves a scene, and only then:
    `make demo-approve SCENE=<id>`. An approved scene is locked; if the owner asks to change one,
@@ -78,7 +82,8 @@ The owner decides the story, the wording, the pacing and the look. You propose, 
 9. **Finished cut.** `make demo`. Every check must pass. Report the length, the loudness and the
    paths: `demo/out/demo.mp4`, with `demo.srt` and the poster `demo.jpg` beside it; frame 0 of the
    cut is the poster.
-10. **Hand back.** The owner publishes. Then put the link where the brief wants it, and commit
+10. **Hand back.** Propose the share line (`references/craft.md`); write it to
+    `demo/out/share-copy.txt` once the owner has said yes to its wording. The owner publishes. Then put the link where the brief wants it, and commit
     `storyboard.json`, `beats.json`, `media.lock.json` and `approved.json`. The media under
     `demo/public/media/` is not in git: remind the owner to archive it.
 
@@ -91,3 +96,4 @@ The owner decides the story, the wording, the pacing and the look. You propose, 
 - [ ] Every scene the owner approved is still as approved
 - [ ] No number is on screen or in a line without a measurement and a source
 - [ ] Nothing paid ran without the owner's yes to a stated amount
+- [ ] The first scene was planned as the hook, and every sound in the cut has its license recorded

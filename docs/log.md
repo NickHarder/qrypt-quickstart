@@ -5,6 +5,13 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the `generate-demo` skill (1.2.0) takes the creative rules of `/brag`
+  (latent-spaces/brag, MIT), on the owner's choice to enhance the skill rather than make the demo
+  with `/brag`: a new `references/craft.md` (the hook planned first, the result before the setup,
+  every frame a possible poster, the cut between scenes looked at, one mixed soundtrack with every
+  license recorded, a share line in the owner's words). `/brag`'s re-rendered UI is not taken, since
+  product footage here is recorded, and neither is its music, whose terms its own README says are
+  unchecked. A `make kit-update` that rewrites the skill would drop this: carry it to the kit.
 * **Change**: the competitive teardown (RQ-41), RANDOM.ORG's API against the five funnel stages,
   from its documentation and one request with an unissued key. Its main finding: a wrong key comes
   back as HTTP 200 with the error in the body. Two ideas to borrow, a budget in every answer and a
