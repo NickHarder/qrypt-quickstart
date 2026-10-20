@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: `tests/test_mirror_to_gitlab.py` no longer inherits git's own variables. Pushing the
+  `public` branch from its worktree, the pre-push hook's gate ran this test with the hook's
+  `GIT_DIR`, so its git commands reached the live repository: they set `core.bare=true` in its
+  config and committed a test README onto `public`. The push stopped before sending anything; the
+  config and the branch were restored, and a test with a decoy repository now proves the isolation.
 * **Change**: the deploy path, by the `set-up-deploy` skill on the owner's go: GitHub Pages, since
   whether Gauntlet's internal GitLab serves Pages is unknown (`docs/DEPLOY.md`; DV-06 in the
   architecture). `.github/workflows/deploy.yml` runs after CI passes on a push to `main`, builds

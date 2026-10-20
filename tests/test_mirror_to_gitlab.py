@@ -12,6 +12,8 @@ import subprocess
 from pathlib import Path
 from typing import Final
 
+import pytest
+
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 SCRIPT: Final = REPOSITORY_ROOT / "scripts" / "mirror_to_gitlab.sh"
 GIT: Final = shutil.which("git") or "git"
@@ -23,6 +25,16 @@ GIT_IDENTITY: Final = {
 }
 
 
+def isolated_environment() -> dict[str, str]:
+    """This process's environment without git's own variables, plus the test identity.
+
+    A git hook exports GIT_DIR and its kin; inherited, they would turn every git command here on the
+    repository the hook runs in instead of the test's own.
+    """
+    inherited = {name: value for name, value in os.environ.items() if not name.startswith("GIT_")}
+    return {**inherited, **GIT_IDENTITY}
+
+
 def git(*arguments: str, cwd: Path) -> str:
     completed = subprocess.run(
         [GIT, *arguments],
@@ -30,7 +42,7 @@ def git(*arguments: str, cwd: Path) -> str:
         check=True,
         capture_output=True,
         text=True,
-        env={**os.environ, **GIT_IDENTITY},
+        env=isolated_environment(),
     )
     return completed.stdout.strip()
 
@@ -57,7 +69,7 @@ def run_script(*arguments: str, cwd: Path) -> subprocess.CompletedProcess[str]:
         check=False,
         capture_output=True,
         text=True,
-        env={**os.environ, **GIT_IDENTITY},
+        env=isolated_environment(),
         timeout=60,
     )
 
@@ -107,3 +119,29 @@ def test_it_says_how_to_run_it_when_an_argument_is_missing(tmp_path: Path) -> No
     run = run_script("--branch", "work", cwd=tmp_path)
     assert run.returncode != 0
     assert "usage" in run.stderr.lower()
+
+
+def test_a_git_hooks_environment_never_reaches_the_repository_it_runs_in(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # A pre-push hook run from a worktree exports GIT_DIR; once, it led this test's git commands to
+    # the live repository, which they made bare and committed into. A decoy stands in for it here.
+    decoy = tmp_path / "decoy"
+    subprocess.run([GIT, "init", "--quiet", str(decoy)], check=True, capture_output=True)
+    monkeypatch.setenv("GIT_DIR", str(decoy / ".git"))
+    monkeypatch.setenv("GIT_WORK_TREE", str(decoy))
+    github, gitlab = make_hosts(tmp_path)
+    run = run_script(
+        "--github", str(github), "--gitlab", str(gitlab), "--branch", "work", cwd=tmp_path
+    )
+    assert run.returncode == 0, run.stderr
+    decoy_config = (decoy / ".git" / "config").read_text()
+    assert "bare = true" not in decoy_config
+    decoy_log = subprocess.run(
+        [GIT, "-C", str(decoy), "log", "--oneline"],
+        capture_output=True,
+        text=True,
+        check=False,
+        env={name: value for name, value in os.environ.items() if not name.startswith("GIT_")},
+    )
+    assert decoy_log.stdout == ""
