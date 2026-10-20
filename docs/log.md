@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the new 403 message checked live, on the owner's go: the Python, Node.js and Rust
+  programs, each run once against Qrypt with a deliberately wrong token, 3 s apart, printed
+  "Qrypt answered HTTP 403: wrong token or allotment spent." and exited 1
+  (`evidence/live_wrong_token.json`). Refused requests spend no entropy; the ledger has a row for
+  each at 0 KiB.
 * **Change**: the 403 message, on the owner's go. Live, Qrypt answers a wrong token with 403
   `{"error": "Forbidden or entropy quota reached"}`, the answer it gives a used-up allotment, where
   its docs say 401 (`evidence/live_probes.json`). The API is Qrypt's to fix; the message was ours:

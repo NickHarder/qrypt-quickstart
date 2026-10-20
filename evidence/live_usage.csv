@@ -50,3 +50,6 @@ occurred_at,purpose,kib_requested,status
 2026-10-20T18:12:28Z,agent round 2-live run 3,1,200
 2026-10-20T18:13:11Z,agent round 2-live run 4,1,200
 2026-10-20T18:13:40Z,agent round 2-live run 5,1,200
+2026-10-20T18:52:46Z,wrong-token check python,0,403
+2026-10-20T18:52:50Z,wrong-token check node,0,403
+2026-10-20T18:52:54Z,wrong-token check rust,0,403
