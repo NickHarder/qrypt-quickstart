@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the demo's storyboard, on the owner's yes: 11 scenes, about 85 s, with the agent run
+  still to come once a round has run. The quickstart site is a recorded take
+  (`demo/takes/quickstart.take.ts`), and the terminal scenes show real output that
+  `demo/terminal/capture.sh` records against the mock. The voice is Gemini's Orus, as the owner
+  asked; the free Kokoro draft stands in until the paid voice-over is approved. The recorder can
+  use another Chromium (`DEMO_BROWSER_PATH`), since a cloud session has no Chrome. The funnel scene
+  became a `Statement`, because the PRD's table lines are longer than `CodeHighlight` takes. The
+  grader run, captured again for the video, took 18.1 s; the documents quote that number.
 * **Change**: the agent harness runs in a cloud session. Docker is installed there, only not
   started. Behind its TLS-inspecting egress proxy, the image takes the proxy's authority as a build
   secret, and the harness gains `--network host` and `--extra-ca`: the container shares the host's

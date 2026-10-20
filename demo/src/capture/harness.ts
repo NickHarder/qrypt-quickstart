@@ -49,7 +49,14 @@ export type CaptureOptions = {
 export const recordTake = async (take: Take, options: CaptureOptions): Promise<BeatRow[]> => {
   const scratchDirectory = mkdtempSync(path.join(tmpdir(), "demo-capture-"));
   const beatRows: BeatRow[] = [];
-  const browser = await chromium.launch({ channel: "chrome", headless: true });
+  // The Chrome installed on the machine; DEMO_BROWSER_PATH names another Chromium build instead
+  // (a cloud session has Playwright's, and no Chrome).
+  const browserPath = process.env.DEMO_BROWSER_PATH;
+  const browser = await chromium.launch(
+    browserPath === undefined || browserPath === ""
+      ? { channel: "chrome", headless: true }
+      : { executablePath: browserPath, headless: true },
+  );
   try {
     const context = await browser.newContext({
       viewport: { width: WIDTH, height: HEIGHT },

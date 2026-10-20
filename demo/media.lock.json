@@ -1,1 +1,7 @@
-{}
+{
+  "takes/quickstart.webm": {
+    "sha256": "658122061791ef251a1144618c5bf4e1f3ea916832c02d2900cfe853d25dd050",
+    "bytes": 3382946,
+    "provenance": "recorded"
+  }
+}

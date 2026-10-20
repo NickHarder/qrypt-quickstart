@@ -1,35 +1,35 @@
 {
-  "started_at": "2026-10-20T04:06:51Z",
+  "started_at": "2026-10-20T12:58:13Z",
   "target": "local mock",
-  "total_seconds": 2.4,
+  "total_seconds": 18.1,
   "steps": [
     {
       "command": "git clone --quiet file:///home/user/qrypt-quickstart qrypt-quickstart",
-      "seconds": 0.3,
+      "seconds": 5.22,
       "exit_code": 0,
       "output_tail": ""
     },
     {
       "command": "cp .env.example .env",
-      "seconds": 0.01,
+      "seconds": 0.0,
       "exit_code": 0,
       "output_tail": ""
     },
     {
       "command": "pip install cryptography python-dotenv",
-      "seconds": 1.83,
+      "seconds": 12.6,
       "exit_code": 0,
-      "output_tail": "51.2/51.2 kB 218.0 MB/s eta 0:00:00\nInstalling collected packages: python-dotenv, pycparser, cffi, cryptography\nSuccessfully installed cffi-2.1.1 cryptography-50.0.2 pycparser-3.11 python-dotenv-1.2.4"
+      "output_tail": "\u2501 51.2/51.2 kB 1.9 MB/s eta 0:00:00\nInstalling collected packages: python-dotenv, pycparser, cffi, cryptography\nSuccessfully installed cffi-2.1.1 cryptography-50.0.2 pycparser-3.11 python-dotenv-1.2.4"
     },
     {
       "command": "python quickstart/python/quickstart.py",
-      "seconds": 0.1,
+      "seconds": 0.11,
       "exit_code": 0,
       "output_tail": "Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown)."
     },
     {
       "command": "node quickstart/node/quickstart.mjs",
-      "seconds": 0.11,
+      "seconds": 0.13,
       "exit_code": 0,
       "output_tail": "Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown)."
     }
