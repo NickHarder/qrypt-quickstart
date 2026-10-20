@@ -1,9 +1,10 @@
 """Every "get a token" link goes to the portal's sign-up page, tagged for the funnel (stage 1).
 
 The brief names https://portal.qrypt.com/register, but the portal renders that as a 404
-(2026-10-20); its login page's "Create trial account" leads to /trial, the working sign-up. The PRD's attribution rests
-on the quickstart's links carrying `ref=quickstart`, which the portal stores as `signup_ref`; a
-link without it would make stage 1 unmeasurable. This keeps the pages and the PRD in agreement.
+(2026-10-20); its login page's "Create trial account" leads to /trial, the working sign-up. The
+PRD's attribution rests on the quickstart's links carrying `ref=quickstart`, which the portal
+stores as `signup_ref`; a link without it would make stage 1 unmeasurable. This keeps the pages
+and the PRD in agreement.
 
 The links for someone without a token are the quickstart page's and the agent docs'. The
 troubleshooting page's 401 fix is for someone who has an account and needs a new token, so it
