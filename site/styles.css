@@ -61,3 +61,27 @@ code { font: 0.9375rem/1.5 ui-monospace, monospace; }
   border-radius: 4px;
   cursor: pointer;
 }
+
+.tabs { display: flex; gap: 0.25rem; margin-top: 1rem; }
+
+[role="tab"] {
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--code-background);
+  border: 1px solid var(--muted);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+}
+
+[role="tab"][aria-selected="true"] {
+  background: var(--background);
+  font-weight: 600;
+}
+
+[role="tabpanel"] {
+  padding: 0 1rem 0.5rem;
+  border: 1px solid var(--muted);
+  border-radius: 0 6px 6px 6px;
+}

@@ -49,7 +49,43 @@ def test_the_page_is_one_path_from_a_token_to_a_key_with_a_time_target(tmp_path:
 def test_every_copy_button_has_an_accessible_label(tmp_path: Path) -> None:
     build_site(output_directory=tmp_path)
     page = (tmp_path / "index.html").read_text()
-    buttons = re.findall(r"<button[^>]*>", page)
-    assert buttons
-    assert all('aria-label="Copy' in button for button in buttons)
+    # The tabs are buttons too; their visible text is their accessible name.
+    copy_buttons = re.findall(r'<button[^>]*class="copy-button"[^>]*>', page)
+    assert len(copy_buttons) == 2
+    assert all('aria-label="Copy' in button for button in copy_buttons)
     assert (tmp_path / "copy.js").is_file()
+
+
+NODE_SNIPPET: Final = REPOSITORY_ROOT / "quickstart" / "node" / "quickstart.mjs"
+JAVASCRIPT_BLOCK_PATTERN: Final = re.compile(
+    r'<pre[^>]*><code class="language-javascript">(?P<code>.*?)</code></pre>', re.DOTALL
+)
+
+
+def test_the_built_page_shows_exactly_the_node_snippet_ci_runs(tmp_path: Path) -> None:
+    build_site(output_directory=tmp_path)
+    page = (tmp_path / "index.html").read_text()
+    code_blocks = [
+        html.unescape(match["code"]) for match in JAVASCRIPT_BLOCK_PATTERN.finditer(page)
+    ]
+    assert code_blocks == [NODE_SNIPPET.read_text()]
+
+
+def test_the_language_tabs_follow_the_aria_tabs_pattern(tmp_path: Path) -> None:
+    build_site(output_directory=tmp_path)
+    page = (tmp_path / "index.html").read_text()
+    assert page.count('role="tablist"') == 1
+    tabs = re.findall(r'<button[^>]*role="tab"[^>]*>', page)
+    assert len(tabs) == 2
+    controlled_ids = re.findall(r'role="tab"[^>]*aria-controls="([^"]+)"', page)
+    assert len(controlled_ids) == 2
+    for controlled_id in controlled_ids:
+        assert re.search(rf'id="{controlled_id}"[^>]*role="tabpanel"', page)
+    assert 'aria-selected="true"' in tabs[0]
+    assert 'aria-selected="false"' in tabs[1]
+
+
+def test_no_panel_is_hidden_without_javascript(tmp_path: Path) -> None:
+    build_site(output_directory=tmp_path)
+    page = (tmp_path / "index.html").read_text()
+    assert not re.search(r'role="tabpanel"[^>]*hidden', page)

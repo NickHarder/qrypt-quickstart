@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()  # reads .env from this script's folder (or a parent); a real env variable wins
 api_key = os.environ.get("QRYPT_API_KEY", "").strip()
 if not api_key:
-    sys.exit("Set QRYPT_API_KEY=<token> in a .env file. Get an Entropy token: portal.qrypt.com")
+    sys.exit("Set QRYPT_API_KEY=<token> in .env (Entropy tokens: portal.qrypt.com)")
 # QRYPT_API_URL points the script at a local mock for testing; unset, it calls Qrypt.
 api_url = os.environ.get("QRYPT_API_URL", "https://api-eus.qrypt.com/api/v1/quantum-entropy")
 headers = {"Accept": "application/json", "Authorization": f"Bearer {api_key}"}
@@ -38,5 +38,5 @@ aes_key, nonce = entropy_bytes[:32], entropy_bytes[32:44]
 sample_text = b"Hello from Qrypt quantum entropy"
 ciphertext = AESGCM(aes_key).encrypt(nonce, sample_text, None)
 if AESGCM(aes_key).decrypt(nonce, ciphertext, None) != sample_text:
-    sys.exit("The AES-GCM round trip did not match: do not use this key.")
-print("Success: a 256-bit AES key from Qrypt quantum entropy passed AES-GCM. It was not shown.")
+    sys.exit("AES-GCM round trip failed: do not use this key.")
+print("Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown).")

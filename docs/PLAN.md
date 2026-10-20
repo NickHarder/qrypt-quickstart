@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:10Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:18:04Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -206,12 +206,15 @@ site built and uploaded as a CI artifact).
 
 Tuesday 2026-10-20, 10:00 to 11:30 CDT.
 
-- **Tests and eval cases, written first:** `web/tests/quickstart-node.test.ts`, the same cases as
-  Phase 1 against the mock; the line count; a Playwright test that the tabs switch with the arrow
-  keys and that each copy button has an accessible label and copies its block. An eval case: asked
-  for a Node program, the model uses built-in `fetch` and `crypto` and installs no Qrypt package.
+- **Tests and eval cases, written first:** `tests/test_quickstart_node.py`, the same cases as
+  Phase 1 against the same Python mock (moved from vitest so one mock serves every language); the
+  line count; a static test of the tabs' ARIA structure and the copy buttons' labels. The
+  Playwright test that drives the tabs and copy buttons by keyboard moves to Phase 5, which installs
+  Playwright. An eval case (AC-02): asked for a Node program, the model uses built-in `fetch` and
+  `crypto` and installs no Qrypt package.
 - **Files:** `quickstart/node/quickstart.mjs`, `site/index.html`, `site/copy.js` (tabs, copy
-  buttons), `web/tsconfig.json` (`checkJs` over the snippet).
+  buttons), `web/tsconfig.json` (`checkJs` over the snippet), `quickstart/biome.json` (Biome over
+  the snippet).
 - **Verify:** `make e2e`, `make gate`.
 - **Effort:** 1.5 hours. **Cost:** about $0.05.
 

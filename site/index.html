@@ -28,28 +28,48 @@
         paste the token into a screenshot, a recording or a chat with an AI agent.</p>
     </section>
 
-    <section aria-labelledby="step-install">
-      <h2 id="step-install">2. Install what the quickstart needs</h2>
-      <p>Python 3.10 or later, and two packages:</p>
-      <pre><code class="language-shell">pip install cryptography python-dotenv</code></pre>
-    </section>
-
     <section aria-labelledby="step-run">
-      <h2 id="step-run">3. Run the quickstart</h2>
-      <p>Save this as <code>quickstart.py</code> next to your <code>.env</code>, then run
-        <code>python quickstart.py</code>.</p>
-      <div class="code-block">
-        <button type="button" class="copy-button" data-copy-target="python-snippet"
-          aria-label="Copy the Python quickstart">Copy</button>
-        <pre id="python-snippet"><code class="language-python"><!-- include: quickstart/python/quickstart.py --></code></pre>
+      <h2 id="step-run">2. Run the quickstart</h2>
+      <p>Pick your language. Save the file next to your <code>.env</code> and run it there.</p>
+      <div role="tablist" aria-label="Quickstart language" class="tabs">
+        <button type="button" role="tab" id="tab-python" aria-controls="panel-python"
+          aria-selected="true">Python</button>
+        <button type="button" role="tab" id="tab-node" aria-controls="panel-node"
+          aria-selected="false">Node.js</button>
+      </div>
+
+      <div id="panel-python" role="tabpanel" aria-labelledby="tab-python" tabindex="0">
+        <p>Python 3.10 or later, and two packages:</p>
+        <pre><code class="language-shell">pip install cryptography python-dotenv</code></pre>
+        <p>Save this as <code>quickstart.py</code>:</p>
+        <div class="code-block">
+          <button type="button" class="copy-button" data-copy-target="python-snippet"
+            aria-label="Copy the Python quickstart">Copy</button>
+          <pre id="python-snippet"><code class="language-python"><!-- include: quickstart/python/quickstart.py --></code></pre>
+        </div>
+        <p>Then run:</p>
+        <pre><code class="language-shell">python quickstart.py</code></pre>
+      </div>
+
+      <div id="panel-node" role="tabpanel" aria-labelledby="tab-node" tabindex="0">
+        <p>Node.js 20.12 or later. Nothing to install: <code>fetch</code> and
+          <code>node:crypto</code> are built in.</p>
+        <p>Save this as <code>quickstart.mjs</code>:</p>
+        <div class="code-block">
+          <button type="button" class="copy-button" data-copy-target="node-snippet"
+            aria-label="Copy the Node.js quickstart">Copy</button>
+          <pre id="node-snippet"><code class="language-javascript"><!-- include: quickstart/node/quickstart.mjs --></code></pre>
+        </div>
+        <p>Then run:</p>
+        <pre><code class="language-shell">node quickstart.mjs</code></pre>
       </div>
       <p role="status" aria-live="polite" class="copy-status"></p>
     </section>
 
     <section aria-labelledby="step-see">
-      <h2 id="step-see">4. What you should see</h2>
-      <pre><code class="language-text">Success: a 256-bit AES key from Qrypt quantum entropy passed AES-GCM. It was not shown.</code></pre>
-      <p>The script asks Qrypt for <code>size=1</code>. <strong><code>size</code> counts KiB
+      <h2 id="step-see">3. What you should see</h2>
+      <pre><code class="language-text">Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown).</code></pre>
+      <p>Either script asks Qrypt for <code>size=1</code>. <strong><code>size</code> counts KiB
         (1,024-byte blocks), not bytes</strong>: <code>size=1</code> returns 1,024 bytes, and an
         AES-256 key needs 32 of them. It decodes the base64 block, takes bytes 0 to 31 as the key and
         bytes 32 to 43 as the AES-GCM nonce, encrypts and decrypts a sample, and prints the result.

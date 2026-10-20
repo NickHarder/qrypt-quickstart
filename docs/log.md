@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 2: the Node quickstart (25 of 25 lines), tested in pytest against the same mock,
+  type-checked by `web/`'s tsc and linted by Biome; the site's run step became two language tabs.
+  The keyboard test with Playwright moved to Phase 5, which installs Playwright
+  ([the plan](/PLAN.md)); the snippet's exceptions are in [the rule](/rules/typescript-conventions.md).
 * **Change**: [the deliverables](/DELIVERABLES.md) mark RQ-28 met: the first CI run on a push built
   the site and kept it as an artifact.
 * **Change**: Phase 1, the tracer bullet: the Python quickstart, the mock, the site builder, the

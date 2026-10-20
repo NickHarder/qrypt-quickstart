@@ -21,3 +21,11 @@ runs:
         cache-dependency-glob: uv.lock
     - shell: bash
       run: uv sync --frozen
+    # Node for the Node snippet (its tests, `make e2e`) and web/'s Biome, which lints the snippet.
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
+      with:
+        node-version-file: web/.nvmrc
+        cache: npm
+        cache-dependency-path: web/package-lock.json
+    - shell: bash
+      run: npm ci --prefix web --no-audit --no-fund
