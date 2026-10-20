@@ -24,9 +24,15 @@ def test_an_include_is_replaced_by_the_file_escaped(tmp_path: Path) -> None:
     assert rendered_page == f"<pre><code>{escaped_code}</code></pre>"
 
 
-@pytest.mark.parametrize("included_path", ["quickstart/missing.py", "../outside.py", "src/x.py"])
+@pytest.mark.parametrize(
+    "included_path",
+    ["quickstart/missing.py", "../outside.py", "src/x.py", "rust/Cargo.toml", "rust/src/../x.rs"],
+)
 def test_an_include_outside_quickstart_or_missing_fails(tmp_path: Path, included_path: str) -> None:
     (tmp_path / "quickstart").mkdir()
+    (tmp_path / "rust" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "Cargo.toml").write_text("[package]\n")
+    (tmp_path / "rust" / "x.rs").write_text("fn main() {}\n")
     with pytest.raises(SiteBuildError):
         render_page(f"<!-- include: {included_path} -->", repository_root=tmp_path)
 
@@ -50,8 +56,9 @@ def test_every_copy_button_has_an_accessible_label(tmp_path: Path) -> None:
     build_site(output_directory=tmp_path)
     page = (tmp_path / "index.html").read_text()
     # The tabs are buttons too; their visible text is their accessible name.
+    # One copy button for each language's program: Python, Node.js and Rust.
     copy_buttons = re.findall(r'<button[^>]*class="copy-button"[^>]*>', page)
-    assert len(copy_buttons) == 2
+    assert len(copy_buttons) == 3
     assert all('aria-label="Copy' in button for button in copy_buttons)
     assert (tmp_path / "copy.js").is_file()
 
@@ -76,16 +83,36 @@ def test_the_language_tabs_follow_the_aria_tabs_pattern(tmp_path: Path) -> None:
     page = (tmp_path / "index.html").read_text()
     assert page.count('role="tablist"') == 1
     tabs = re.findall(r'<button[^>]*role="tab"[^>]*>', page)
-    assert len(tabs) == 2
+    assert len(tabs) == 3
     controlled_ids = re.findall(r'role="tab"[^>]*aria-controls="([^"]+)"', page)
-    assert len(controlled_ids) == 2
+    assert len(controlled_ids) == 3
     for controlled_id in controlled_ids:
         assert re.search(rf'id="{controlled_id}"[^>]*role="tabpanel"', page)
     assert 'aria-selected="true"' in tabs[0]
-    assert 'aria-selected="false"' in tabs[1]
+    assert all('aria-selected="false"' in tab for tab in tabs[1:])
 
 
 def test_no_panel_is_hidden_without_javascript(tmp_path: Path) -> None:
     build_site(output_directory=tmp_path)
     page = (tmp_path / "index.html").read_text()
     assert not re.search(r'role="tabpanel"[^>]*hidden', page)
+
+
+def test_the_rust_quickstart_can_be_included_from_its_crate(tmp_path: Path) -> None:
+    (tmp_path / "rust" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "src" / "main.rs").write_text("fn main() {}\n")
+    rendered_page = render_page("<!-- include: rust/src/main.rs -->", repository_root=tmp_path)
+    assert rendered_page == "fn main() {}\n"
+
+
+RUST_SNIPPET: Final = REPOSITORY_ROOT / "rust" / "src" / "main.rs"
+RUST_BLOCK_PATTERN: Final = re.compile(
+    r'<pre[^>]*><code class="language-rust">(?P<code>.*?)</code></pre>', re.DOTALL
+)
+
+
+def test_the_built_page_shows_exactly_the_rust_snippet_ci_runs(tmp_path: Path) -> None:
+    build_site(output_directory=tmp_path)
+    page = (tmp_path / "index.html").read_text()
+    code_blocks = [html.unescape(match["code"]) for match in RUST_BLOCK_PATTERN.finditer(page)]
+    assert code_blocks == [RUST_SNIPPET.read_text()]

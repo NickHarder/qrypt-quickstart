@@ -1,6 +1,6 @@
 # Qrypt Quickstart: an AES-256 key from Qrypt quantum entropy (full version)
 
-> Everything an AI coding agent needs to generate an AES-256 key from Qrypt's Quantum Entropy REST API in a new project: the rules, a complete Python program, a complete Node.js program, and every error message with its fix. Target: a working key in under 10 minutes.
+> Everything an AI coding agent needs to generate an AES-256 key from Qrypt's Quantum Entropy REST API in a new project: the rules, complete Python, Node.js and Rust programs, and every error message with its fix. Target: a working key in under 10 minutes.
 
 ## Rules for AI coding agents
 
@@ -45,6 +45,20 @@ node quickstart.mjs
 ```javascript
 <!-- include: quickstart/node/quickstart.mjs -->```
 
+## Step 2, Rust: src/main.rs
+
+Rust 1.89 or later. Make a project, add five crates, save the program over `src/main.rs`, put `.env` in the project's folder, and run it:
+
+```shell
+cargo new qrypt-key && cd qrypt-key
+cargo add aes-gcm@0.11.1 base64@0.23.1 dotenvy@0.15.7 serde_json@1.0.151
+cargo add ureq@3.4.2 -F platform-verifier
+cargo run
+```
+
+```rust
+<!-- include: rust/src/main.rs -->```
+
 ## Step 3: what success looks like
 
 ```text
@@ -62,6 +76,6 @@ Each program makes one request and prints one line on failure, with a non-zero e
 - `Qrypt answered HTTP 429: over 30 requests in 10 seconds; wait 10 seconds, then run once.`: the rate limit. Wait 10 seconds, then run once; never retry in a loop.
 - `Qrypt answered HTTP 500: try again shortly.`: an error inside Qrypt. Run again in a minute; if it persists, contact Qrypt support.
 - `Qrypt answered HTTP 503: try again shortly.`: Qrypt's entropy supply is temporarily insufficient. Run again in a minute with `size=1`.
-- `Could not get entropy (...)`: no network, a timeout, a proxy, or a certificate the machine does not trust. Behind a TLS-inspecting proxy, point the runtime at the company's root certificate: `SSL_CERT_FILE=/path/to/company-ca.pem` for Python, `NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem` for Node.js. Never turn certificate checks off.
+- `Could not get entropy (...)`: no network, a timeout, a proxy, or a certificate the machine does not trust. Behind a TLS-inspecting proxy, point the runtime at the company's root certificate: `SSL_CERT_FILE=/path/to/company-ca.pem` for Python, `NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem` for Node.js; the Rust program trusts the operating system's certificates, and `SSL_CERT_FILE` on Linux. Never turn certificate checks off.
 
 More detail: [Troubleshooting](troubleshooting.html). Qrypt's own reference: [docs.qrypt.com/eaas](https://docs.qrypt.com/eaas/).

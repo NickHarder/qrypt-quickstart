@@ -18,6 +18,7 @@ REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 SNIPPETS: Final = [
     REPOSITORY_ROOT / "quickstart" / "python" / "quickstart.py",
     REPOSITORY_ROOT / "quickstart" / "node" / "quickstart.mjs",
+    REPOSITORY_ROOT / "rust" / "src" / "main.rs",
 ]
 ENDPOINT: Final = "https://api-eus.qrypt.com/api/v1/quantum-entropy"
 
@@ -63,7 +64,7 @@ def test_the_snippets_use_the_endpoint_and_headers_llms_txt_names(built_site: Pa
         assert "size=1" in source
 
 
-def test_llms_full_txt_holds_both_snippets_word_for_word(built_site: Path) -> None:
+def test_llms_full_txt_holds_every_snippet_word_for_word(built_site: Path) -> None:
     text = (built_site / "llms-full.txt").read_text()
     for snippet in SNIPPETS:
         assert snippet.read_text() in text

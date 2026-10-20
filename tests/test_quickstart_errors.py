@@ -1,8 +1,8 @@
-"""Every way the first run can fail, for both snippets: a clear message, a non-zero exit, no trace.
+"""Every way the first run can fail, for every snippet: a clear message, a non-zero exit, no trace.
 
 The brief's edge cases (RQ-11, RQ-12, RQ-13, RQ-17): each HTTP error Qrypt documents, a refused
 connection, a certificate the machine does not trust, and a 200 whose body holds no usable block.
-Neither snippet retries, so each failure costs one request at most.
+No snippet retries, so each failure costs one request at most.
 """
 
 import html
@@ -17,7 +17,7 @@ from qrypt_quickstart.mock_server import MockQryptServer
 from snippet_runner import run_snippet
 from tls_certificate import write_self_signed_certificate
 
-LANGUAGES: Final = ["python", "node"]
+LANGUAGES: Final = ["python", "node", "rust"]
 TROUBLESHOOTING_PAGE: Final = Path(__file__).resolve().parents[1] / "site" / "troubleshooting.html"
 EXPECTED_PHRASES: Final = {
     400: ["HTTP 400", "size"],
@@ -59,7 +59,7 @@ def test_a_rate_limit_stops_at_once_instead_of_looping(tmp_path: Path, language:
 
 
 @pytest.mark.parametrize("status_code", sorted(EXPECTED_PHRASES))
-def test_both_snippets_print_the_same_message_and_the_page_quotes_it(
+def test_every_snippet_prints_the_same_message_and_the_page_quotes_it(
     tmp_path: Path, status_code: int
 ) -> None:
     messages = []
@@ -71,7 +71,7 @@ def test_both_snippets_print_the_same_message_and_the_page_quotes_it(
                 language, work_directory, api_url=server.url, token=f"mock-{status_code}"
             )
         messages.append(run.stderr.strip())
-    assert messages[0] == messages[1]
+    assert len(set(messages)) == 1, messages
     assert messages[0] in page_text()
 
 

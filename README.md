@@ -1,6 +1,6 @@
 # Qrypt Quickstart
 
-A 25-line Python and Node quickstart, troubleshooting site, llms.txt and onboarding PRD for Qrypt quantum entropy.
+A 25-line Python, Node and Rust quickstart, troubleshooting site, llms.txt and onboarding PRD for Qrypt quantum entropy.
 
 A developer new to Qrypt, or the AI coding agent working for them, gets from "never heard of Qrypt"
 to a working AES-256 key made from quantum entropy: one request for 1 KiB, a key proven with
@@ -25,7 +25,10 @@ Each program asks Qrypt for `size=1` (1 KiB) and prints:
 Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown).
 ```
 
-No token yet? `make bootstrap` then `make e2e` runs both programs against a local mock of Qrypt's
+Rust too (the stretch third language, Rust 1.89 or later): `cd rust && cargo run` prints the same
+line, reading `.env` from the repository's root.
+
+No token yet? `make bootstrap` then `make e2e` runs all three programs against a local mock of Qrypt's
 endpoint, builds the site and checks it shows the code that ran, in under a minute and offline.
 Something else printed? Every message is in `site/troubleshooting.html`.
 
@@ -33,7 +36,7 @@ Something else printed? Every message is in `site/troubleshooting.html`.
 
 | The brief asks for | Here |
 |---|---|
-| Quickstart code in two languages, at most 25 lines each | [`quickstart/python/quickstart.py`](quickstart/python/quickstart.py), [`quickstart/node/quickstart.mjs`](quickstart/node/quickstart.mjs) |
+| Quickstart code in two languages, at most 25 lines each | [`quickstart/python/quickstart.py`](quickstart/python/quickstart.py), [`quickstart/node/quickstart.mjs`](quickstart/node/quickstart.mjs); a third, Rust (stretch): [`rust/src/main.rs`](rust/src/main.rs) |
 | The quickstart site, with troubleshooting | [`site/`](site/index.html), built by `make e2e` into `build/site/`; [`site/troubleshooting.html`](site/troubleshooting.html) |
 | Agent-readable docs | [`site/llms.md`](site/llms.md) and [`site/llms-full.md`](site/llms-full.md), built into `llms.txt` and `llms-full.txt` |
 | The onboarding PRD | [`PRD.md`](PRD.md) |
@@ -42,7 +45,7 @@ Something else printed? Every message is in `site/troubleshooting.html`.
 | The prioritized backlog | `BACKLOG.md`, after the rounds |
 | AI usage | [`AI_USAGE.md`](AI_USAGE.md) |
 | Lighthouse report | [`evidence/lighthouse/`](evidence/lighthouse/summary.json): load p95 1,024 ms on mobile, accessibility 100 |
-| CI on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml): both programs against the mock for the success path and 400, 401, 403, 429, 500 and 503 |
+| CI on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml): all three programs against the mock for the success path and 400, 401, 403, 429, 500 and 503 |
 
 ## Run the snippets
 
@@ -56,7 +59,7 @@ QRYPT_API_URL=http://127.0.0.1:8765/api/v1/quantum-entropy QRYPT_API_KEY=mock-42
   python quickstart/python/quickstart.py            # in another: prints the 429 message
 ```
 
-`make e2e` runs both programs against the mock, counts their lines and builds the site, in one
+`make e2e` runs all three programs against the mock, counts their lines and builds the site, in one
 command. The tests in `tests/` run every error each program can meet, against the mock.
 
 ## Build the site

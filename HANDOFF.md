@@ -3,8 +3,9 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after Phase 6: the quickstarts, the site, the claims table and the
-onboarding PRD are done against the mock; the live check waits on the owner's token.
+Last updated: 2026-10-20, after Phase 10: the three quickstarts, the site, the claims table, the
+onboarding PRD and the agent harness are done against the mock; the live check waits on the owner's
+token.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -25,6 +26,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
 | Phase 7, live check | Code ready and tested against the mock (`make live-check`); not run live: waits on the owner's token and go, 12 KiB | `tests/test_live_check.py` |
 | Phase 8, agent harness | Built and proved with stand-in agents (`make agent-round ROUND=1`); the rounds need Docker, the agent's login and the owner's go; live rounds go through the recording relay (64 KiB a run) | `tests/test_agent_harness.py` |
+| Phase 10, Rust | Done against the mock: `rust/src/main.rs` (25 of 25 lines), a Rust tab and `llms-full.txt` section; its 5 live runs wait on the token (they make the live check 17 KiB) | `tests/test_quickstart_rust.py` |
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
 | Next | Run round 1 (owner's go: Docker, the agent's login; and the token for a live round); Phase 9 (the backlog) follows the rounds | `docs/PLAN.md` |

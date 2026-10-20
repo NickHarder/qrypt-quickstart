@@ -38,6 +38,8 @@
           aria-selected="true">Python</button>
         <button type="button" role="tab" id="tab-node" aria-controls="panel-node"
           aria-selected="false">Node.js</button>
+        <button type="button" role="tab" id="tab-rust" aria-controls="panel-rust"
+          aria-selected="false">Rust</button>
       </div>
 
       <div id="panel-python" role="tabpanel" aria-labelledby="tab-python" tabindex="0">
@@ -64,6 +66,22 @@
         </div>
         <p>Then run:</p>
         <pre><code class="language-shell">node quickstart.mjs</code></pre>
+      </div>
+
+      <div id="panel-rust" role="tabpanel" aria-labelledby="tab-rust" tabindex="0">
+        <p>Rust 1.89 or later. Make a project and add five crates:</p>
+        <pre><code class="language-shell">cargo new qrypt-key &amp;&amp; cd qrypt-key
+cargo add aes-gcm@0.11.1 base64@0.23.1 dotenvy@0.15.7 serde_json@1.0.151
+cargo add ureq@3.4.2 -F platform-verifier</code></pre>
+        <p>Save this over <code>src/main.rs</code>, and put your <code>.env</code> in
+          <code>qrypt-key</code>:</p>
+        <div class="code-block">
+          <button type="button" class="copy-button" data-copy-target="rust-snippet"
+            aria-label="Copy the Rust quickstart">Copy</button>
+          <pre id="rust-snippet"><code class="language-rust"><!-- include: rust/src/main.rs --></code></pre>
+        </div>
+        <p>Then run:</p>
+        <pre><code class="language-shell">cargo run</code></pre>
       </div>
       <p role="status" aria-live="polite" class="copy-status"></p>
     </section>

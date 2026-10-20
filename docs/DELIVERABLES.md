@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:42:48Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:17:29Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -87,7 +87,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-33 | The deployed site's URL | Submission | Owner to do | Phase 11 | The GitLab Pages URL |
 | RQ-34 | `PRD.md`, `AGENT_READINESS.md` (both rounds), `BACKLOG.md`, the claims-to-source table | Submission | Not yet | Phases 5, 6, 8, 9 | The four files at the repository's root |
 | RQ-35 | Grader quick-start: set a token, run each snippet, see the success line in under 5 minutes | Submission | Not yet | Phase 11 | A timed run from a fresh clone, logged in `evidence/grader_quickstart.md` |
-| RQ-36 | A one-line description of at most 120 characters | Submission | Met | Phase 11 | The line under the README's title, 114 characters; `tests/test_readme_and_ai_usage.py` caps it at 120 |
+| RQ-36 | A one-line description of at most 120 characters | Submission | Met | Phase 11 | The line under the README's title, 120 characters; `tests/test_readme_and_ai_usage.py` caps it at 120 |
 | RQ-37 | A demo video of at most 5 minutes: a fresh run, one troubleshooting path, the PRD's funnel, one agent-readiness run | Submission | Owner to do | Phase 11 | The `generate-demo` skill, which the owner calls |
 
 # Stretch
@@ -95,7 +95,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | Id | Requirement | Where in the brief | Status | Where | Proof |
 |---|---|---|---|---|---|
 | RQ-38 | A plain-Markdown `llms.txt` of the quickstart, linked from the site | Stretch | Met | Phase 4 | `tests/test_llms_txt.py`: the built site holds `llms.txt` (llmstxt.org shape, every rule the snippets follow) and `llms-full.txt` (both snippets word for word, every troubleshooting message); the quickstart page links to it |
-| RQ-39 | A third language | Stretch | Not yet | Phase 10 | The Rust snippet in `make e2e` and CI |
+| RQ-39 | A third language | Stretch | Met | Phase 10 | Rust: `rust/src/main.rs`, 25 of 25 lines; `make e2e` and CI run it against the mock (`tests/test_quickstart_rust.py`, and every case of `tests/test_quickstart_errors.py`, with the same message as Python and Node); a Rust tab on the site and in `llms-full.txt`. Its 5 live runs wait on the token |
 | RQ-40 | Privacy-respecting analytics wired to the observable funnel stages | Stretch | Not yet | Not built (see the plan's "Not doing") | The plan's reason |
 | RQ-41 | A competitive teardown of one other security or randomness API's quickstart against the funnel | Stretch | Not yet | Phase 11 | `evidence/teardown.md` |
 

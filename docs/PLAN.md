@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:55:12Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:17:29Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -355,10 +355,18 @@ Tuesday 2026-10-20, 22:00 to 23:00 CDT.
 
 Wednesday 2026-10-21, 07:00 to 08:30 CDT.
 
-- **Tests and eval cases, written first:** `rust/tests/quickstart.rs`, the Phase 1 and Phase 3
-  cases against the mock, no panic and no backtrace on any error; the line count.
-- **Files:** `rust/src/main.rs`, `rust/Cargo.toml` (versions pinned), a Rust tab on the site.
-- **Verify:** `make e2e`, `make gate`; 5 live runs, timed (5 KiB).
+- **Tests and eval cases, written first:** the Phase 1 and Phase 3 cases against the mock, no
+  panic and no backtrace on any error; the line count. They are pytest cases, not
+  `rust/tests/quickstart.rs` as first planned: the Rust program runs through the same runner and
+  against the same mock as the other two (`tests/test_quickstart_rust.py`, `rust` in
+  `tests/test_quickstart_errors.py`), so the three print the same message for each error by test.
+- **Files:** `rust/src/main.rs` (the crate's program, which replaced the kit's starter library),
+  `rust/Cargo.toml` (each crate pinned exactly), a Rust tab on the site and in `llms-full.txt`.
+  The program trusts the platform's certificates (ureq's `platform-verifier`), so the
+  troubleshooting page's `SSL_CERT_FILE` fix works for it too; a test proves it with a throwaway
+  authority.
+- **Verify:** `make e2e`, `make gate`; 5 live runs, timed (5 KiB). Done but the live runs: they
+  join `make live-check` when the owner gives the token and the go, taking it from 12 KiB to 17.
 - **Effort:** 1.5 hours. **Cost:** $0, 5 KiB.
 
 ## Phase 11: the submission

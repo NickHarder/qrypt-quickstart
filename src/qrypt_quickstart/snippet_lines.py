@@ -4,8 +4,9 @@ The brief caps each snippet at 25 lines "excluding comments and imports". This m
 count a check rather than a claim (docs/brief/research-review.md, item C9). A line counts when it
 holds code. These do not count: a blank line, a comment, a docstring (the comment a reader sees
 first in Python), and every line of an import statement. Python is read with its own tokenizer;
-JavaScript, line by line: a line that is only a `//` comment, a line of a `/* ... */` block that
-opens a line, and the lines of a static `import` statement.
+JavaScript and Rust, line by line: a line that is only a `//` comment (in Rust, `///` and `//!`
+doc comments too), a line of a `/* ... */` block that opens a line, and the lines of a static
+`import` statement in JavaScript or a `use` declaration in Rust.
 
 Run `python -m qrypt_quickstart.snippet_lines <file>...`: it prints each file's count and exits 1
 when one is over the limit.
@@ -70,11 +71,12 @@ def count_python_lines(source: str) -> int:
     return len(code_lines - excluded_lines)
 
 
-def count_javascript_lines(source: str) -> int:
-    """Count the lines of JavaScript source that hold code, excluding comments and imports.
+def count_c_family_lines(source: str, *, import_keyword: str) -> int:
+    """Count the lines of `//`-commented source that hold code, excluding comments and imports.
 
     Args:
-        source: The text of a JavaScript module.
+        source: The text of a JavaScript module or a Rust file.
+        import_keyword: The word that opens an import statement: `import` or `use`.
 
     Returns:
         How many lines count against the snippet limit.
@@ -86,11 +88,21 @@ def count_javascript_lines(source: str) -> int:
         stripped_line = line.strip()
         if is_in_block_comment or stripped_line.startswith("/*"):
             is_in_block_comment = "*/" not in stripped_line
-        elif is_in_import or stripped_line.startswith("import "):
+        elif is_in_import or stripped_line.startswith(f"{import_keyword} "):
             is_in_import = not stripped_line.endswith(";")
         elif stripped_line and not stripped_line.startswith("//"):
             code_line_count += 1
     return code_line_count
+
+
+def count_javascript_lines(source: str) -> int:
+    """Count the lines of JavaScript source that hold code, excluding comments and imports."""
+    return count_c_family_lines(source, import_keyword="import")
+
+
+def count_rust_lines(source: str) -> int:
+    """Count the lines of Rust source that hold code, excluding comments and `use` declarations."""
+    return count_c_family_lines(source, import_keyword="use")
 
 
 def count_snippet_lines(snippet_path: Path) -> int:
@@ -104,6 +116,8 @@ def count_snippet_lines(snippet_path: Path) -> int:
         return count_python_lines(source)
     if snippet_path.suffix in {".js", ".mjs"}:
         return count_javascript_lines(source)
+    if snippet_path.suffix == ".rs":
+        return count_rust_lines(source)
     message = f"no line counter for {snippet_path.suffix} files: {snippet_path}"
     raise ValueError(message)
 

@@ -236,6 +236,8 @@ jobs:
       # The browser tests (tests/test_site_in_a_browser.py) drive the Chromium build that the
       # locked Playwright names, with the system libraries it needs.
       - run: uv run playwright install --with-deps chromium
+      # The Rust snippet's tests build it with the toolchain rust/rust-toolchain.toml pins.
+      - run: rustup toolchain install 1.99 --profile minimal --component rustfmt,clippy
       - run: uv run pytest -q
 
   # Known vulnerabilities in the locked dependencies. No path filter: new advisories land without

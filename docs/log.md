@@ -5,6 +5,13 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 10, the Rust quickstart: `rust/src/main.rs`, 25 counted lines, the crate's
+  program in place of the kit's starter, with each crate pinned. It prints the same line as the
+  Python and Node programs for every error, by test, and trusts the platform's certificates so the
+  `SSL_CERT_FILE` fix holds for it. On the site and in `llms-full.txt`, with Rust 1.89 as its
+  floor, found by building it on 1.85, 1.87 and 1.89. Its tests are pytest cases through the
+  shared runner, not the planned `rust/tests/quickstart.rs`; its live runs wait on the token
+  ([the plan](/PLAN.md)).
 * **Change**: the recording relay for live agent rounds: it stands in for `api-eus.qrypt.com`,
   forwards each request to Qrypt unchanged, records it so live runs are judged like mock runs,
   ledgers it, and refuses past 64 KiB a run or the 8,192 KiB stop. The mock's handler was split so

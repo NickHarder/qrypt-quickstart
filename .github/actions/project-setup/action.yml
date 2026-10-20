@@ -29,3 +29,6 @@ runs:
         cache-dependency-path: web/package-lock.json
     - shell: bash
       run: npm ci --prefix web --no-audit --no-fund
+    # Rust for the Rust snippet (`make e2e`), on the toolchain rust/rust-toolchain.toml pins.
+    - shell: bash
+      run: rustup toolchain install 1.99 --profile minimal --component rustfmt,clippy

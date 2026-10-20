@@ -141,10 +141,13 @@
       <p><strong>Fix</strong>: ask your IT team for the company's root certificate file (PEM) and
         point the runtime at it. Never turn certificate checks off.</p>
       <pre><code class="language-shell">SSL_CERT_FILE=/path/to/company-ca.pem python quickstart.py
-NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem node quickstart.mjs</code></pre>
-      <p>If you must go through a proxy, Python reads <code>HTTPS_PROXY</code> on its own. Recent
-        Node.js versions read it when started with <code>--use-env-proxy</code> (see
-        <code>node --help</code>).</p>
+NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem node quickstart.mjs
+SSL_CERT_FILE=/path/to/company-ca.pem cargo run</code></pre>
+      <p>The Rust program also trusts the operating system's own certificates, so on macOS and
+        Windows a root certificate IT has installed works as it is.</p>
+      <p>If you must go through a proxy, Python and the Rust program read <code>HTTPS_PROXY</code>
+        on their own. Recent Node.js versions read it when started with
+        <code>--use-env-proxy</code> (see <code>node --help</code>).</p>
     </section>
 
     <section id="env-network" aria-labelledby="heading-network">

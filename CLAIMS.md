@@ -60,7 +60,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Id | Claim, as the site says it | Page | Source |
 |---|---|---|---|
 | Q-25 | Node.js 20.12 or later. Nothing to install: fetch and node:crypto are built in. | `site/index.html` | Node.js documentation: `process.loadEnvFile` (added in 20.12), `fetch` and `node:crypto` in the core; Snippets: the Node tests run the program with no package installed |
-| Q-26 | If you must go through a proxy, Python reads HTTPS_PROXY on its own. | `site/troubleshooting.html` | Python documentation: `urllib.request` reads proxy settings from the environment (`getproxies`) |
+| Q-26 | If you must go through a proxy, Python and the Rust program read HTTPS_PROXY on their own. | `site/troubleshooting.html` | Python documentation: `urllib.request` reads proxy settings from the environment (`getproxies`); ureq 3.4.2's source: its default configuration reads `HTTPS_PROXY` and `NO_PROXY` (`Proxy::try_from_env`) |
 | Q-27 | Recent Node.js versions read it when started with --use-env-proxy (see node --help). | `site/troubleshooting.html` | `node --help` of Node.js 22.22.0 lists `--use-env-proxy`; checked 2026-10-20 |
 | Q-28 | point the runtime at it. Never turn certificate checks off. | `site/troubleshooting.html` | Python documentation: OpenSSL's default trust store honours `SSL_CERT_FILE`; Node.js documentation: `NODE_EXTRA_CA_CERTS` |
 

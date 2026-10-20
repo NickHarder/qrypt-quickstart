@@ -1,6 +1,6 @@
 # Qrypt Quickstart: an AES-256 key from Qrypt quantum entropy
 
-> How to generate an AES-256 key from Qrypt's Quantum Entropy REST API in a new project, in Python or Node.js, with no SDK: one request for 1 KiB of entropy, a key proven with AES-GCM, and the key never printed.
+> How to generate an AES-256 key from Qrypt's Quantum Entropy REST API in a new project, in Python, Node.js or Rust, with no SDK: one request for 1 KiB of entropy, a key proven with AES-GCM, and the key never printed.
 
 ## Rules for AI coding agents
 
@@ -13,11 +13,11 @@
 - Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
 - Errors: make one request and stop; never retry in a loop. 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
 - On any failure, exit non-zero with one clear line, not a stack trace.
-- Python needs `pip install cryptography python-dotenv`. Node.js 20.12 or later needs nothing.
+- Python needs `pip install cryptography python-dotenv`. Node.js 20.12 or later needs nothing. Rust 1.89 or later needs five crates: `cargo add aes-gcm@0.11.1 base64@0.23.1 dotenvy@0.15.7 serde_json@1.0.151` and `cargo add ureq@3.4.2 -F platform-verifier`.
 
 ## Docs
 
-- [Quickstart, with complete Python and Node.js programs](llms-full.txt): the rules, both programs and every error message, in one file
+- [Quickstart, with complete Python, Node.js and Rust programs](llms-full.txt): the rules, the three programs and every error message, in one file
 - [Quickstart page](index.html): the same path for people, with language tabs and copy buttons
 - [Troubleshooting](troubleshooting.html): every message the quickstart can print, its cause and its fix
 

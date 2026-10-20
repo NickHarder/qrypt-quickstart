@@ -5,6 +5,7 @@ from qrypt_quickstart.snippet_lines import (
     SNIPPET_LINE_LIMIT,
     count_javascript_lines,
     count_python_lines,
+    count_rust_lines,
 )
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
@@ -55,3 +56,27 @@ console.log(url, createCipheriv, existsSync);
 def test_the_node_quickstart_is_within_the_limit() -> None:
     snippet = REPOSITORY_ROOT / "quickstart" / "node" / "quickstart.mjs"
     assert count_javascript_lines(snippet.read_text()) <= SNIPPET_LINE_LIMIT
+
+
+def test_rust_comments_doc_comments_uses_and_blank_lines_are_not_counted() -> None:
+    source = """//! A crate comment
+//! over two lines.
+use std::env;
+use aes_gcm::{
+    Aes256Gcm,
+    Nonce,
+};
+
+/// A doc comment.
+fn main() {
+    // a comment
+    let home = env::var("HOME"); // a trailing comment does not hide the code
+    /* a block comment */
+}
+"""
+    assert count_rust_lines(source) == 3
+
+
+def test_the_rust_quickstart_is_within_the_limit() -> None:
+    snippet = REPOSITORY_ROOT / "rust" / "src" / "main.rs"
+    assert count_rust_lines(snippet.read_text()) <= SNIPPET_LINE_LIMIT

@@ -23,7 +23,8 @@ from typing import Final
 from .config import REPOSITORY_ROOT
 
 SITE_DIRECTORY_NAME: Final = "site"
-INCLUDABLE_DIRECTORY_NAME: Final = "quickstart"
+# The snippets live in quickstart/, but the Rust quickstart is its crate's program, in rust/src/.
+INCLUDABLE_DIRECTORY_NAMES: Final = ("quickstart", "rust/src")
 INCLUDE_PATTERN: Final = re.compile(r"<!-- include: (?P<path>[^ ]+) -->")
 STATIC_SUFFIXES: Final = frozenset({".css", ".js", ".txt"})
 
@@ -44,12 +45,15 @@ def included_text(included_path: str, *, repository_root: Path, escape_html: boo
         The file's text, escaped for HTML unless `escape_html` is False.
 
     Raises:
-        SiteBuildError: If the path leaves `quickstart/` or names no file.
+        SiteBuildError: If the path leaves `quickstart/` and `rust/src/`, or names no file.
     """
-    includable_directory = (repository_root / INCLUDABLE_DIRECTORY_NAME).resolve()
+    includable_directories = [
+        (repository_root / directory_name).resolve()
+        for directory_name in INCLUDABLE_DIRECTORY_NAMES
+    ]
     resolved_path = (repository_root / included_path).resolve()
-    if not resolved_path.is_relative_to(includable_directory):
-        message = f"a page may include only files under quickstart/: {included_path}"
+    if not any(resolved_path.is_relative_to(directory) for directory in includable_directories):
+        message = f"a page may include only files under quickstart/ or rust/src/: {included_path}"
         raise SiteBuildError(message)
     if not resolved_path.is_file():
         message = f"a page includes a file that does not exist: {included_path}"

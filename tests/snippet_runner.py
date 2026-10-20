@@ -1,7 +1,9 @@
 """Run a quickstart snippet the way a developer runs it, against the mock, for the tests.
 
 Each run copies the snippet into an empty directory, so no `.env` of this repository is found,
-and points `QRYPT_API_URL` at the URL given, so no request can reach the live API.
+and points `QRYPT_API_URL` at the URL given, so no request can reach the live API. The Rust
+quickstart is a program, not a script: it is built once (`cargo build`, on the toolchain
+`rust/rust-toolchain.toml` pins), and its binary is what is copied and run.
 """
 
 import os
@@ -10,15 +12,49 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
 from typing import Final
 
-QUICKSTART_DIRECTORY: Final = Path(__file__).resolve().parents[1] / "quickstart"
+REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
+QUICKSTART_DIRECTORY: Final = REPOSITORY_ROOT / "quickstart"
+RUST_CRATE_DIRECTORY: Final = REPOSITORY_ROOT / "rust"
 SNIPPETS: Final = {
     "python": QUICKSTART_DIRECTORY / "python" / "quickstart.py",
     "node": QUICKSTART_DIRECTORY / "node" / "quickstart.mjs",
+    "rust": RUST_CRATE_DIRECTORY / "src" / "main.rs",
 }
-TRACEBACK_MARKERS: Final = ("Traceback (most recent call last)", "    at ", "node:internal")
+# A Python traceback, a Node stack frame, or a Rust panic or backtrace.
+TRACEBACK_MARKERS: Final = (
+    "Traceback (most recent call last)",
+    "    at ",
+    "node:internal",
+    "panicked at",
+    "stack backtrace",
+)
+
+
+@cache
+def built_rust_quickstart() -> Path:
+    """Build the Rust quickstart once per test session and return its binary."""
+    cargo = shutil.which("cargo")
+    assert cargo, "cargo is not installed; the Rust quickstart cannot be tested (make bootstrap)"
+    subprocess.run(
+        [cargo, "build", "--locked", "--quiet", "--bin", "quickstart"],
+        check=True,
+        cwd=RUST_CRATE_DIRECTORY,
+        timeout=600,
+    )
+    return RUST_CRATE_DIRECTORY / "target" / "debug" / "quickstart"
+
+
+def command_for(language: str, copied_snippet: Path) -> list[str]:
+    """Return the command that runs a copied snippet: an interpreter and the file, or the binary."""
+    if language == "rust":
+        return [str(copied_snippet)]
+    interpreter = sys.executable if language == "python" else shutil.which("node")
+    assert interpreter, f"no interpreter for {language}"
+    return [interpreter, str(copied_snippet)]
 
 
 @dataclass(frozen=True)
@@ -45,7 +81,7 @@ def run_snippet(
     extra_environment: dict[str, str] | None = None,
 ) -> SnippetRun:
     """Copy the snippet into the work directory and run it there with the given environment."""
-    snippet = SNIPPETS[language]
+    snippet = built_rust_quickstart() if language == "rust" else SNIPPETS[language]
     copied_snippet = work_directory / snippet.name
     shutil.copy(snippet, copied_snippet)
     environment = {key: value for key, value in os.environ.items() if not key.startswith("QRYPT_")}
@@ -53,11 +89,9 @@ def run_snippet(
     environment.update(extra_environment or {})
     if token is not None:
         environment["QRYPT_API_KEY"] = token
-    interpreter = sys.executable if language == "python" else shutil.which("node")
-    assert interpreter, f"no interpreter for {language}"
     started_at = time.monotonic()
     completed = subprocess.run(
-        [interpreter, str(copied_snippet)],
+        command_for(language, copied_snippet),
         check=False,
         cwd=work_directory,
         env=environment,
