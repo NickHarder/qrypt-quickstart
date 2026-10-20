@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:48:10Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:54:04Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -386,7 +386,9 @@ Wednesday 2026-10-21, 08:30 to 12:00 CDT.
   a reader's shell (it found the mock started with a bare `python`, which the virtualenv does not
   answer to; fixed); `make grader-run` times the grader quick-start from a fresh clone against
   the mock, 3.2 s (`evidence/grader_quickstart.md`, held by `tests/test_grader_run.py`); the
-  steps of the move to GitLab are in `HANDOFF.md`. The demo waits on the owner's call to
+  steps of the move to GitLab are in `HANDOFF.md`; the teardown, RANDOM.ORG's API against the
+  funnel, is `evidence/teardown.md` (ANU's was first choice, but its pages give no text without a
+  browser). The demo waits on the owner's call to
   `generate-demo`; the live repeat of the grader run waits on the token.
 
 **You act:** call `generate-demo`, record the product footage with no token on screen, and approve the cut (creative call)

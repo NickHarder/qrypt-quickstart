@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the competitive teardown (RQ-41), RANDOM.ORG's API against the five funnel stages,
+  from its documentation and one request with an unissued key. Its main finding: a wrong key comes
+  back as HTTP 200 with the error in the body. Two ideas to borrow, a budget in every answer and a
+  server-side pacing hint, wait for the backlog ([the plan](/PLAN.md)).
 * **Change**: Phase 11 begun. A test runs every shell block of the README in a reader's shell; it
   found that the "Run the snippets" block started the mock with a bare `python`, which fails after
   `make bootstrap` because the virtualenv is not activated, and the README now names

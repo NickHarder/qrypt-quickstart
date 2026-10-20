@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:48:10Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:54:04Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -97,7 +97,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-38 | A plain-Markdown `llms.txt` of the quickstart, linked from the site | Stretch | Met | Phase 4 | `tests/test_llms_txt.py`: the built site holds `llms.txt` (llmstxt.org shape, every rule the snippets follow) and `llms-full.txt` (both snippets word for word, every troubleshooting message); the quickstart page links to it |
 | RQ-39 | A third language | Stretch | Met | Phase 10 | Rust: `rust/src/main.rs`, 25 of 25 lines; `make e2e` and CI run it against the mock (`tests/test_quickstart_rust.py`, and every case of `tests/test_quickstart_errors.py`, with the same message as Python and Node); a Rust tab on the site and in `llms-full.txt`. Its 5 live runs wait on the token |
 | RQ-40 | Privacy-respecting analytics wired to the observable funnel stages | Stretch | Not yet | Not built (see the plan's "Not doing") | The plan's reason |
-| RQ-41 | A competitive teardown of one other security or randomness API's quickstart against the funnel | Stretch | Not yet | Phase 11 | `evidence/teardown.md` |
+| RQ-41 | A competitive teardown of one other security or randomness API's quickstart against the funnel | Stretch | Met | Phase 11 | `evidence/teardown.md`: RANDOM.ORG's API against the five funnel stages, each fact sourced and dated (`tests/test_teardown.py`) |
 
 # Constraints the owner set
 

@@ -45,6 +45,8 @@ these four commands took 3.2 s against the mock ([`evidence/grader_quickstart.md
 | The agent-readiness test, both rounds | `AGENT_READINESS.md` and `evidence/agent_runs.csv`, after the rounds run; the harness is [`src/qrypt_quickstart/agent_harness.py`](src/qrypt_quickstart/agent_harness.py) |
 | The prioritized backlog | `BACKLOG.md`, after the rounds |
 | AI usage | [`AI_USAGE.md`](AI_USAGE.md) |
+| Competitive teardown (stretch) | [`evidence/teardown.md`](evidence/teardown.md): RANDOM.ORG's API against the same funnel |
+| Timed grader run | [`evidence/grader_quickstart.md`](evidence/grader_quickstart.md) |
 | Lighthouse report | [`evidence/lighthouse/`](evidence/lighthouse/summary.json): load p95 1,024 ms on mobile, accessibility 100 |
 | CI on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml): all three programs against the mock for the success path and 400, 401, 403, 429, 500 and 503 |
 
