@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: `scripts/mirror_to_gitlab.sh`, for the owner's Mac: it clones or reuses a clone of
+  the GitHub repository, fetches a branch and pushes it to a GitLab branch, never forcing, so the
+  owner's personal access token stays on the owner's machine. Tested on two local bare
+  repositories. The owner also approved one live request to each endpoint once the key is set.
 * **Change**: the owner found that the portal, beside a new key, shows a request to a different
   API from the documented one: `POST eaas-aws.qrypt.com/api/v1/entropy` with `X-API-Key` and a JSON
   body, where docs.qrypt.com names only `GET api-eus.qrypt.com/api/v1/quantum-entropy` with a

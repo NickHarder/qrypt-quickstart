@@ -31,7 +31,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Portal walkthrough | Begun by the owner: the trial sign-up and the temporary-password email; first login and the token's screen to come | `evidence/portal_walkthrough.md` |
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
-| Next | Run round 1 (owner's go: Docker, the agent's login; and the token for a live round); Phase 9 (the backlog) follows the rounds | `docs/PLAN.md` |
+| Next | The owner approved (2026-10-20) one live request to each endpoint once `QRYPT_API_KEY` is set: the documented `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1` (Bearer) and the portal's `POST eaas-aws.qrypt.com/api/v1/entropy` (`X-API-Key`, one 32-byte block), about 1 KiB, logged in the ledger; the answer decides the quickstart's endpoint. Then, each on the owner's go: the live check, round 1, the Orus voice-over, the GitLab push | `evidence/portal_walkthrough.md` |
 
 ## How to check your work
 
@@ -69,8 +69,11 @@ The owner's steps, at the very end (decided 2026-10-19). Nothing here has run ye
 1. **What goes public.** `docs/brief/` holds the partner's brief and the owner's notes and stays out
    of any public copy (above). If the GitLab project is public, push a branch without it; if it is
    private with Pages open to everyone, it can stay.
-2. **The repository.** Create the project on GitLab, then from a clone of this one:
-   `git remote add gitlab <the project's URL>`, `git push gitlab --all`, `git push gitlab --tags`.
+2. **The repository.** Create the project on GitLab (private, no README). From the owner's Mac,
+   `scripts/mirror_to_gitlab.sh --gitlab <the project's clone URL> --branch <the GitHub branch>`
+   clones GitHub (or reuses the clone), fetches the branch and pushes it to GitLab's `main`, never
+   forcing; run it again after each change on GitHub. At the first push, git asks for credentials:
+   any user name and the GitLab personal access token as the password.
 3. **CI.** The kit writes GitLab CI when its `ci_provider` answer is `gitlab`
    (`.copier-answers.yml` says `github` now): re-answer it with `copier update`, then put this
    project's setup in `.gitlab/project-setup.yml`, as `.github/actions/project-setup/action.yml`
