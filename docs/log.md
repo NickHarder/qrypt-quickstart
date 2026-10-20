@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Creation**: [the architecture](/ARCHITECTURE.md), Gate 3, as a draft for the owner, on the
+  owner's go, because the ladder names it next and the users are committed: five parts (snippets,
+  mock, site builder, agent harness, CI), a Python tracer bullet proved by `make e2e`, and four
+  deviations. It settles SEC-01 (a revocable token and an exact-value scrubber with its own test)
+  and ARCH-02 (a named `User-Agent`; a 0 KiB default-client probe in Phase 7), both flagged for the
+  owner. The persona fields left open are taken as assumed for the assessment, not researched.
 * **Creation**: [the users](/USERS.md), Gate 2, as a draft for the owner, because the ladder names
   it next and the audit is committed: five personas (the developer primary, the agent, engineering,
   support, the grader), four anti-personas, five moments and six use cases, each traced to the

@@ -2,6 +2,10 @@
 okf_version: "0.2"
 ---
 
+# Architecture
+
+* [Architecture: snippets, mock, site builder, agent harness and CI](ARCHITECTURE.md) - How the Qrypt quickstart is built from five small parts, where the token and the key may and may not go, what each dependency's failure looks like to the user, and the tracer bullet that proves the design first.
+
 # Audit
 
 * [Audit: Qrypt's first-run path, before any product code](AUDIT.md) - What a first-time developer or agent meets in Qrypt's documented entropy API, and in this repository before its first slice, with a reproduction for each finding and the decision it forces in the plan.
