@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: `evidence/portal_walkthrough.md` starts the record of the real path to an Entropy
+  token, step by step, with each friction and what Qrypt could change. The owner's first finding:
+  the temporary-password email puts a password that ends in a period inside a sentence that ends
+  in one, so the reader cannot tell which period is the password's. No credential is recorded.
 * **Change**: the owner found that `portal.qrypt.com/register`, the sign-up link the brief gives,
   shows a 404. Rendered in a browser, the portal's real routes are its login page and, from its
   "Create trial account" link, `/trial` (full name and work email); `/signup` says to contact
