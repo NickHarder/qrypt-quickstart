@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the owner found that the portal, beside a new key, shows a request to a different
+  API from the documented one: `POST eaas-aws.qrypt.com/api/v1/entropy` with `X-API-Key` and a JSON
+  body, where docs.qrypt.com names only `GET api-eus.qrypt.com/api/v1/quantum-entropy` with a
+  Bearer token. Recorded as walkthrough step 6; which endpoint a trial key works on waits on one
+  live request to each, on the owner's go.
 * **Change**: the quickstart page's "Get a token" step names the portal's real steps, from the
   owner's walk: the trial, the temporary password set anew at first login, API Keys in the side bar
   under Dashboard, Create API key, Entropy as the service, Create key, copy. The walkthrough's

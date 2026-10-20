@@ -11,6 +11,11 @@ with every friction a newcomer meets. It feeds the backlog (Phase 9) and the qui
 | 3 | Read the temporary password | An email from Qrypt's infrastructure address, "Your temporary password", gives the username and the password in one sentence: "… and temporary password is `<password>`." | The password ends in a period, and the sentence's own full stop follows it, so a reader cannot tell which periods belong to the password. A password made of symbols, inside a sentence, invites a wrong copy | Put the password on a line of its own, in a monospace style, with nothing after it, for example `Temporary password:` then the password alone on the next line, then the rest of the email. Better still, send a one-time link that sets the password, so none is copied at all |
 | 4 | First login | Log in with the temporary password, and set one of your own | None reported once the password was read right | |
 | 5 | Generate the Entropy token | The portal opens on Dashboard. In its side bar, API Keys; then Create API key; choose the service (two choices: Entropy, and one for another product); Create key. The key is shown, with a way to copy it | The quickstart's word is "token" and the portal's is "API key"; a newcomer has to know they are the same thing | Call it one thing in the portal, the docs and the error messages |
+| 6 | The portal's own example | Beside the new key, the portal shows a request to a different API: `POST https://eaas-aws.qrypt.com/api/v1/entropy`, header `X-API-Key: <key>`, JSON body `{"block_size": 32, "block_count": 5}` | Qrypt's documentation (docs.qrypt.com/eaas, read 2026-10-20) names only `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=<KiB>` with `Authorization: Bearer <token>`, and never `eaas-aws`. A newcomer, or an agent, cannot tell which API the key is for. Without a key, `eaas-aws` answers 403 | One API in the docs and the portal, or both documented with which key works where |
+
+**Open, waiting on one live request to each, about 1 KiB in all:** does a trial key from this
+portal work on the documented `api-eus` endpoint, on `eaas-aws` only, or on both? The answer
+decides which endpoint the quickstart calls.
 
 ## How this reaches the product
 
