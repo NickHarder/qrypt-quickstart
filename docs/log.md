@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the demo's captions. The final cut's checks failed on two captions of one word,
+  "shown." (0.81 s) and "KiB." (0.60 s), under the 1.2 s minimum: a sentence too long for one
+  caption was filled word by word, leaving its last word alone. The splitter now evens out the last
+  two captions of such a sentence (`demo/src/pipeline/captions.ts`, a test for both lines). No line's
+  words changed, so the approved scenes stand. A `make kit-update` that rewrites the demo pipeline
+  would drop this: carry it to the kit.
 * **Change**: the demo, on the owner's go, with two changes to the approved storyboard that the
   owner chose. The error scene shows the live 403 line ("wrong token or allotment spent"), which a
   mistyped token gets, in place of the mock's 401, and its line now says so; the troubleshooting

@@ -77,6 +77,21 @@ describe("splitIntoCaptionTexts", () => {
       expect(piece.length).toBeLessThanOrEqual(2 * MAX_CHARACTERS_PER_LINE);
     }
   });
+
+  // The final cut failed on these two lines: filling word by word left "shown." and "KiB." alone,
+  // on screen for under the 1.2 s minimum. The last two pieces are balanced instead.
+  it.each([
+    "One request to Qrypt, one AES-256 key, proven with AES-GCM, and the key never shown.",
+    "For AI coding agents, llms.txt carries the same rules: no SDK, both headers, size in KiB.",
+  ])("leaves no word alone at the end of a long sentence: %s", (longSentence) => {
+    const pieces = splitIntoCaptionTexts(longSentence);
+    expect(pieces.join(" ")).toBe(longSentence);
+    const lastPiece = pieces.at(-1) ?? "";
+    expect(lastPiece.split(" ").length).toBeGreaterThan(2);
+    for (const piece of pieces) {
+      expect(piece.length).toBeLessThanOrEqual(2 * MAX_CHARACTERS_PER_LINE);
+    }
+  });
 });
 
 describe("wrapCaption", () => {
