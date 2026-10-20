@@ -5,6 +5,15 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the rate limit, measured and acted on, on the owner's go. A probe
+  (`evidence/live_rate_limit.json`, 7 KiB) found a trial key refused with 429 for a second request
+  0.36 s after its first, with no `Retry-After`, every 429 cleared within 1.5 s. The live check now
+  waits 2 s before each request and runs Rust too; run again, 15 of 15 succeeded (medians 0.42 s,
+  0.51 s, 0.51 s; slowest 0.66 s). The three snippets' 429 message says "too many requests in a
+  short time", and the troubleshooting page, `llms.md` and claims Q-15, Q-16, Q-22 and new Q-37 give
+  the documented and the live figure side by side; PERF-02 records it. Also seen live: without
+  `Accept`, Qrypt still answers 200 with JSON, and a wrong token gets 403 "Forbidden or entropy
+  quota reached", not 401, so the snippets' 403 message ("allotment") misleads a mistyped token.
 * **Change**: the first live check, on the owner's go (`evidence/live_runs.csv`,
   `evidence/live_probes.json`; the ledger at 16 KiB). Python and Node each succeeded 3 of 5, median
   0.54 s and 0.52 s, slowest 0.78 s, under the 3 s target. Every failure was a 429 after a few

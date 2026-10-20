@@ -26,3 +26,22 @@ occurred_at,purpose,kib_requested,status
 2026-10-20T17:25:38Z,rate-limit probe cycle 2 burst,1,200
 2026-10-20T17:25:39Z,rate-limit probe cycle 2 burst,1,200
 2026-10-20T17:25:39Z,rate-limit probe cycle 2 recovery,1,200
+2026-10-20T17:30:46Z,python run 1,1,exit 0
+2026-10-20T17:30:48Z,python run 2,1,exit 0
+2026-10-20T17:30:51Z,python run 3,1,exit 0
+2026-10-20T17:30:53Z,python run 4,1,exit 0
+2026-10-20T17:30:55Z,python run 5,1,exit 0
+2026-10-20T17:30:58Z,node run 1,1,exit 0
+2026-10-20T17:31:01Z,node run 2,1,exit 0
+2026-10-20T17:31:03Z,node run 3,1,exit 0
+2026-10-20T17:31:06Z,node run 4,1,exit 0
+2026-10-20T17:31:08Z,node run 5,1,exit 0
+2026-10-20T17:31:11Z,rust run 1,1,exit 0
+2026-10-20T17:31:13Z,rust run 2,1,exit 0
+2026-10-20T17:31:16Z,rust run 3,1,exit 0
+2026-10-20T17:31:18Z,rust run 4,1,exit 0
+2026-10-20T17:31:21Z,rust run 5,1,exit 0
+2026-10-20T17:31:23Z,probe answer_shape,1,200
+2026-10-20T17:31:26Z,probe without_accept,1,200
+2026-10-20T17:31:28Z,probe bad_token_named_client,0,403
+2026-10-20T17:31:30Z,probe bad_token_python_default_client,0,403
