@@ -104,6 +104,7 @@ The same revised docs, prompt, image and mock, with two other agents, on 2026-10
 |---|---|---|---|
 | Round b07-haiku | 5 of 5 | 0.51 | Claude Code 2.1.304, on Haiku |
 | Round b07-gemini | 1 of 5 | 2.10 | Gemini CLI 0.63.0, its own model choice (a Flash model) |
+| Round b07-gemini-2 | 2 of 5 | 2.62 | The same, on the docs with the token-file rule (`2c8b5bc`) |
 
 **Claude Code on Haiku** did what the larger model did: every run Python, through the virtual
 environment the docs name, one entropy request, 6 to 9 turns, no failed tool call.
@@ -136,18 +137,32 @@ Gemini's 5 runs used about 4.0 million input tokens (3.2 million of them cached)
 output tokens, billed to the owner's `GEMINI_API_KEY`; Haiku's ran on the owner's Claude
 subscription.
 
+**Gemini CLI again, on the new rule** (round `b07-gemini-2`, 2 of 5). The rule worked where the
+agent could read it in time: every run made exactly one entropy request (11 in the round before),
+and no run printed its environment. The three failures are all one move, and the docs cannot
+reach it: in each, Gemini's second tool call asked for `.env` in the same turn as its first
+asked for the docs, 30 to 45 ms after it and before the docs' content had returned to the model.
+It decided to look at the token file before it had read a word of the quickstart; its own
+workspace check refused every read again. So the rule fixes what an agent does after reading,
+and only the agent's own configuration can stop what it does first, such as a rule in the
+project that its tools never open `.env`. The round used about 2.3 million input tokens (1.8
+million cached) and 15,600 output tokens.
+
 ## Failure taxonomy
 
-Claude Code failed no run in any round. Gemini CLI failed four, and six runs were scored failures
+Claude Code failed no run in any round. Gemini CLI failed four, then three on the new rule, and six runs were scored failures
 because of the harness, not the agent:
 
 | Run | First scored | What happened | Addressed by |
 |---|---|---|---|
 | `1-2` | `invented-sdk` | A harness fault, not the agent's: the pattern matched "install" in the written file's comment ("nothing to install") before `QRYPT_API_KEY`. Judged again from its transcript, a success. | `a9aa446` |
-| `b07-gemini-1` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini has not run again on them. | `2c8b5bc` |
-| `b07-gemini-2` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini has not run again on them. | `2c8b5bc` |
-| `b07-gemini-4` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file twice (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini has not run again on them. | `2c8b5bc` |
-| `b07-gemini-5` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini has not run again on them. | `2c8b5bc` |
+| `b07-gemini-1` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini's run on them is round `b07-gemini-2`. | `2c8b5bc` |
+| `b07-gemini-2` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini's run on them is round `b07-gemini-2`. | `2c8b5bc` |
+| `b07-gemini-4` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file twice (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini's run on them is round `b07-gemini-2`. | `2c8b5bc` |
+| `b07-gemini-5` | Success, then `token-file-read` when the check was added | Gemini CLI's file tool asked for the token file once (refused by its own workspace check) before it wrote the program. The docs now forbid it; Gemini's run on them is round `b07-gemini-2`. | `2c8b5bc` |
+| `b07-gemini-2-1` | `token-file-read` | On the docs with the rule, Gemini CLI's file tool asked for the token file in the same turn as the docs, before their content reached the model (refused by its own workspace check). | **Open**: no doc change can reach a call made before the docs are read; the agent's own configuration can |
+| `b07-gemini-2-2` | `token-file-read` | On the docs with the rule, Gemini CLI's file tool asked for the token file in the same turn as the docs, before their content reached the model (refused by its own workspace check). | **Open**: no doc change can reach a call made before the docs are read; the agent's own configuration can |
+| `b07-gemini-2-3` | `token-file-read` | On the docs with the rule, Gemini CLI's file tool asked for the token file in the same turn as the docs, before their content reached the model (refused by its own workspace check). | **Open**: no doc change can reach a call made before the docs are read; the agent's own configuration can |
 | `b07-gemini-setup-1` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
 | `b07-gemini-setup-2` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |
 | `b07-gemini-setup-3` | `no-request` | A harness fault, not the agent's: Gemini CLI in headless mode refuses an untrusted folder, and the first command lacked `--skip-trust`, so it stopped before calling its model. Kept in the log as round `b07-gemini-setup`; round `b07-gemini` ran with the flag. | `47ce734` |

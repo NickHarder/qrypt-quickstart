@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Gemini CLI again, on the docs with the token-file rule, on the owner's go (round
+  `b07-gemini-2`, against the mock, about 2.3 million input tokens): 2 of 5, median 2.62 minutes.
+  Every run made one entropy request (11 in the round before) and none printed its environment.
+  The three failures are each a token-file read Gemini issued in the same turn as its read of the
+  docs, 30 to 45 ms after it and before the docs' content returned, so no wording in the docs can
+  prevent it; its own workspace check refused each. The report's taxonomy now takes `**Open**: <why>`
+  in place of a commit for a failure that no change here addresses, rather than pinning it to a
+  commit that did not fix it; `tests/test_agent_readiness.py` checks either form.
 * **Change**: from B-07's Gemini runs, on the owner's go, a doc rule and a harness check. The
   `llms` files now say never to open the token file or print the environment (a value an agent
   reads goes to its model's provider), to check the token by its variable's name or a count, and

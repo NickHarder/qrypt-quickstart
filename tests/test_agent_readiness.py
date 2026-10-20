@@ -22,7 +22,7 @@ RUN_LOG: Final = REPOSITORY_ROOT / "evidence" / "agent_runs.csv"
 TRANSCRIPTS: Final = REPOSITORY_ROOT / "evidence" / "transcripts"
 # Round 2 ran twice on the revised docs: against the mock, then against Qrypt ("2-live").
 # Backlog item B-07 ran the revised docs with Claude Code on Haiku and with Gemini CLI.
-ROUNDS: Final = ["1", "2", "2-live", "b07-haiku", "b07-gemini"]
+ROUNDS: Final = ["1", "2", "2-live", "b07-haiku", "b07-gemini", "b07-gemini-2"]
 RUNS_PER_ROUND: Final = 5
 # RQ-29: a busy engineering lead reads it in 10 minutes, the PRD's own cap (tests/test_prd.py).
 WORD_LIMIT: Final = 2500
@@ -32,9 +32,12 @@ SUMMARY_ROW: Final = re.compile(
     r" \| (?P<median>[\d.]+) \|",
     re.MULTILINE,
 )
-# A failed run is named in the taxonomy as `<round>-<run>`, with a commit of 7 to 40 hex digits.
+# A failed run is named in the taxonomy as `<round>-<run>`, ending in the commit that addressed it
+# (7 to 40 hex digits) or, when no change to the docs or the harness can, `**Open**: <why not>`.
 TAXONOMY_ROW: Final = re.compile(
-    r"^\| `(?P<run>[\w-]+-\d)` \|.*`(?P<commit>[0-9a-f]{7,40})`", re.MULTILINE
+    r"^\| `(?P<run>[\w-]+-\d)` \|.*\| "
+    r"(?:`(?P<commit>[0-9a-f]{7,40})`|\*\*Open\*\*: (?P<open_reason>\S[^|]*\S)) \|$",
+    re.MULTILINE,
 )
 
 
@@ -92,7 +95,13 @@ def test_the_live_round_meets_the_briefs_bar_against_qrypt() -> None:
 
 
 def test_every_failed_run_is_in_the_taxonomy_with_the_commit_that_addressed_it() -> None:
-    taxonomy = {row["run"]: row["commit"] for row in TAXONOMY_ROW.finditer(REPORT.read_text())}
+    # Gemini CLI asked for the token file in the same turn it asked for the docs, before the rule
+    # could reach it: no doc change addresses that, so such a row says Open and why, instead of
+    # naming a commit that did not fix it.
+    taxonomy = {
+        row["run"]: row["commit"] or row["open_reason"]
+        for row in TAXONOMY_ROW.finditer(REPORT.read_text())
+    }
     for run in logged_runs():
         if run["succeeded"] == "False":
             assert f"{run['round_name']}-{run['run_number']}" in taxonomy

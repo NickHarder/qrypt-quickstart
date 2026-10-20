@@ -64,7 +64,8 @@ RICE, on Intercom's scales: **reach** × **impact** × **confidence** ÷ **effor
 - **B-07.** Only Claude Code had run the agent test. Another agent may stumble where it did not;
   the harness already takes another agent's command, so the effort is the runs and their report.
   **Done 2026-10-20, against the mock:** Claude Code on Haiku 5 of 5; Gemini CLI 1 of 5, its
-  other four runs failing the token-file check its own transcripts led to (`AGENT_READINESS.md`, "Other agents").
+  other four runs failing the token-file check its own transcripts led to, then 2 of 5 on the
+  docs with the new rule (`AGENT_READINESS.md`, "Other agents").
 - **B-08.** Live, Python's default `Python-urllib/3.x` User-Agent got Cloudflare's 403 `Error 1010:
   Access denied` before Qrypt read the token (`evidence/live_probes.json`). It looks like a token
   problem, and nothing in Qrypt's docs explains it.
