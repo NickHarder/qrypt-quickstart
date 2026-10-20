@@ -1,3 +1,5 @@
 occurred_at,purpose,kib_requested,status
 2026-10-20T17:11:39Z,endpoint-probe api-eus GET quantum-entropy size=1 Bearer,1,403
 2026-10-20T17:11:39Z,endpoint-probe eaas-aws POST entropy 1x32 bytes X-API-Key,1,403
+2026-10-20T17:15:53Z,endpoint-probe-ua api-eus GET quantum-entropy size=1 Bearer,1,200
+2026-10-20T17:15:54Z,endpoint-probe-ua eaas-aws POST entropy 1x32 bytes X-API-Key,1,error:RemoteDisconnected

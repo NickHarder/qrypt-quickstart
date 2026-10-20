@@ -4,8 +4,8 @@ If you are picking this work up, human or model: read this file top to bottom fi
 refreshes it; it describes the current state.
 
 Last updated: 2026-10-20, after Phase 10: the three quickstarts, the site, the claims table, the
-onboarding PRD and the agent harness are done against the mock; the live check waits on the owner's
-token.
+onboarding PRD and the agent harness are done against the mock; the token works on the documented
+endpoint; the live check waits on the owner's go.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -31,7 +31,8 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Portal walkthrough | Begun by the owner: the trial sign-up and the temporary-password email; first login and the token's screen to come | `evidence/portal_walkthrough.md` |
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
-| Next | The owner approved (2026-10-20) one live request to each endpoint once `QRYPT_API_KEY` is set: the documented `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1` (Bearer) and the portal's `POST eaas-aws.qrypt.com/api/v1/entropy` (`X-API-Key`, one 32-byte block), about 1 KiB, logged in the ledger; the answer decides the quickstart's endpoint. Then, each on the owner's go: the live check, round 1, the Orus voice-over, the GitLab push | `evidence/portal_walkthrough.md` |
+| Endpoint question | Settled 2026-10-20: a portal trial key works on the documented `api-eus` GET (Bearer), 200, the mock's shape; the portal's `eaas-aws` POST closed the connection unanswered. The quickstarts keep `api-eus`. Cloudflare refuses a default library User-Agent with 403 error 1010 (the quickstarts send their own); 4 KiB used | `evidence/portal_walkthrough.md`, `evidence/live_usage.csv` |
+| Next | Each on the owner's go: the live check (`make live-check`, 12 KiB, 17 KiB with Rust), the Cloudflare 1010 entry on the troubleshooting page with its claims row, round 1 (needs `CLAUDE_CODE_OAUTH_TOKEN` in the environment's settings and Docker), the Orus voice-over, the GitLab push | `make blockers` |
 
 ## How to check your work
 

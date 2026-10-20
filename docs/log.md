@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the endpoint question is settled, by the owner's approved probes (ledger
+  `evidence/live_usage.csv`, 4 KiB). A portal trial key works on the documented
+  `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1` with a Bearer token: 200, the same
+  `{"random": [...], "size": n}` shape the mock serves, so the quickstarts keep their endpoint and
+  no code changes. The portal's `POST eaas-aws.qrypt.com/api/v1/entropy` with `X-API-Key` closed the
+  connection without an answer. The first pair went out with urllib's default User-Agent, and
+  Cloudflare refused both (error 1010) before the API read the key; the quickstarts send their own
+  User-Agent, and the second pair did too.
 * **Change**: `scripts/mirror_to_gitlab.sh`, for the owner's Mac: it clones or reuses a clone of
   the GitHub repository, fetches a branch and pushes it to a GitLab branch, never forcing, so the
   owner's personal access token stays on the owner's machine. Tested on two local bare

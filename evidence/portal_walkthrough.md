@@ -13,9 +13,18 @@ with every friction a newcomer meets. It feeds the backlog (Phase 9) and the qui
 | 5 | Generate the Entropy token | The portal opens on Dashboard. In its side bar, API Keys; then Create API key; choose the service (two choices: Entropy, and one for another product); Create key. The key is shown, with a way to copy it | The quickstart's word is "token" and the portal's is "API key"; a newcomer has to know they are the same thing | Call it one thing in the portal, the docs and the error messages |
 | 6 | The portal's own example | Beside the new key, the portal shows a request to a different API: `POST https://eaas-aws.qrypt.com/api/v1/entropy`, header `X-API-Key: <key>`, JSON body `{"block_size": 32, "block_count": 5}` | Qrypt's documentation (docs.qrypt.com/eaas, read 2026-10-20) names only `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=<KiB>` with `Authorization: Bearer <token>`, and never `eaas-aws`. A newcomer, or an agent, cannot tell which API the key is for. Without a key, `eaas-aws` answers 403 | One API in the docs and the portal, or both documented with which key works where |
 
-**Open, waiting on one live request to each, about 1 KiB in all:** does a trial key from this
-portal work on the documented `api-eus` endpoint, on `eaas-aws` only, or on both? The answer
-decides which endpoint the quickstart calls.
+**Settled, 2026-10-20, by one live request to each (ledger `evidence/live_usage.csv`):** a trial
+key from this portal works on the documented endpoint. `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
+with `Authorization: Bearer <key>` answered 200 with `{"random": [<one base64 block>], "size": 1}`,
+the shape the quickstarts and the mock already use, so the quickstart keeps `api-eus`. The portal's
+own example, `POST eaas-aws.qrypt.com/api/v1/entropy` with `X-API-Key` and one 32-byte block,
+closed the connection without an answer. A newcomer who copies the portal's example gets nothing
+back, which makes step 6 the worst friction on this path.
+
+One more, for the troubleshooting page: both hosts sit behind Cloudflare, which refuses a request
+carrying a default library User-Agent (Python's `Python-urllib/3.x`) with 403 "Error 1010: Access
+denied" before the key is read. The quickstarts send their own User-Agent; a newcomer's own code
+may not.
 
 ## How this reaches the product
 
