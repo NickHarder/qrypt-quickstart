@@ -17,3 +17,12 @@ occurred_at,purpose,kib_requested,status
 2026-10-20T17:21:25Z,probe without_accept,1,429
 2026-10-20T17:21:25Z,probe bad_token_named_client,0,403
 2026-10-20T17:21:25Z,probe bad_token_python_default_client,0,403
+2026-10-20T17:25:20Z,rate-limit probe cycle 1 burst,1,200
+2026-10-20T17:25:21Z,rate-limit probe cycle 1 burst,0,429
+2026-10-20T17:25:22Z,rate-limit probe cycle 1 recovery,0,429
+2026-10-20T17:25:22Z,rate-limit probe cycle 1 recovery,1,200
+2026-10-20T17:25:38Z,rate-limit probe cycle 2 burst,1,200
+2026-10-20T17:25:38Z,rate-limit probe cycle 2 burst,1,200
+2026-10-20T17:25:38Z,rate-limit probe cycle 2 burst,1,200
+2026-10-20T17:25:39Z,rate-limit probe cycle 2 burst,1,200
+2026-10-20T17:25:39Z,rate-limit probe cycle 2 recovery,1,200

@@ -29,7 +29,7 @@ headers = {"Accept": "application/json", "Authorization": f"Bearer {api_key}",
 # What to do about each error Qrypt documents; 500, 503 and any other status: try again shortly.
 hints = {400: "malformed request: size must be 1-512", 403: "allotment used up; ask Qrypt",
          401: "the token is invalid or expired; get a new one at portal.qrypt.com",
-         429: "over 30 requests in 10 seconds; wait 10 seconds, then run once"}
+         429: "too many requests in a short time; wait 10 seconds, then run once"}
 # size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.
 request = urllib.request.Request(f"{api_url}?size=1", headers=headers)
 try:

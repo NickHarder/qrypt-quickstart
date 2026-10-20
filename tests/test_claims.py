@@ -31,6 +31,8 @@ QRYPT_FACT_MARKERS: Final = [
     "1 to 512",
     "1,024 bytes",
     "30 requests",
+    "0.36 s",
+    "half a second",
     "allotment",
     "invalid or expired",
     "entropy supply",

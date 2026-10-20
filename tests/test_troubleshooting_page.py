@@ -38,6 +38,8 @@ def test_each_problem_has_a_symptom_a_likely_cause_and_a_fix(section_id: str) ->
 def test_the_page_tells_the_rate_limit_from_the_allotment() -> None:
     page_sections = sections()
     assert "30 requests" in page_sections["error-429"]
+    # Live, a trial key was refused far below the documented limit (evidence/live_rate_limit.json).
+    assert "0.36 s" in page_sections["error-429"]
     assert "allotment" in page_sections["error-403"]
     assert "403" in page_sections["error-429"]
     assert "429" in page_sections["error-403"]

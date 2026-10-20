@@ -12,6 +12,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | EaaS | Qrypt Quantum Entropy documentation, https://docs.qrypt.com/eaas/ | 2026-10-19 |
 | SDK | Qrypt SDK quickstarts and overview, https://docs.qrypt.com/sdk/quickstarts/ and https://docs.qrypt.com/sdk/overview/ | 2026-10-20 |
 | Brief | The assessment's Qrypt Quick Reference (the partner's own statement of the service) | 2026-10-19 |
+| Live | The owner's trial key against `api-eus`, 2026-10-20: `evidence/live_rate_limit.json` and `evidence/live_runs.csv` | 2026-10-20 |
 | Snippets | What the quickstart programs do, proved by the tests named in the row | Every commit |
 
 ## Claims about Qrypt
@@ -32,14 +33,15 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-12 | generate a new access token for the Entropy service in the Qrypt portal (portal.qrypt.com) | `site/troubleshooting.html` | EaaS: tokens are generated in the portal; Brief: the Entropy service |
 | Q-13 | the account has retrieved its maximum entropy allotment for the current period. | `site/troubleshooting.html` | EaaS: 403, limit reached for the current period |
 | Q-14 | Ask Qrypt to change the account's limit. | `site/troubleshooting.html` | EaaS: 403, contact Qrypt to change the limit |
-| Q-15 | the token sent more than 30 requests in 10 seconds | `site/troubleshooting.html` | EaaS: 429, 30 requests per 10-second interval per token |
-| Q-16 | Qrypt answered HTTP 429: over 30 requests in 10 seconds; wait 10 seconds, then run once. | `site/troubleshooting.html` | EaaS: the 429 limit; Snippets: the message both programs print |
+| Q-15 | Qrypt's docs say the limit is 30 requests in 10 seconds, but a trial key was refused for a second request 0.36 s after its first. Qrypt's answer has no Retry-After header. | `site/troubleshooting.html` | EaaS: 429, 30 requests per 10-second interval per token; Live: a 429 at 0.36 s after a 200, with no `Retry-After`, and every 429 cleared within 1.5 s |
+| Q-37 | Requests: 30 per 10 seconds per token, Qrypt's docs say; a trial key was refused at two within half a second | `site/troubleshooting.html` | EaaS: the 30-in-10-seconds limit; Live: the same 429 |
+| Q-16 | Qrypt answered HTTP 429: too many requests in a short time; wait 10 seconds, then run once. | `site/troubleshooting.html` | EaaS: the 429 status; Live: every 429 cleared within 1.5 s, so 10 seconds is ample; Snippets: the message the three programs print |
 | Q-17 | ask for more in one request (up to 512 KiB) | `site/troubleshooting.html` | EaaS: at most 512 KiB per request |
 | Q-18 | an error inside Qrypt's service, not in your request. | `site/troubleshooting.html` | EaaS: 500, internal server error; contact Qrypt support |
 | Q-19 | Qrypt's entropy supply is temporarily insufficient. | `site/troubleshooting.html` | EaaS: 503, not enough supply; retry later |
 | Q-20 | a firewall that blocks api-eus.qrypt.com | `site/troubleshooting.html` | EaaS: the endpoint's host |
 | Q-21 | Qrypt reads it as 32 KiB: 32 blocks of 1,024 bytes. | `site/troubleshooting.html` | EaaS: `size` is KiB |
-| Q-22 | 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. | `site/llms.md` | EaaS: 429, 403 and 401 |
+| Q-22 | 429 means requests came too close together (Qrypt's docs say over 30 in 10 seconds; a trial key was refused at two within half a second): wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. | `site/llms.md` | EaaS: 429, 403 and 401; Live: a trial key refused with 429 at 0.36 s after a 200 |
 | Q-23 | the account has retrieved its maximum entropy for the period. | `site/llms-full.md` | EaaS: 403 |
 | Q-24 | Qrypt's entropy supply is temporarily insufficient. | `site/llms-full.md` | EaaS: 503 |
 
