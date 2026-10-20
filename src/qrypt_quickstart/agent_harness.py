@@ -28,6 +28,7 @@ import argparse
 import base64
 import csv
 import datetime
+import functools
 import os
 import re
 import shlex
@@ -64,6 +65,17 @@ MOCK_TOKEN: Final = SUCCESS_TOKEN
 DEFAULT_AGENT_COMMAND: Final = (
     "claude -p {prompt} --output-format stream-json --verbose --permission-mode bypassPermissions"
 )
+# The agents a round can name, each with its headless command. Backlog item B-07 adds Claude Code
+# on a smaller model, and Gemini CLI, which in headless mode refuses an untrusted folder unless
+# told to skip the check; `--yolo` approves its tools, as `bypassPermissions` does Claude Code's.
+AGENT_COMMANDS: Final = {
+    "claude-code": DEFAULT_AGENT_COMMAND,
+    "claude-code-haiku": (
+        "claude -p {prompt} --model haiku --output-format stream-json --verbose"
+        " --permission-mode bypassPermissions"
+    ),
+    "gemini-cli": "gemini -p {prompt} --yolo --skip-trust --output-format stream-json",
+}
 LARGEST_PROJECT_FILE_BYTES: Final = 1_000_000
 SKIPPED_DIRECTORIES: Final = frozenset({"node_modules", ".venv", "venv", "__pycache__", ".git"})
 # An invented SDK is something the agent did, not text it read (the quickstart itself warns
@@ -265,6 +277,8 @@ def run_agent_once(
         agent_arguments = [
             argument.replace(PROMPT_PLACEHOLDER, PROMPT) for argument in agent_command
         ]
+        agent_program = Path(agent_command[0]).name
+        agent_login = agent_login_environment(os.environ, agent_program)
         if isolation == "container":
             # The image runs as a user without root; this throwaway folder must be theirs to write.
             project_directory.chmod(0o777)
@@ -276,6 +290,7 @@ def run_agent_once(
                 certificate_authority=certificate_authority,
                 network=network,
                 extra_authority=extra_authority,
+                login_names=LOGIN_NAMES.get(agent_program, LOGIN_NAMES["claude"]),
             )
             # docker passes the agent's login and the proxy through by name (`--env=NAME`), from
             # this process.
@@ -285,7 +300,7 @@ def run_agent_once(
                     for name in ("PATH", "HOME", *PROXY_VARIABLES)
                     if name in os.environ
                 },
-                **agent_login_environment(os.environ),
+                **agent_login,
             }
         else:
             command = agent_arguments
@@ -331,7 +346,8 @@ def run_agent_once(
     )
     transcripts_directory.mkdir(parents=True, exist_ok=True)
     transcript_path = transcripts_directory / f"{round_name}-run-{run_number}.txt"
-    transcript_path.write_text(scrub(transcript, token))
+    scrubbed_transcript = scrub_logins(scrub(transcript, token), list(agent_login.values()))
+    transcript_path.write_text(scrubbed_transcript)
     entropy_sizes = [request.size_kib or 0 for request in run_requests]
     return AgentRun(
         round_name=round_name,
@@ -364,25 +380,55 @@ PROXY_VARIABLES: Final = ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_prox
 # A cloud session keeps CLAUDE_CODE_OAUTH_TOKEN for its own login and may not pass the owner's
 # through, so the owner's login can also arrive under this name; the container gets the usual one.
 HARNESS_LOGIN_VARIABLE: Final = "HARNESS_CLAUDE_CODE_OAUTH_TOKEN"
+# The login each agent reads, by the name of its program: a container gets only its own agent's.
+LOGIN_NAMES: Final = {
+    "claude": ("ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"),
+    "gemini": ("GEMINI_API_KEY",),
+}
+# What a login's value becomes in a committed transcript.
+LOGIN_PLACEHOLDER: Final = "<agent login>"
 
 
-def agent_login_environment(source_environment: Mapping[str, str]) -> dict[str, str]:
-    """Give the agent in the container its login, under the names Claude Code reads.
+def agent_login_environment(
+    source_environment: Mapping[str, str], agent_program: str = "claude"
+) -> dict[str, str]:
+    """Give the agent in the container its own login, under the names it reads, and no other.
 
     Args:
         source_environment: This process's environment, or a stand-in for one in a test.
+        agent_program: The agent's program, `claude` or `gemini` (the first word of its command).
 
     Returns:
-        ANTHROPIC_API_KEY and CLAUDE_CODE_OAUTH_TOKEN, each only when there is a value for it;
-        CLAUDE_CODE_OAUTH_TOKEN comes from HARNESS_CLAUDE_CODE_OAUTH_TOKEN when it is not set
-        itself.
+        For Gemini CLI, GEMINI_API_KEY. For Claude Code, ANTHROPIC_API_KEY and
+        CLAUDE_CODE_OAUTH_TOKEN, CLAUDE_CODE_OAUTH_TOKEN coming from
+        HARNESS_CLAUDE_CODE_OAUTH_TOKEN when it is not set itself. Each only when it has a value.
     """
+    if agent_program == "gemini":
+        gemini_key = source_environment.get("GEMINI_API_KEY", "")
+        return {"GEMINI_API_KEY": gemini_key} if gemini_key else {}
     oauth_token = source_environment.get("CLAUDE_CODE_OAUTH_TOKEN") or source_environment.get(
         HARNESS_LOGIN_VARIABLE
     )
     api_key = source_environment.get("ANTHROPIC_API_KEY")
     candidate_login = {"CLAUDE_CODE_OAUTH_TOKEN": oauth_token, "ANTHROPIC_API_KEY": api_key}
     return {name: value for name, value in candidate_login.items() if value}
+
+
+def scrub_logins(text: str, login_values: list[str]) -> str:
+    """Replace every copy of each of the agent's login values in a text with a placeholder.
+
+    Args:
+        text: A transcript, already scrubbed of the Qrypt token.
+        login_values: The values of the login the agent was given; empty ones are skipped.
+
+    Returns:
+        The text with no login value left in it.
+    """
+    return functools.reduce(
+        lambda scrubbed_text, login_value: scrubbed_text.replace(login_value, LOGIN_PLACEHOLDER),
+        [login_value for login_value in login_values if login_value],
+        text,
+    )
 
 
 def container_command(
@@ -394,6 +440,7 @@ def container_command(
     certificate_authority: Path | None,
     network: str = "bridge",
     extra_authority: Path | None = None,
+    login_names: tuple[str, ...] = LOGIN_NAMES["claude"],
 ) -> list[str]:
     """Return the `docker run` command for one run in a fresh container (the `container` mode).
 
@@ -413,6 +460,7 @@ def container_command(
             egress proxy on its loopback (a cloud session): the container shares the host's
             network, the proxy settings pass in, and Qrypt's host name stays off the proxy.
         extra_authority: Another authority to trust, such as the egress proxy's.
+        login_names: The names of the agent's login variables, passed through by name.
 
     Returns:
         The command's arguments.
@@ -423,8 +471,7 @@ def container_command(
         "--rm",
         f"--volume={project_directory}:/project",
         "--workdir=/project",
-        "--env=ANTHROPIC_API_KEY",
-        "--env=CLAUDE_CODE_OAUTH_TOKEN",
+        *(f"--env={name}" for name in login_names),
     ]
     is_host_network = network == "host"
     if is_host_network:
@@ -459,6 +506,27 @@ def owner_token() -> str:
     return (from_environment or from_file).strip()
 
 
+def agent_command_for(agent_name: str, agent_command: str | None) -> str:
+    """Return the command a round runs: the one given, or the named agent's own.
+
+    Args:
+        agent_name: A name from AGENT_COMMANDS, or any name when a command is given.
+        agent_command: The operator's own command, which wins when given.
+
+    Returns:
+        The agent's command line, with `{prompt}` where the brief's prompt goes.
+
+    Raises:
+        SystemExit: When no command is given and the name is not a known agent.
+    """
+    if agent_command:
+        return agent_command
+    if agent_name not in AGENT_COMMANDS:
+        known_names = ", ".join(sorted(AGENT_COMMANDS))
+        sys.exit(f"agent-harness: unknown agent {agent_name!r}; name one of {known_names}")
+    return AGENT_COMMANDS[agent_name]
+
+
 def main() -> None:
     """Run one round of the agent-readiness test and append it to the log.
 
@@ -473,7 +541,7 @@ def main() -> None:
     parser.add_argument("--target", choices=["mock", "live"], default="mock")
     parser.add_argument("--isolation", choices=["container", "folder"], default="container")
     parser.add_argument("--agent-name", default="claude-code")
-    parser.add_argument("--agent-command", default=DEFAULT_AGENT_COMMAND)
+    parser.add_argument("--agent-command", default=None)
     parser.add_argument("--image", default="qrypt-agent-harness")
     parser.add_argument("--network", choices=["bridge", "host"], default="bridge")
     parser.add_argument("--extra-ca", type=Path, default=None, dest="extra_authority")
@@ -510,7 +578,9 @@ def main() -> None:
                 run = run_agent_once(
                     round_name=arguments.round_name,
                     run_number=run_number,
-                    agent_command=shlex.split(arguments.agent_command),
+                    agent_command=shlex.split(
+                        agent_command_for(arguments.agent_name, arguments.agent_command)
+                    ),
                     api_url=server.url,
                     token=token,
                     transcripts_directory=EVIDENCE_DIRECTORY / "transcripts",

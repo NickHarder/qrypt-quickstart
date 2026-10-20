@@ -19,6 +19,7 @@ from qrypt_quickstart.agent_harness import (
     BRIEF_PROMPT,
     DOCUMENT_FILE_NAME,
     AgentRun,
+    agent_command_for,
     agent_login_environment,
     container_command,
     judge_run,
@@ -306,6 +307,8 @@ program = re.search(r"```python\\n(.*?)```", document, re.S).group(1)
 completed = subprocess.run([sys.executable, "main.py"], cwd=project, capture_output=True, text=True,
     env={{"PATH": "/usr/bin:/bin", "QRYPT_API_URL": {api_url!r}}})
 print(completed.stdout, completed.stderr)
+import os
+print("CLAUDE_CODE_OAUTH_TOKEN=" + os.environ.get("CLAUDE_CODE_OAUTH_TOKEN", ""))
 """
 
 
@@ -341,6 +344,66 @@ def test_the_container_mode_runs_docker_with_the_project_mounted_and_judges_the_
     assert docker_arguments[-3:-1] == ["claude", "-p"]
     assert docker_arguments[-1].startswith(BRIEF_PROMPT)
     assert not any(PLANTED_TOKEN in argument for argument in docker_arguments)
+
+
+def test_the_agents_login_is_scrubbed_from_the_transcript_too(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # An agent may print its environment; its login must not reach a committed transcript.
+    fake_bin = tmp_path / "bin"
+    fake_bin.mkdir()
+    record = tmp_path / "docker-arguments.txt"
+    with MockQryptServer() as server:
+        fake_docker = fake_bin / "docker"
+        fake_docker.write_text(
+            FAKE_DOCKER.format(python=sys.executable, record=str(record), api_url=server.url)
+        )
+        fake_docker.chmod(0o755)
+        monkeypatch.setenv("PATH", f"{fake_bin}:{os.environ['PATH']}")
+        monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
+        monkeypatch.setenv("HARNESS_CLAUDE_CODE_OAUTH_TOKEN", "stand-in-login-value")
+        run_agent_once(
+            round_name="test",
+            run_number=8,
+            agent_command=["claude", "-p", "{prompt}"],
+            api_url=server.url,
+            token=PLANTED_TOKEN,
+            transcripts_directory=tmp_path / "transcripts",
+            mock_server=server,
+            isolation="container",
+            image="qrypt-agent-harness",
+            certificate_authority=tmp_path / "ca.pem",
+        )
+    transcript = (tmp_path / "transcripts" / "test-run-8.txt").read_text()
+    assert "stand-in-login-value" not in transcript
+    assert "CLAUDE_CODE_OAUTH_TOKEN=<agent login>" in transcript
+
+
+def test_a_gemini_agent_gets_only_its_own_login() -> None:
+    owner_environment = {
+        "GEMINI_API_KEY": "stand-in-gemini-key",
+        "HARNESS_CLAUDE_CODE_OAUTH_TOKEN": "stand-in-claude-login",
+    }
+    assert agent_login_environment(owner_environment, agent_program="gemini") == {
+        "GEMINI_API_KEY": "stand-in-gemini-key"
+    }
+    assert agent_login_environment(owner_environment, agent_program="claude") == {
+        "CLAUDE_CODE_OAUTH_TOKEN": "stand-in-claude-login"
+    }
+
+
+def test_the_container_passes_only_the_logins_it_is_given_by_name(tmp_path: Path) -> None:
+    command = container_command(
+        project_directory=tmp_path,
+        image="qrypt-agent-harness",
+        agent_arguments=["gemini", "-p", BRIEF_PROMPT],
+        map_api_to_host=True,
+        certificate_authority=None,
+        login_names=("GEMINI_API_KEY",),
+    )
+    assert "--env=GEMINI_API_KEY" in command
+    assert "--env=CLAUDE_CODE_OAUTH_TOKEN" not in command
+    assert "--env=ANTHROPIC_API_KEY" not in command
 
 
 def test_the_login_comes_from_the_harness_name_when_the_reserved_name_is_absent() -> None:
@@ -385,3 +448,17 @@ def test_a_run_through_the_relay_is_judged_like_a_mock_run_and_ledgered(tmp_path
     assert run.succeeded, run
     assert ledger_total_kib(ledger) == 1
     assert "agent round 2 run 3" in ledger.read_text()
+
+
+def test_each_named_agent_has_the_command_its_round_ran_with() -> None:
+    # Backlog item B-07: Claude Code on a smaller model, and Gemini CLI, which refuses an untrusted
+    # folder in headless mode unless told to skip the check.
+    assert agent_command_for("claude-code", None).startswith("claude -p {prompt}")
+    assert "--model haiku" in agent_command_for("claude-code-haiku", None)
+    gemini_command = agent_command_for("gemini-cli", None)
+    assert gemini_command.startswith("gemini -p {prompt}")
+    assert "--yolo" in gemini_command
+    assert "--skip-trust" in gemini_command
+    assert agent_command_for("gemini-cli", "stand-in {prompt}") == "stand-in {prompt}"
+    with pytest.raises(SystemExit):
+        agent_command_for("an-unknown-agent", None)

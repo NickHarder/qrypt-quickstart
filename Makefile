@@ -213,11 +213,12 @@ live-check:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.live_check
 
 .PHONY: agent-round
-# Phase 8: one round of the agent-readiness test, ROUND=1 or 2, in a fresh container per run
+# Phase 8: one round of the agent-readiness test, ROUND=1 or 2, in a fresh container per run;
+# AGENT=claude-code (the default), claude-code-haiku or gemini-cli (backlog item B-07)
 # (build the image first: docker build -t qrypt-agent-harness agent-harness/). TARGET=mock (the
 # default) or TARGET=live, which reaches Qrypt through the recording relay: 64 KiB a run at most,
-# stopping at the ledger's 8,192 KiB. It runs Claude Code with the owner's login, and a live round
-# spends the owner's entropy: only with the owner's approval. In a cloud session, whose only way out
+# stopping at the ledger's 8,192 KiB. It runs the agent with the owner's login (Gemini CLI's is
+# GEMINI_API_KEY), and a live round spends the owner's entropy: only with the owner's approval. In a cloud session, whose only way out
 # is an egress proxy: HARNESS_OPTIONS='--network host --extra-ca <the proxy's authority>'.
 agent-round:
-	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.agent_harness --round $(ROUND) --target $(or $(TARGET),mock) $(HARNESS_OPTIONS)
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.agent_harness --round $(ROUND) --target $(or $(TARGET),mock) --agent-name $(or $(AGENT),claude-code) $(HARNESS_OPTIONS)
