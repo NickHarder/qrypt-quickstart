@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:19:10Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T02:33:47Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -309,13 +309,26 @@ Tuesday 2026-10-20, 19:00 to 22:00 CDT.
   round, each with a time, a result and a failure category; that the success rate and the median
   in `AGENT_READINESS.md` equal the CSV's; and that no transcript holds a token. Each Round 1
   failure becomes a regression eval case before its doc fix.
-- **How it runs:** `scripts/agent_run.sh` starts a new Docker container per run with Claude Code, an
-  empty project, the token in `.env` only and the quickstart's Markdown, and gives it the brief's
-  prompt word for word. It records the start, the end, whether the program printed a success line
-  with a working key, the entropy requested, and the transcript, with the token scrubbed. Round 1,
-  then the doc revision as its own commit, then Round 2.
-- **Files:** `scripts/agent_run.sh`, `evidence/agent_runs.csv`, `evidence/transcripts/`,
-  `AGENT_READINESS.md`, the revised `site/` pages.
+- **How it runs:** `make agent-round ROUND=1` (`src/qrypt_quickstart/agent_harness.py`) starts a
+  new Docker container per run (`agent-harness/Dockerfile`) with Claude Code, a project holding
+  only `.env` and the quickstart's Markdown, and the brief's prompt word for word plus one line
+  naming that file. Every request the agent's program makes goes to a recording server, so the run
+  is judged from what happened: success when a request with `Accept: application/json` and the
+  run's token got entropy, and neither the token nor the key appears in the transcript or the
+  project; otherwise the first failure category, security first. It logs the start, the
+  wall-clock time, the result, the category and the entropy requested, and keeps the transcript
+  with the token scrubbed. Round 1, then the doc revision as its own commit, then Round 2.
+- **Against the mock first** (the owner's call of 2026-10-20, with no token yet): in the container,
+  `api-eus.qrypt.com` maps to the mock on the host, which answers with a certificate from a
+  throwaway authority the container trusts, so the agent's program calls Qrypt's real URL. The
+  harness is proved with stand-in agents and a stand-in `docker` (`tests/test_agent_harness.py`);
+  no Docker daemon runs where it was built, so the image itself is unproved until the first round.
+- **Against Qrypt**, the rounds need one more piece, not built yet: a recording relay between the
+  agent's program and Qrypt, so each request is judged the same way and a per-run cap holds even
+  if an agent loops. Until it exists the harness refuses the live target.
+- **Files:** `src/qrypt_quickstart/agent_harness.py`, `src/qrypt_quickstart/harness_certificates.py`,
+  `agent-harness/`, `evidence/agent_runs.csv`, `evidence/transcripts/`, `AGENT_READINESS.md`, the
+  revised `site/` pages.
 - **Verify:** `make gate`; the counts in `AGENT_READINESS.md` against the CSV.
 - **Effort:** 3 hours. **Cost:** $0 on the owner's Claude subscription (about $15 if billed per
   token through an API key: 10 runs at about $1.50); at most 640 KiB of entropy expected

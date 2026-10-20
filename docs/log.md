@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 8's harness, against the mock: a fresh project per run holding only the token
+  file and the quickstart's Markdown, the brief's prompt word for word, and one judge that decides
+  each run from the requests the mock recorded and the key bytes it served, security first. A
+  container mode maps `api-eus.qrypt.com` to the mock under a throwaway certificate authority.
+  Proved with stand-in agents and a stand-in `docker`; the rounds wait on the owner's go and the
+  agent's login ([the plan](/PLAN.md)). The live target needs a recording relay, not built.
 * **Change**: Phase 7's code: `make live-check` runs each snippet 5 times against Qrypt and four
   probes (the answer's shape, a request without `Accept`, a wrong token from two clients), within
   12 KiB, refusing before any request when the ledger would pass 8,192 KiB, and scrubbing the token

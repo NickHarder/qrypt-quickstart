@@ -91,18 +91,25 @@ class MockQryptServer:
     it answers is appended to `recorded_requests`.
     """
 
-    def __init__(self, port: int = 0, tls_certificate: tuple[Path, Path] | None = None) -> None:
+    def __init__(
+        self,
+        port: int = 0,
+        tls_certificate: tuple[Path, Path] | None = None,
+        host: str = "127.0.0.1",
+    ) -> None:
         """Create the server; `port` 0 lets the system choose a free one.
 
         Args:
             port: The port to listen on.
+            host: The address to listen on: loopback by default; "0.0.0.0" for the agent
+                harness's containers, which reach the host through Docker's host gateway.
             tls_certificate: A certificate and its private key (PEM) to serve HTTPS with, or None
                 for plain HTTP.
         """
         self.recorded_requests: list[RecordedRequest] = []
         self._recording_lock = threading.Lock()
         handler_class = self._handler_class()
-        self._http_server = ThreadingHTTPServer(("127.0.0.1", port), handler_class)
+        self._http_server = ThreadingHTTPServer((host, port), handler_class)
         self._scheme = "http" if tls_certificate is None else "https"
         if tls_certificate is not None:
             tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)

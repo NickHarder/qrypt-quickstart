@@ -205,3 +205,10 @@ lighthouse:
 # Only with the owner's approval: it spends the owner's entropy (src/qrypt_quickstart/live_check.py).
 live-check:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.live_check
+
+.PHONY: agent-round
+# Phase 8: one round of the agent-readiness test, ROUND=1 or 2, against the mock, in a fresh
+# container per run (build the image first: docker build -t qrypt-agent-harness agent-harness/).
+# It runs Claude Code with the owner's login: only with the owner's approval.
+agent-round:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.agent_harness --round $(ROUND) --target mock
