@@ -71,12 +71,17 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 The owner's steps, at the very end (decided 2026-10-19). Nothing here has run yet.
 
 1. **What goes public.** `docs/brief/` holds the partner's brief and the owner's notes and stays out
-   of any public copy (above). If the GitLab project is public, push a branch without it; if it is
-   private with Pages open to everyone, it can stay.
-2. **The repository.** Create the project on GitLab (private, no README). From the owner's Mac,
-   `scripts/mirror_to_gitlab.sh --gitlab <the project's clone URL> --branch <the GitHub branch>`
+   of any public copy (above). The GitLab project is public (the owner's call, 2026-10-20), so it
+   gets the branch `public`: one commit with no history (an older commit would still hold the
+   folder), the tree of this branch with `docs/brief/` replaced by stubs of the same names, so
+   every link resolves; the gate is green on it. After a later change here, `public` gets a new
+   commit with the new tree, on top of its own, never a branch with this one's history.
+2. **The repository.** Create the project on Gauntlet's GitLab (public, no README). From the
+   owner's Mac, `scripts/mirror_to_gitlab.sh --gitlab <the project's clone URL> --branch public`
    clones GitHub (or reuses the clone), fetches the branch and pushes it to GitLab's `main`, never
-   forcing; run it again after each change on GitHub. At the first push, git asks for credentials:
+   forcing; run it again after each new commit on `public`. Whether that GitLab offers Pages is not
+   known: Deploy, Pages in the project's side bar says; if not, the built site goes to a public
+   host of its own (a GitHub Pages repository of only `build/site`, or Cloudflare Pages). At the first push, git asks for credentials:
    any user name and the GitLab personal access token as the password.
 3. **CI.** The kit writes GitLab CI when its `ci_provider` answer is `gitlab`
    (`.copier-answers.yml` says `github` now): re-answer it with `copier update`, then put this

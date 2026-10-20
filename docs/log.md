@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the `public` branch, for the public GitLab project (the owner's call): one commit
+  with no history, since an older commit would still hold `docs/brief/`, of this branch's tree with
+  that folder replaced by stubs of the same names, so every document that cites it, approved ones
+  included, is unchanged and its links resolve. Its gate is green and gitleaks finds nothing in it.
+  The final demo is 121.9 s with the Orus voice, every check passing.
 * **Change**: the demo's captions. The final cut's checks failed on two captions of one word,
   "shown." (0.81 s) and "KiB." (0.60 s), under the 1.2 s minimum: a sentence too long for one
   caption was filled word by word, leaving its last word alone. The splitter now evens out the last
