@@ -49,8 +49,8 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 ## Open, for the owner
 
 - Read and approve `docs/PLAN.md` (`make docs-approve DOC=docs/PLAN.md`, when you say so).
-- Get a Qrypt token: ask the program contact for an assessment token. It goes in `.env` as
-  `QRYPT_API_KEY`, never committed. The plan's fallback starts if none comes by 2026-10-20 18:00 CDT.
+- Review the backlog's scores and wording (`BACKLOG.md`): its reach shares and Qrypt's efforts are
+  this project's estimates.
 - Record AC-01: approve installing the `anthropic` SDK for the eval's model client, put a model key
   in the root env file as `QRYPT_QUICKSTART_MODEL_API_KEY`, and approve the run, about $0.05.
 - Every other point where the plan needs you: `make blockers` lists its `**You act:**` lines.
