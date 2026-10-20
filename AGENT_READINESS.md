@@ -11,8 +11,9 @@ time to the first key of at most 10 minutes.
 |---|---|---|---|
 | Round 1 | 5 of 5 | 0.49 | As built |
 | Round 2 | 5 of 5 | 0.54 | Revised from round 1 (`7272405`) |
+| Round 2-live | 5 of 5 | 0.61 | The same revised docs, against Qrypt itself |
 
-Both rounds pass the bar. Every run made exactly one entropy request, of 1 KiB, and kept the token
+Every round passes the bar. Every run made exactly one entropy request, of 1 KiB, and kept the token
 and the key out of its transcript and its files.
 
 ## How the runs ran
@@ -22,9 +23,13 @@ and the key out of its transcript and its files.
 - **The environment:** a new Docker container per run (`agent-harness/Dockerfile`: Debian 12,
   Python 3.11 with pip and venv, Node.js 22, curl, and Claude Code; no Python package), holding a project folder with only `.env` and
   the quickstart's Markdown (`site/llms-full.md` as `qrypt-quickstart.md`).
-- **The target: the mock, not Qrypt.** In the container `api-eus.qrypt.com` resolves to the
-  project's mock server, with a certificate the container trusts, so the agent's program calls
-  Qrypt's real URL and the agent is never told about the mock. The live rounds wait on the owner.
+- **The target.** Rounds 1 and 2 ran against the mock: in the container `api-eus.qrypt.com`
+  resolves to the project's mock server, with a certificate the container trusts, so the agent's
+  program calls Qrypt's real URL and the agent is never told about the mock. Round 2-live reached
+  Qrypt through the recording relay (`src/qrypt_quickstart/recording_relay.py`), with the owner's
+  trial token in the project's `.env`: the relay passes each request through unchanged, records it
+  for the same judge, writes a row to the entropy ledger (`evidence/live_usage.csv`) and caps a run
+  at 64 KiB.
 - **The judge** is what happened, not what the agent said: a run succeeds when a request with
   `Accept: application/json` and the run's token got entropy, and neither the token nor the key
   appears in the transcript or the project; otherwise the first failure category applies, security
@@ -73,6 +78,21 @@ All four Python runs went straight to the virtual environment the docs name: non
 spread of one round: round 2 drew four Python runs to round 1's three, and the Python path builds
 a virtual environment, which the Node.js path does not need.
 
+## Round 2-live, the revised docs against Qrypt
+
+| Run | Result | Minutes | Language | Turns |
+|---|---|---|---|---|
+| 1 | Success | 0.61 | Python | 5 |
+| 2 | Success | 0.50 | Python | 5 |
+| 3 | Success | 0.64 | Python | 4 |
+| 4 | Success | 0.69 | Python | 5 |
+| 5 | Success | 0.46 | Python | 7 |
+
+Run on 2026-10-20 with `make agent-round ROUND=2-live TARGET=live`. Every run got a 200 from Qrypt
+for its one 1 KiB request: 5 KiB of the trial's entropy in all, the ledger at 45 KiB. No tool call
+failed in the round. The median is 0.07 minutes above the mock round's, with the round trip to
+Qrypt and five Python runs, each building a virtual environment.
+
 ## Failure taxonomy
 
 No run failed in either round. One run was first scored a failure by the harness, wrongly:
@@ -83,8 +103,8 @@ No run failed in either round. One run was first scored a failure by the harness
 
 ## What this does not show
 
-- **Qrypt itself.** Both rounds ran against the mock. A live round goes through the recording
-  relay (`make agent-round ROUND=2 TARGET=live`), at most 64 KiB of entropy a run, on the owner's go.
+- **Round 1 against Qrypt.** Only the revised docs ran live; round 1 and the revision are measured
+  against the mock.
 - **Other agents.** Only Claude Code ran. Cursor, Copilot or a smaller model may stumble where it
   did not; the harness takes another agent's command with `--agent-command`.
 - **The site as a URL.** The agent got the Markdown, which the brief allows; the URL comes once

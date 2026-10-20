@@ -45,3 +45,8 @@ occurred_at,purpose,kib_requested,status
 2026-10-20T17:31:26Z,probe without_accept,1,200
 2026-10-20T17:31:28Z,probe bad_token_named_client,0,403
 2026-10-20T17:31:30Z,probe bad_token_python_default_client,0,403
+2026-10-20T18:11:17Z,agent round 2-live run 1,1,200
+2026-10-20T18:11:51Z,agent round 2-live run 2,1,200
+2026-10-20T18:12:28Z,agent round 2-live run 3,1,200
+2026-10-20T18:13:11Z,agent round 2-live run 4,1,200
+2026-10-20T18:13:40Z,agent round 2-live run 5,1,200

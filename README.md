@@ -42,7 +42,7 @@ these four commands took 18.1 s against the mock ([`evidence/grader_quickstart.m
 | Agent-readable docs | [`site/llms.md`](site/llms.md) and [`site/llms-full.md`](site/llms-full.md), built into `llms.txt` and `llms-full.txt` |
 | The onboarding PRD | [`PRD.md`](PRD.md) |
 | The claims-to-source table, with the fact-check of AI-drafted claims | [`CLAIMS.md`](CLAIMS.md) |
-| The agent-readiness test, both rounds | [`AGENT_READINESS.md`](AGENT_READINESS.md) (both rounds against the mock: 5 of 5, then 5 of 5 on the revised docs) and `evidence/agent_runs.csv`; the harness is [`src/qrypt_quickstart/agent_harness.py`](src/qrypt_quickstart/agent_harness.py) |
+| The agent-readiness test, both rounds | [`AGENT_READINESS.md`](AGENT_READINESS.md) (5 of 5 in round 1, then 5 of 5 on the revised docs against the mock and again against Qrypt) and `evidence/agent_runs.csv`; the harness is [`src/qrypt_quickstart/agent_harness.py`](src/qrypt_quickstart/agent_harness.py) |
 | The prioritized backlog | `BACKLOG.md`, after the rounds |
 | AI usage | [`AI_USAGE.md`](AI_USAGE.md) |
 | Competitive teardown (stretch) | [`evidence/teardown.md`](evidence/teardown.md): RANDOM.ORG's API against the same funnel |

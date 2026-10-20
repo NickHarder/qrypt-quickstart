@@ -20,11 +20,13 @@ REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 REPORT: Final = REPOSITORY_ROOT / "AGENT_READINESS.md"
 RUN_LOG: Final = REPOSITORY_ROOT / "evidence" / "agent_runs.csv"
 TRANSCRIPTS: Final = REPOSITORY_ROOT / "evidence" / "transcripts"
-ROUNDS: Final = ["1", "2"]
+# Round 2 ran twice on the revised docs: against the mock, then against Qrypt ("2-live").
+ROUNDS: Final = ["1", "2", "2-live"]
 RUNS_PER_ROUND: Final = 5
 # One row of the report's summary table: | Round 1 | 5 of 5 | 0.49 | ...
 SUMMARY_ROW: Final = re.compile(
-    r"^\| Round (?P<round_name>\d) \| (?P<succeeded>\d) of (?P<runs>\d) \| (?P<median>[\d.]+) \|",
+    r"^\| Round (?P<round_name>[\w-]+) \| (?P<succeeded>\d) of (?P<runs>\d)"
+    r" \| (?P<median>[\d.]+) \|",
     re.MULTILINE,
 )
 # A failed run is named in the taxonomy as `round-run`, with a commit of 7 to 40 hex digits.
@@ -72,8 +74,16 @@ def test_the_reports_success_count_and_median_equal_the_logs(round_name: str) ->
 
 
 def test_the_revised_round_meets_the_briefs_bar() -> None:
-    revised_runs = runs_of_round(ROUNDS[-1])
+    revised_runs = runs_of_round("2")
     successes = [run for run in revised_runs if run["succeeded"] == "True"]
+    assert len(successes) >= 4
+    assert statistics.median(float(run["wall_clock_minutes"]) for run in successes) <= 10
+
+
+def test_the_live_round_meets_the_briefs_bar_against_qrypt() -> None:
+    live_runs = runs_of_round("2-live")
+    assert {run["target"] for run in live_runs} == {"live"}
+    successes = [run for run in live_runs if run["succeeded"] == "True"]
     assert len(successes) >= 4
     assert statistics.median(float(run["wall_clock_minutes"]) for run in successes) <= 10
 

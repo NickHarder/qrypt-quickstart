@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/2.1.304, at: 2026-10-20T18:05:30Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-20T18:14:58Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -45,7 +45,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-06 | Troubleshooting page: 400, 401, 403, 429, 500, 503 as symptom → likely cause → fix, and the common mistakes (`size` is KiB, base64 must be decoded, no loop faster than the rate limit) | Core 2 | Met | Phase 3 | `site/troubleshooting.html`; `tests/test_troubleshooting_page.py` checks a symptom, a cause and a fix for each code, mistake and environment issue |
 | RQ-07 | Every documented command runs as written | Core 2, Accept | Met | Phase 5 | `tests/test_documented_commands.py` runs every shell line of the site's pages and `llms-full.txt` as written, against the mock; `pip install` lines are checked (packages installed and declared), not run |
 | RQ-08 | Onboarding PRD: problem, personas and jobs-to-be-done, the funnel (landing → token created → first successful call → first key → return within 7 days), a target and a measurement for each stage, scope, out of scope, risks, the tradeoff not made; an engineer can build the instrumentation without a question | Core 3 | Met | Gates 2 and 4, Phase 6 | `PRD.md`; `tests/test_prd.py` checks every section the brief lists, the funnel and its common rules equal to `docs/KEY_METRICS.md` cell for cell, and every illustrative figure labelled an assumption. Its targets wait for the owner's approval |
-| RQ-09 | ⛔ Agent-readiness test: only the quickstart URL or its Markdown and the prompt "Generate an AES-256 key using Qrypt quantum entropy in a new project", a fresh environment, 5 runs; success, wall-clock time and failure reason each; revise the docs and repeat; at least 4 of 5 succeed after revision; both rounds logged | Core 4; Benchmarks | Met | Phase 8 | `AGENT_READINESS.md` and `evidence/agent_runs.csv`: round 1 5 of 5, the revision (`7272405`), round 2 5 of 5, against the mock (a live round waits on the owner); `tests/test_agent_readiness.py` keeps the report equal to the log |
+| RQ-09 | ⛔ Agent-readiness test: only the quickstart URL or its Markdown and the prompt "Generate an AES-256 key using Qrypt quantum entropy in a new project", a fresh environment, 5 runs; success, wall-clock time and failure reason each; revise the docs and repeat; at least 4 of 5 succeed after revision; both rounds logged | Core 4; Benchmarks | Met | Phase 8 | `AGENT_READINESS.md` and `evidence/agent_runs.csv`: round 1 5 of 5, the revision (`7272405`), round 2 5 of 5 against the mock and 5 of 5 against Qrypt (round 2-live); `tests/test_agent_readiness.py` keeps the report equal to the log |
 | RQ-10 | ⛔ Ten follow-up items from the agent findings and a review of the first-run experience, each with a RICE score and its evidence | Core 5 | Not yet | Phase 9 | `BACKLOG.md` and `BACKLOG.csv`; a test checks ten items, the RICE arithmetic and an evidence link on each |
 
 # Edge cases and failure modes
@@ -65,7 +65,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 
 | Id | Requirement | Where in the brief | Status | Where | Proof |
 |---|---|---|---|---|---|
-| RQ-19 | Agent time-to-first-key: median at most 10 minutes over the successful runs of the revised round | Benchmarks | Met | Phase 8 | `evidence/agent_runs.csv`, Round 2: median 0.54 minutes over 5 successful runs, against the mock |
+| RQ-19 | Agent time-to-first-key: median at most 10 minutes over the successful runs of the revised round | Benchmarks | Met | Phase 8 | `evidence/agent_runs.csv`, Round 2: median 0.54 minutes over 5 successful runs against the mock, 0.61 against Qrypt (round 2-live) |
 | RQ-20 | Site load under 1.5 s p95 on mobile, Lighthouse mobile preset, 10 runs | Benchmarks | Met | Phase 5 | `make lighthouse`: 10 mobile runs, load (Largest Contentful Paint) p95 1,024 ms; `evidence/lighthouse/summary.json`, `runs.csv`; `tests/test_lighthouse_evidence.py` |
 | RQ-21 | Lighthouse accessibility at least 95, report committed | Benchmarks | Met | Phase 5 | `evidence/lighthouse/index-run.report.html` and `troubleshooting-run.report.html`: accessibility 100 on every run |
 | RQ-22 | Snippet runtime under 3 s end to end against the live API, 5 runs | Benchmarks | Not yet | Phase 7 | `evidence/live_runs.csv` |

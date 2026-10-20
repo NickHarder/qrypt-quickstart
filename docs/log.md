@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: agent round 2-live, the revised docs against Qrypt, on the owner's go: 5 of 5, median
+  0.61 minutes, every run Python, every run's one 1 KiB request answered 200 (5 KiB; the ledger at
+  45 KiB). It ran as round `2-live`, not `2`, so its transcripts sit beside the mock round's rather
+  than over them, and `tests/test_agent_readiness.py` holds it to the report and to the brief's bar
+  as a round of its own. The handoff's line that the live check still waited on the token was
+  stale (it ran 15 of 15) and now says what ran where.
 * **Change**: agent round 2, on the revised docs, against the mock, on the owner's go: 5 of 5,
   median 0.54 minutes (round 1: 0.49). All four Python runs went straight to the virtual
   environment the docs now name, with no refused or probed install; the median rose with the

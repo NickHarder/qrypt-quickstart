@@ -9,3 +9,8 @@ round_name,run_number,agent,target,started_at,wall_clock_minutes,succeeded,failu
 2,3,claude-code,mock,2026-10-20T17:59:48Z,0.55,True,,1,1,
 2,4,claude-code,mock,2026-10-20T18:00:22Z,0.54,True,,1,1,
 2,5,claude-code,mock,2026-10-20T18:00:55Z,0.38,True,,1,1,
+2-live,1,claude-code,live,2026-10-20T18:10:48Z,0.61,True,,1,1,
+2-live,2,claude-code,live,2026-10-20T18:11:25Z,0.5,True,,1,1,
+2-live,3,claude-code,live,2026-10-20T18:11:56Z,0.64,True,,1,1,
+2-live,4,claude-code,live,2026-10-20T18:12:35Z,0.69,True,,1,1,
+2-live,5,claude-code,live,2026-10-20T18:13:17Z,0.46,True,,1,1,
