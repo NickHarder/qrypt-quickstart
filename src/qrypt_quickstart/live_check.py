@@ -1,7 +1,8 @@
 """The live check (Phase 7): the only code here that calls Qrypt's API with the owner's token.
 
-It runs each quickstart 5 times against the live endpoint and times it (the brief's "snippet
-runtime under 3 s, 5 runs"), then makes four probes that settle what Qrypt's docs leave open:
+It runs each quickstart (Python, Node and the built Rust binary) 5 times against the live endpoint
+and times it (the brief's "snippet runtime under 3 s, 5 runs"), then makes four probes that settle
+what Qrypt's docs leave open:
 
 - `answer_shape`: one ordinary request, recording the answer's shape (never its entropy).
 - `without_accept`: one request without `Accept: application/json`, recording Qrypt's real answer,
@@ -11,8 +12,12 @@ runtime under 3 s, 5 runs"), then makes four probes that settle what Qrypt's doc
   whether the edge in front of the API refuses either client first (audit finding ARCH-02). A bad
   token is refused before any entropy is served: 0 KiB.
 
+It waits `REQUEST_SPACING_SECONDS` before every request but the first: live, a trial key got 429
+for a second request 0.36 s after the first, with no `Retry-After`, and every 429 had cleared
+within 1.5 s (`evidence/live_rate_limit.json`), where Qrypt's docs say 30 requests in 10 seconds.
+
 Its guards: it refuses before the first request when the ledger (`evidence/live_usage.csv`) plus
-this run's 12 KiB would pass the 8,192 KiB stop the plan sets under the brief's 10,240 KiB budget;
+this run's 17 KiB would pass the 8,192 KiB stop the plan sets under the brief's 10,240 KiB budget;
 it appends a ledger row for every request as it is made; and it writes the token's value nowhere,
 scrubbing everything it writes by the token's exact value.
 
@@ -33,6 +38,8 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Callable
+from functools import cache
 from pathlib import Path
 from typing import Final
 
@@ -47,8 +54,12 @@ RUNS_PER_SNIPPET: Final = 5
 SNIPPETS: Final = {
     "python": REPOSITORY_ROOT / "quickstart" / "python" / "quickstart.py",
     "node": REPOSITORY_ROOT / "quickstart" / "node" / "quickstart.mjs",
+    "rust": REPOSITORY_ROOT / "rust" / "src" / "main.rs",
 }
-# 10 snippet runs and 2 probes that may be served entropy, at 1 KiB each; bad tokens are free.
+RUST_CRATE_DIRECTORY: Final = REPOSITORY_ROOT / "rust"
+# Past the longest 429 seen live (1.5 s), so one run's request does not refuse the next.
+REQUEST_SPACING_SECONDS: Final = 2.0
+# 15 snippet runs and 2 probes that may be served entropy, at 1 KiB each; bad tokens are free.
 PLANNED_KIB: Final = len(SNIPPETS) * RUNS_PER_SNIPPET + 2
 LEDGER_STOP_KIB: Final = 8192
 LEDGER_FIELDS: Final = ["occurred_at", "purpose", "kib_requested", "status"]
@@ -113,17 +124,43 @@ def record_request(ledger: Path, *, purpose: str, kib_requested: int, status: st
         )
 
 
+@cache
+def built_rust_quickstart() -> Path:
+    """Build the Rust quickstart once, as a developer's `cargo build` does; return its binary."""
+    cargo = shutil.which("cargo")
+    if cargo is None:
+        message = "cargo is not installed; the Rust quickstart cannot run (make bootstrap)"
+        raise LiveCheckRefusedError(message)
+    subprocess.run(  # noqa: S603  cargo, building this repository's crate
+        [cargo, "build", "--locked", "--quiet", "--bin", "quickstart"],
+        check=True,
+        cwd=RUST_CRATE_DIRECTORY,
+        timeout=600,
+    )
+    return RUST_CRATE_DIRECTORY / "target" / "debug" / "quickstart"
+
+
+def snippet_command(snippet: str, work_directory: Path) -> list[str]:
+    """Copy a quickstart into the empty folder and return the command that runs the copy."""
+    if snippet == "rust":
+        copied_binary = work_directory / "quickstart"
+        shutil.copy(built_rust_quickstart(), copied_binary)
+        return [str(copied_binary)]
+    copied_snippet = work_directory / SNIPPETS[snippet].name
+    shutil.copy(SNIPPETS[snippet], copied_snippet)
+    interpreter = sys.executable if snippet == "python" else shutil.which("node") or "node"
+    return [interpreter, str(copied_snippet)]
+
+
 def run_snippet_once(snippet: str, *, api_url: str, token: str, run_number: int) -> SnippetRun:
     """Run one quickstart as a developer does, in an empty folder, and time it end to end."""
     with tempfile.TemporaryDirectory() as work_directory:
-        copied_snippet = Path(work_directory) / SNIPPETS[snippet].name
-        shutil.copy(SNIPPETS[snippet], copied_snippet)
-        interpreter = sys.executable if snippet == "python" else shutil.which("node") or "node"
+        command = snippet_command(snippet, Path(work_directory))
         environment = {key: value for key, value in os.environ.items() if key != "QRYPT_API_KEY"}
         environment.update({"QRYPT_API_KEY": token, "QRYPT_API_URL": api_url})
         started_at = time.monotonic()
-        completed = subprocess.run(  # noqa: S603  this repository's snippet, with this Python or node
-            [interpreter, str(copied_snippet)],
+        completed = subprocess.run(  # noqa: S603  this repository's snippet, with this Python or node, or its binary
+            command,
             check=False,
             cwd=work_directory,
             env=environment,
@@ -179,13 +216,21 @@ def probe(api_url: str, *, token: str, headers: dict[str, str]) -> dict[str, obj
     return recorded
 
 
-def run_live_check(*, api_url: str, token: str, evidence_directory: Path) -> list[SnippetRun]:
+def run_live_check(
+    *,
+    api_url: str,
+    token: str,
+    evidence_directory: Path,
+    pause: Callable[[float], None] = time.sleep,
+) -> list[SnippetRun]:
     """Run the snippets and the probes against the endpoint, recording everything.
 
     Args:
         api_url: The endpoint: Qrypt's for the live check, the mock's in tests.
         token: The access token; never written anywhere.
         evidence_directory: Where the runs, the probes and the ledger are written.
+        pause: Called with `REQUEST_SPACING_SECONDS` before every request but the first; the tests
+            pass one that does not wait.
 
     Returns:
         The timed snippet runs.
@@ -206,9 +251,13 @@ def run_live_check(*, api_url: str, token: str, evidence_directory: Path) -> lis
             f"{LEDGER_STOP_KIB:,} KiB stop"
         )
         raise LiveCheckRefusedError(message)
+    if "rust" in SNIPPETS:
+        built_rust_quickstart()  # built before the first request, so the build is not timed
     runs: list[SnippetRun] = []
     for snippet in SNIPPETS:
         for run_number in range(1, RUNS_PER_SNIPPET + 1):
+            if runs:
+                pause(REQUEST_SPACING_SECONDS)
             run = run_snippet_once(snippet, api_url=api_url, token=token, run_number=run_number)
             record_request(
                 ledger,
@@ -236,6 +285,7 @@ def run_live_check(*, api_url: str, token: str, evidence_directory: Path) -> lis
     }
     probes: dict[str, dict[str, object]] = {}
     for probe_name, (kib_requested, headers) in probe_plan.items():
+        pause(REQUEST_SPACING_SECONDS)
         probes[probe_name] = probe(api_url, token=token, headers=headers)
         record_request(
             ledger,

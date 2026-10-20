@@ -16,6 +16,7 @@ import pytest
 from qrypt_quickstart.live_check import (
     LEDGER_STOP_KIB,
     PLANNED_KIB,
+    REQUEST_SPACING_SECONDS,
     LiveCheckRefusedError,
     ledger_total_kib,
     run_live_check,
@@ -40,14 +41,21 @@ def test_scrub_refuses_an_empty_token() -> None:
         scrub("text", "")
 
 
+def no_pause(seconds: float) -> None:
+    """Stand in for `time.sleep`, so a test against the mock does not wait between requests."""
+    del seconds
+
+
 def test_a_run_against_the_mock_records_runs_probes_and_every_request(tmp_path: Path) -> None:
     with MockQryptServer() as server:
-        run_live_check(api_url=server.url, token=PLANTED_TOKEN, evidence_directory=tmp_path)
+        run_live_check(
+            api_url=server.url, token=PLANTED_TOKEN, evidence_directory=tmp_path, pause=no_pause
+        )
         request_count = len(server.recorded_requests)
     with (tmp_path / "live_runs.csv").open() as runs_file:
         runs = list(csv.DictReader(runs_file))
-    assert sorted({run["snippet"] for run in runs}) == ["node", "python"]
-    assert len(runs) == 10
+    assert sorted({run["snippet"] for run in runs}) == ["node", "python", "rust"]
+    assert len(runs) == 15
     assert all(run["succeeded"] == "True" for run in runs)
     with (tmp_path / "live_usage.csv").open() as ledger_file:
         ledger = list(csv.DictReader(ledger_file))
@@ -65,9 +73,27 @@ def test_a_run_against_the_mock_records_runs_probes_and_every_request(tmp_path: 
     assert probes["bad_token_named_client"]["status"] == 401
 
 
+def test_it_pauses_before_every_request_but_the_first(tmp_path: Path) -> None:
+    # Live, a trial key got 429 for a second request 0.36 s after the first, and every 429 had
+    # cleared within 1.5 s (evidence/live_rate_limit.json); the spacing keeps runs apart past that.
+    pauses_seconds: list[float] = []
+    with MockQryptServer() as server:
+        run_live_check(
+            api_url=server.url,
+            token=PLANTED_TOKEN,
+            evidence_directory=tmp_path,
+            pause=pauses_seconds.append,
+        )
+        request_count = len(server.recorded_requests)
+    assert REQUEST_SPACING_SECONDS >= 2.0
+    assert pauses_seconds == [REQUEST_SPACING_SECONDS] * (request_count - 1)
+
+
 def test_nothing_it_writes_holds_the_token(tmp_path: Path) -> None:
     with MockQryptServer() as server:
-        run_live_check(api_url=server.url, token=PLANTED_TOKEN, evidence_directory=tmp_path)
+        run_live_check(
+            api_url=server.url, token=PLANTED_TOKEN, evidence_directory=tmp_path, pause=no_pause
+        )
     for written_file in tmp_path.iterdir():
         assert PLANTED_TOKEN not in written_file.read_text(), written_file.name
 

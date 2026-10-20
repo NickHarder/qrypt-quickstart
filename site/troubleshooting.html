@@ -69,9 +69,11 @@
     <section id="error-429" aria-labelledby="heading-429">
       <h3 id="heading-429">429: rate limit</h3>
       <p><strong>Symptom</strong></p>
-      <pre><code class="language-text">Qrypt answered HTTP 429: over 30 requests in 10 seconds; wait 10 seconds, then run once.</code></pre>
-      <p><strong>Likely cause</strong>: the token sent more than 30 requests in 10 seconds, usually
-        from a loop or several scripts sharing one token. Unlike <a href="#error-403">403</a>, it
+      <pre><code class="language-text">Qrypt answered HTTP 429: too many requests in a short time; wait 10 seconds, then run once.</code></pre>
+      <p><strong>Likely cause</strong>: the token's requests came too close together, usually
+        from a loop or several scripts sharing one token. Qrypt's docs say the limit is 30 requests
+        in 10 seconds, but a trial key was refused for a second request 0.36 s after its first.
+        Qrypt's answer has no Retry-After header. Unlike <a href="#error-403">403</a>, it
         passes on its own.</p>
       <p><strong>Fix</strong>: wait 10 seconds, then run once. Never retry in a tight loop: each
         retry counts against the same limit. If you need more entropy, ask for more in one request
@@ -80,7 +82,7 @@
         <caption>429 or 403?</caption>
         <thead><tr><th scope="col"></th><th scope="col">429 rate limit</th><th scope="col">403 allotment</th></tr></thead>
         <tbody>
-          <tr><th scope="row">What it limits</th><td>Requests: 30 per 10 seconds per token</td><td>Entropy: a total per account per period</td></tr>
+          <tr><th scope="row">What it limits</th><td>Requests: 30 per 10 seconds per token, Qrypt's docs say; a trial key was refused at two within half a second</td><td>Entropy: a total per account per period</td></tr>
           <tr><th scope="row">Does waiting fix it?</th><td>Yes, after 10 seconds</td><td>No: ask Qrypt</td></tr>
         </tbody>
       </table>
@@ -188,7 +190,7 @@ SSL_CERT_FILE=/path/to/company-ca.pem cargo run</code></pre>
       <h3 id="heading-loop">A retry loop faster than the rate limit</h3>
       <p><strong>Symptom</strong>: a run of 429 answers, then possibly a 403.</p>
       <p><strong>Likely cause</strong>: code that retries at once on any error. Every retry counts
-        against the 30-requests-in-10-seconds limit.</p>
+        against the same rate limit.</p>
       <p><strong>Fix</strong>: on 429, wait at least 10 seconds before one more try. On 403, stop.
         On 500 or 503, wait a minute.</p>
     </section>

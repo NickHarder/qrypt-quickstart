@@ -4,7 +4,7 @@ title: "Audit area: performance"
 description: What bounds the quickstart's 3-second runtime and the agent's 10-minute target, from Qrypt's one documented region, its rate limit, the size of its answer and the cost of starting each runtime.
 tags: [audit, performance]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T17:31:58Z }
 sources:
   - id: qrypt-eaas
     resource: https://docs.qrypt.com/eaas/
@@ -58,6 +58,12 @@ The API's own latency was not measured: that needs a live call, which waits on t
 - **Mitigation:** the snippets never retry; on 429 they exit at once with "wait 10 seconds", which
   the documented window supports (Phase 3 test: exit within 1 s after one request). Agent runs go
   one after another, never in parallel.
+- **Live, 2026-10-20:** a trial key's real limit is far lower and irregular. A second request 0.36 s
+  after a 200 got 429, while another burst passed four requests 0.25 s apart; no answer carried
+  `Retry-After` or any rate-limit header, and every 429 cleared within 1.5 s
+  (`evidence/live_rate_limit.json`). The first live check, with runs half a second apart, failed 4
+  of 10 on 429; with 2 s between requests, 15 of 15 succeeded (`evidence/live_runs.csv`). The
+  snippets' 429 message no longer states the documented limit, and "wait 10 seconds" stays.
 
 ### [PERF-03] The answer to `size=1` is small; the data is not what bounds latency
 - **Severity:** info

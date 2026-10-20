@@ -1,0 +1,122 @@
+[
+  {
+    "at_seconds": 15.6,
+    "phase": "cycle 1 burst",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "at_seconds": 15.96,
+    "phase": "cycle 1 burst",
+    "status": 429,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "31",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    },
+    "body": "{\"error\":\"Rate limit exceeded\"}"
+  },
+  {
+    "at_seconds": 16.67,
+    "phase": "cycle 1 recovery",
+    "status": 429,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "31",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    },
+    "body": "{\"error\":\"Rate limit exceeded\"}"
+  },
+  {
+    "at_seconds": 17.48,
+    "phase": "cycle 1 recovery",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "cycle": 1,
+    "burst_successes": 1,
+    "recovery_seconds": 1.51
+  },
+  {
+    "at_seconds": 33.01,
+    "phase": "cycle 2 burst",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "at_seconds": 33.29,
+    "phase": "cycle 2 burst",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "at_seconds": 33.5,
+    "phase": "cycle 2 burst",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "at_seconds": 33.74,
+    "phase": "cycle 2 burst",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "at_seconds": 34.47,
+    "phase": "cycle 2 recovery",
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "1392",
+      "Connection": "close",
+      "Cache-Control": "no-store",
+      "Server": "cloudflare"
+    }
+  },
+  {
+    "cycle": 2,
+    "burst_successes": 4,
+    "recovery_seconds": 0.73
+  }
+]

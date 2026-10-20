@@ -207,7 +207,7 @@ grader-run:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.grader_run
 
 .PHONY: live-check
-# Phase 7, live: each snippet 5 times against Qrypt, and four probes; 12 KiB, ledger-guarded.
+# Phase 7, live: each snippet (Python, Node, Rust) 5 times against Qrypt, 2 s apart, and four probes; 17 KiB, ledger-guarded.
 # Only with the owner's approval: it spends the owner's entropy (src/qrypt_quickstart/live_check.py).
 live-check:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.live_check

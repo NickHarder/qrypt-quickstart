@@ -29,7 +29,7 @@ const headers = { Accept: "application/json", Authorization: `Bearer ${apiKey}`,
 /** @type {Record<number, string>} */
 const hints = { 400: "malformed request: size must be 1-512", 403: "allotment used up; ask Qrypt",
   401: "the token is invalid or expired; get a new one at portal.qrypt.com",
-  429: "over 30 requests in 10 seconds; wait 10 seconds, then run once" };
+  429: "too many requests in a short time; wait 10 seconds, then run once" };
 // size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.
 const response = await fetch(`${apiUrl}?size=1`, { headers, signal: AbortSignal.timeout(10_000) });
 const hint = hints[response.status] ?? "try again shortly";

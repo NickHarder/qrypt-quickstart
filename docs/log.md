@@ -10,6 +10,29 @@ skill has the format.
   The owner saved the token under the usual name in the cloud environment's settings, and it did
   not reach the session (checked by name only); the session uses that name for its own login, so
   the owner's login now has a name of its own. Docker started and the image built in the session.
+* **Change**: the rate limit, measured and acted on, on the owner's go. A probe
+  (`evidence/live_rate_limit.json`, 7 KiB) found a trial key refused with 429 for a second request
+  0.36 s after its first, with no `Retry-After`, every 429 cleared within 1.5 s. The live check now
+  waits 2 s before each request and runs Rust too; run again, 15 of 15 succeeded (medians 0.42 s,
+  0.51 s, 0.51 s; slowest 0.66 s). The three snippets' 429 message says "too many requests in a
+  short time", and the troubleshooting page, `llms.md` and claims Q-15, Q-16, Q-22 and new Q-37 give
+  the documented and the live figure side by side; PERF-02 records it. Also seen live: without
+  `Accept`, Qrypt still answers 200 with JSON, and a wrong token gets 403 "Forbidden or entropy
+  quota reached", not 401, so the snippets' 403 message ("allotment") misleads a mistyped token.
+* **Change**: the first live check, on the owner's go (`evidence/live_runs.csv`,
+  `evidence/live_probes.json`; the ledger at 16 KiB). Python and Node each succeeded 3 of 5, median
+  0.54 s and 0.52 s, slowest 0.78 s, under the 3 s target. Every failure was a 429 after a few
+  requests about half a second apart, against the documented 30 requests in 10 seconds, so a trial
+  key's real limit is far lower and claims Q-15, Q-16 and Q-22 are not borne out live. A bad token
+  got 403 "Forbidden or entropy quota reached", not 401. Rust's runs are not in the live check yet.
+* **Change**: the endpoint question is settled, by the owner's approved probes (ledger
+  `evidence/live_usage.csv`, 4 KiB). A portal trial key works on the documented
+  `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1` with a Bearer token: 200, the same
+  `{"random": [...], "size": n}` shape the mock serves, so the quickstarts keep their endpoint and
+  no code changes. The portal's `POST eaas-aws.qrypt.com/api/v1/entropy` with `X-API-Key` closed the
+  connection without an answer. The first pair went out with urllib's default User-Agent, and
+  Cloudflare refused both (error 1010) before the API read the key; the quickstarts send their own
+  User-Agent, and the second pair did too.
 * **Change**: `scripts/mirror_to_gitlab.sh`, for the owner's Mac: it clones or reuses a clone of
   the GitHub repository, fetches a branch and pushes it to a GitLab branch, never forcing, so the
   owner's personal access token stays on the owner's machine. Tested on two local bare

@@ -31,7 +31,7 @@ use ureq::tls::{RootCerts, TlsConfig};
     // What to do about each error Qrypt documents; 500, 503 and any other status: try again shortly.
     let hint = |status| match status { 400 => "malformed request: size must be 1-512", 403 => "allotment used up; ask Qrypt",
         401 => "the token is invalid or expired; get a new one at portal.qrypt.com",
-        429 => "over 30 requests in 10 seconds; wait 10 seconds, then run once", _ => "try again shortly" };
+        429 => "too many requests in a short time; wait 10 seconds, then run once", _ => "try again shortly" };
     // size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.
     // The platform's certificates (and SSL_CERT_FILE) are trusted, so a company proxy's root works.
     let answer = ureq::get(format!("{api_url}?size=1")).header("Accept", "application/json").header("User-Agent", "qrypt-quickstart-rust/1.0")

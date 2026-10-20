@@ -23,7 +23,8 @@ EXPECTED_PHRASES: Final = {
     400: ["HTTP 400", "size"],
     401: ["HTTP 401", "invalid or expired", "portal.qrypt.com"],
     403: ["HTTP 403", "allotment"],
-    429: ["HTTP 429", "wait"],
+    # Not "30 requests": live, a trial key was refused at two within half a second.
+    429: ["HTTP 429", "too many requests in a short time", "wait 10 seconds"],
     500: ["HTTP 500", "try again shortly"],
     503: ["HTTP 503", "try again shortly"],
 }

@@ -11,7 +11,7 @@
 - Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at https://portal.qrypt.com/trial?ref=quickstart and put `QRYPT_API_KEY=<token>` in `.env`.
 - Answer: `{"random": ["<base64 of 1,024 bytes>"], "size": 1}`. Base64-decode `random[0]` first; then bytes 0-31 are the AES-256 key and bytes 32-43 the AES-GCM nonce. Never reuse entropy bytes for two purposes.
 - Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
-- Errors: make one request and stop; never retry in a loop. 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
+- Errors: make one request and stop; never retry in a loop. 429 means requests came too close together (Qrypt's docs say over 30 in 10 seconds; a trial key was refused at two within half a second): wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
 - On any failure, exit non-zero with one clear line, not a stack trace.
 
 ## Step 1: the token
@@ -73,7 +73,7 @@ Each program makes one request and prints one line on failure, with a non-zero e
 - `Qrypt answered HTTP 400: malformed request: size must be 1-512.`: the request is malformed; send `size` as a whole number from 1 to 512, with both headers.
 - `Qrypt answered HTTP 401: the token is invalid or expired; get a new one at portal.qrypt.com.`: generate a new Entropy token and replace the `QRYPT_API_KEY` line, with no quotes or spaces.
 - `Qrypt answered HTTP 403: allotment used up; ask Qrypt.`: the account has retrieved its maximum entropy for the period. Stop; waiting does not help. Ask Qrypt to change the limit.
-- `Qrypt answered HTTP 429: over 30 requests in 10 seconds; wait 10 seconds, then run once.`: the rate limit. Wait 10 seconds, then run once; never retry in a loop.
+- `Qrypt answered HTTP 429: too many requests in a short time; wait 10 seconds, then run once.`: the rate limit. Wait 10 seconds, then run once; never retry in a loop.
 - `Qrypt answered HTTP 500: try again shortly.`: an error inside Qrypt. Run again in a minute; if it persists, contact Qrypt support.
 - `Qrypt answered HTTP 503: try again shortly.`: Qrypt's entropy supply is temporarily insufficient. Run again in a minute with `size=1`.
 - `Could not get entropy (...)`: no network, a timeout, a proxy, or a certificate the machine does not trust. Behind a TLS-inspecting proxy, point the runtime at the company's root certificate: `SSL_CERT_FILE=/path/to/company-ca.pem` for Python, `NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem` for Node.js; the Rust program trusts the operating system's certificates, and `SSL_CERT_FILE` on Linux. Never turn certificate checks off.
