@@ -73,7 +73,9 @@
         character, with no quotes or spaces around it, or create a new key and paste that. If the
         token is right, ask Qrypt to change the account's limit, and check that your code asks only
         for what it needs: <code>size=1</code> is 1 KiB, and <code>size=512</code> uses 512 times as
-        much.</p>
+        much. If your own code got the 403 and its body says <code>Error 1010</code>, the cause is
+        its <code>User-Agent</code>: see <a href="#mistake-default-user-agent">A 403 from
+        Cloudflare</a>.</p>
     </section>
 
     <section id="error-429" aria-labelledby="heading-429">
@@ -217,6 +219,24 @@ SSL_CERT_FILE=/path/to/company-ca.pem cargo run</code></pre>
         against the same rate limit.</p>
       <p><strong>Fix</strong>: on 429, wait at least 10 seconds before one more try. On 403, stop.
         On 500 or 503, wait a minute.</p>
+    </section>
+
+    <section id="mistake-default-user-agent" aria-labelledby="heading-user-agent">
+      <h3 id="heading-user-agent">A 403 from Cloudflare: error 1010</h3>
+      <p><strong>Symptom</strong>: your own code gets HTTP 403, and the body is Cloudflare's, not
+        Qrypt's: JSON whose <code>title</code> is</p>
+      <pre><code class="language-text">Error 1010: Access denied</code></pre>
+      <p>with the detail "The site owner has blocked access based on your browser's signature", and
+        a <code>server: cloudflare</code> header.</p>
+      <p><strong>Likely cause</strong>: Qrypt's API sits behind Cloudflare, which refuses a request
+        carrying an HTTP library's default <code>User-Agent</code>, such as Python's
+        <code>Python-urllib/3.x</code>, before Qrypt reads the token. The quickstart's programs
+        send their own <code>User-Agent</code>, so they do not meet this; code written from
+        scratch may.</p>
+      <p><strong>Fix</strong>: send a <code>User-Agent</code> header that names your program, as
+        the quickstart does, for example <code>"User-Agent": "my-app/1.0"</code> beside the
+        <code>Accept</code> and <code>Authorization</code> headers. The token is not the problem:
+        do not create a new one for this.</p>
     </section>
 
     <h2 id="key-handling-heading">Handling the key safely</h2>

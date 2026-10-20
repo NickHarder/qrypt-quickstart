@@ -7,6 +7,7 @@
 - No SDK: Qrypt's documentation lists no Python or Node.js package for this API (its SDK is a C/C++ library for key generation). Do not install one (no `pip install qrypt`, no `npm install qrypt`); call the REST endpoint with the language's own HTTP client.
 - Endpoint: `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
 - Headers, both required: `Accept: application/json` and `Authorization: Bearer <QRYPT_API_KEY>`.
+- Also send a `User-Agent` that names your program (the quickstart sends `qrypt-quickstart-python/1.0`): Cloudflare in front of the API refuses an HTTP library's default one, such as `Python-urllib/3.x`, with 403 `Error 1010: Access denied` before the token is read.
 - `size` counts KiB (1,024-byte blocks), from 1 to 512, not bytes. Send `size=1`: it returns 1,024 bytes, and one key needs 32.
 - Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at https://portal.qrypt.com/trial?ref=quickstart and put `QRYPT_API_KEY=<token>` in `.env`.
 - Answer: `{"random": ["<base64 of 1,024 bytes>"], "size": 1}`. Base64-decode `random[0]` first; then bytes 0-31 are the AES-256 key and bytes 32-43 the AES-GCM nonce. Never reuse entropy bytes for two purposes.
@@ -74,6 +75,7 @@ Each program makes one request and prints one line on failure, with a non-zero e
 - `Qrypt answered HTTP 400: malformed request: size must be 1-512.`: the request is malformed; send `size` as a whole number from 1 to 512, with both headers.
 - `Qrypt answered HTTP 401: the token is invalid or expired; get a new one at portal.qrypt.com.`: generate a new Entropy token and replace the `QRYPT_API_KEY` line, with no quotes or spaces.
 - `Qrypt answered HTTP 403: wrong token or allotment spent.`: most likely a wrong token (mistyped, cut short, or from another account), which Qrypt answers with 403 `{"error": "Forbidden or entropy quota reached"}` although its docs say 401; check `QRYPT_API_KEY` against the portal's API Keys page. Otherwise the account has retrieved its maximum entropy for the period. Stop; waiting does not help. Ask Qrypt to change the limit.
+- `Error 1010: Access denied` (HTTP 403, a JSON body from Cloudflare, not Qrypt): the request carried an HTTP library's default `User-Agent`, such as `Python-urllib/3.x`, which Cloudflare refuses before the token is read. Send a `User-Agent` that names your program; the token is not the problem.
 - `Qrypt answered HTTP 429: too many requests in a short time; wait 10 seconds, then run once.`: the rate limit. Wait 10 seconds, then run once; never retry in a loop.
 - `Qrypt answered HTTP 500: try again shortly.`: an error inside Qrypt. Run again in a minute; if it persists, contact Qrypt support.
 - `Qrypt answered HTTP 503: try again shortly.`: Qrypt's entropy supply is temporarily insufficient. Run again in a minute with `size=1`.

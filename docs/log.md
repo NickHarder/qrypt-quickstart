@@ -5,6 +5,13 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the troubleshooting page's Cloudflare 1010 entry, on the owner's go. Live, Python's
+  default `Python-urllib/3.x` User-Agent got Cloudflare's 403 `Error 1010: Access denied` before
+  Qrypt read the token (`evidence/live_probes.json`). The programs send their own User-Agent, so
+  the entry is among the mistakes in a developer's own code, linked from the 403 entry; `llms.txt`
+  and `llms-full.txt` gain the rule and the message. The PRD's risk and claim Q-35 drop their "may",
+  and new claim Q-40 cites the probe. Only Python's default client was probed: the entry names it
+  as the example and claims nothing about other libraries.
 * **Change**: the new 403 message checked live, on the owner's go: the Python, Node.js and Rust
   programs, each run once against Qrypt with a deliberately wrong token, 3 s apart, printed
   "Qrypt answered HTTP 403: wrong token or allotment spent." and exited 1

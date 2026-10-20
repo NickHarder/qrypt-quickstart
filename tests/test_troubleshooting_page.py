@@ -16,7 +16,12 @@ SECTION_PATTERN: Final = re.compile(
     r'<section id="(?P<id>[a-z0-9-]+)"[^>]*>(?P<body>.*?)</section>', re.DOTALL
 )
 ERROR_SECTIONS: Final = [f"error-{code}" for code in (400, 401, 403, 429, 500, 503)]
-MISTAKE_SECTIONS: Final = ["mistake-size-is-kib", "mistake-base64", "mistake-loop"]
+MISTAKE_SECTIONS: Final = [
+    "mistake-size-is-kib",
+    "mistake-base64",
+    "mistake-loop",
+    "mistake-default-user-agent",
+]
 ENVIRONMENT_SECTIONS: Final = ["env-runtime", "env-missing-dotenv", "env-proxy-tls", "env-network"]
 
 
@@ -41,6 +46,18 @@ def test_the_403_entry_puts_the_wrong_token_first_and_says_qrypt_documents_401()
     assert "QRYPT_API_KEY" in section_text
     assert "Forbidden or entropy quota reached" in section_text
     assert "401" in section_text
+
+
+def test_the_cloudflare_1010_entry_names_the_body_the_cause_and_the_fix() -> None:
+    # Live, Cloudflare refused Python's default User-Agent with 403 error 1010 before Qrypt read the
+    # token (evidence/live_probes.json, bad_token_python_default_client).
+    section_text = sections()["mistake-default-user-agent"]
+    for phrase in ("Error 1010: Access denied", "Python-urllib", "User-Agent", "Cloudflare"):
+        assert phrase in section_text, phrase
+    raw_sections = {
+        match["id"]: match["body"] for match in SECTION_PATTERN.finditer(PAGE.read_text())
+    }
+    assert 'href="#mistake-default-user-agent"' in raw_sections["error-403"]
 
 
 def test_the_page_tells_the_rate_limit_from_the_allotment() -> None:

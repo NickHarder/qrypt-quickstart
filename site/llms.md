@@ -7,6 +7,7 @@
 - No SDK: Qrypt's documentation lists no Python or Node.js package for this API (its SDK is a C/C++ library for key generation). Do not install one (no `pip install qrypt`, no `npm install qrypt`); call the REST endpoint with the language's own HTTP client.
 - Endpoint: `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
 - Headers, both required: `Accept: application/json` and `Authorization: Bearer <QRYPT_API_KEY>`.
+- Also send a `User-Agent` that names your program (the quickstart sends `qrypt-quickstart-python/1.0`): Cloudflare in front of the API refuses an HTTP library's default one, such as `Python-urllib/3.x`, with 403 `Error 1010: Access denied` before the token is read.
 - `size` counts KiB (1,024-byte blocks), from 1 to 512, not bytes. Send `size=1`: it returns 1,024 bytes, and one key needs 32.
 - Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at https://portal.qrypt.com/trial?ref=quickstart and put `QRYPT_API_KEY=<token>` in `.env`.
 - Answer: `{"random": ["<base64 of 1,024 bytes>"], "size": 1}`. Base64-decode `random[0]` first; then bytes 0-31 are the AES-256 key and bytes 32-43 the AES-GCM nonce. Never reuse entropy bytes for two purposes.

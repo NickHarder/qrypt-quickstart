@@ -43,6 +43,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-21 | Qrypt reads it as 32 KiB: 32 blocks of 1,024 bytes. | `site/troubleshooting.html` | EaaS: `size` is KiB |
 | Q-22 | 429 means requests came too close together (Qrypt's docs say over 30 in 10 seconds; a trial key was refused at two within half a second): wait 10 seconds. 403 means a wrong token or a used-up entropy allotment: Qrypt's docs say 401 for a bad token, but Qrypt answers a wrong token with 403 and the same body as a used-up allotment | `site/llms.md` | EaaS: 429, 403 and 401; Live: a trial key refused with 429 at 0.36 s after a 200, and a wrong token answered 403 (`evidence/live_probes.json`, `bad_token_named_client`) |
 | Q-39 | Qrypt's docs say a bad token gets 401, but Qrypt answers it with 403 and the body {"error": "Forbidden or entropy quota reached"}, the same as a used-up allotment | `site/troubleshooting.html` | EaaS: 401 for an invalid or expired token, 403 for the allotment; Live: a wrong token sent with the snippets' User-Agent got 403 with that body on 2026-10-20 (`evidence/live_probes.json`, `bad_token_named_client`), and each of the three programs, run with a wrong token, printed the 403 message (`evidence/live_wrong_token.json`) |
+| Q-40 | Qrypt's API sits behind Cloudflare, which refuses a request carrying an HTTP library's default User-Agent, such as Python's Python-urllib/3.x, before Qrypt reads the token. | `site/troubleshooting.html` | Live: with a wrong token, the snippets' User-Agent got Qrypt's own 403 body, and Python's default `Python-urllib/3.x` got Cloudflare's 403 `Error 1010: Access denied` with `server: cloudflare` instead (`evidence/live_probes.json`, `bad_token_named_client` and `bad_token_python_default_client`; `evidence/portal_walkthrough.md`) |
 | Q-23 | the account has retrieved its maximum entropy for the period. | `site/llms-full.md` | EaaS: 403 |
 | Q-24 | Qrypt's entropy supply is temporarily insufficient. | `site/llms-full.md` | EaaS: 503 |
 
@@ -57,7 +58,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-33 | There is no llms.txt at docs.qrypt.com (HTTP 404), and no self-service step to a token is documented: the page says to contact Qrypt. | `PRD.md` | `curl` of docs.qrypt.com/llms.txt, HTTP 404 on 2026-10-19; EaaS: tokens come from contacting Qrypt |
 | Q-34 | Qrypt sells quantum entropy as one REST endpoint. | `PRD.md` | EaaS: one endpoint, `GET /api/v1/quantum-entropy` |
 | Q-36 | In the portal's side bar, under Dashboard, open API Keys, then Create API key. | `site/index.html` | The owner's walk of the portal, 2026-10-20 (`evidence/portal_walkthrough.md`, steps 4 and 5) |
-| Q-35 | Cloudflare in front of the API may refuse some HTTP clients with a 403 | `PRD.md` | `docs/audit/architecture.md`: the API answers through Cloudflare, and another Cloudflare-fronted site refused Python's default client; "may" until the live check |
+| Q-35 | Cloudflare in front of the API refuses an HTTP library's default User-Agent with a 403 | `PRD.md` | `docs/audit/architecture.md`: the API answers through Cloudflare; Live: Python's default client (`Python-urllib/3.x`) got 403 error 1010 on 2026-10-20 (`evidence/live_probes.json`, `bad_token_python_default_client`) |
 
 ## Claims about the tools the quickstart uses
 
