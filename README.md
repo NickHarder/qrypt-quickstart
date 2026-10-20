@@ -31,7 +31,7 @@ line, reading `.env` from the repository's root.
 No token yet? `make bootstrap` then `make e2e` runs all three programs against a local mock of Qrypt's
 endpoint, builds the site and checks it shows the code that ran, in under a minute and offline.
 Something else printed? Every message is in `site/troubleshooting.html`. Timed from a fresh clone,
-these four commands took 3.2 s against the mock ([`evidence/grader_quickstart.md`](evidence/grader_quickstart.md), `make grader-run`).
+these four commands took 2.4 s against the mock ([`evidence/grader_quickstart.md`](evidence/grader_quickstart.md), `make grader-run`).
 
 ## Where each deliverable is
 

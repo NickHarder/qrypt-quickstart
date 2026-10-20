@@ -385,7 +385,7 @@ Wednesday 2026-10-21, 08:30 to 12:00 CDT.
 - **Done so far:** `tests/test_readme_commands.py` runs every other shell block of the README in
   a reader's shell (it found the mock started with a bare `python`, which the virtualenv does not
   answer to; fixed); `make grader-run` times the grader quick-start from a fresh clone against
-  the mock, 3.2 s (`evidence/grader_quickstart.md`, held by `tests/test_grader_run.py`); the
+  the mock, 2.4 s (`evidence/grader_quickstart.md`, held by `tests/test_grader_run.py`); the
   steps of the move to GitLab are in `HANDOFF.md`; the teardown, RANDOM.ORG's API against the
   funnel, is `evidence/teardown.md` (ANU's was first choice, but its pages give no text without a
   browser). The demo waits on the owner's call to

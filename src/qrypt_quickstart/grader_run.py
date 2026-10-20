@@ -16,6 +16,7 @@ its output) and evidence/grader_quickstart.md (the same as a table, and the tota
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -33,6 +34,9 @@ GRADER_TARGET_SECONDS: Final = 300.0
 STEP_TIMEOUT_SECONDS: Final = 300
 OUTPUT_TAIL_CHARACTERS: Final = 200
 EVIDENCE_DIRECTORY: Final = REPOSITORY_ROOT / "evidence"
+# What only a shell understands. The README's grader commands use none of it, so each runs without a
+# shell; a line that needs one is refused rather than run with its operators passed as arguments.
+SHELL_SYNTAX: Final = re.compile(r"[|&;<>$`]")
 
 
 @dataclass(frozen=True)
@@ -63,11 +67,18 @@ def grader_quick_start_commands(readme: Path) -> list[str]:
 
 
 def run_timed(command: str, *, work_directory: Path, environment: dict[str, str]) -> TimedStep:
-    """Run one command in a shell, as a grader's shell runs it, and time it."""
+    """Run one command, split into its words without a shell, and time it.
+
+    Raises:
+        ValueError: If the command needs a shell: a pipe, a redirect, `&&`, `;` or a variable.
+    """
+    if SHELL_SYNTAX.search(command):
+        message = f"this command needs a shell, which the grader run does not use: {command}"
+        raise ValueError(message)
+    command_words = shlex.split(command)
     started_at = time.monotonic()
-    completed = subprocess.run(  # noqa: S602  the README's own command, as a grader runs it
-        command,
-        shell=True,
+    completed = subprocess.run(  # noqa: S603  a README command, split into words, without a shell
+        command_words,
         check=False,
         cwd=work_directory,
         env=environment,

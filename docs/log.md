@@ -5,6 +5,9 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the grader run splits each README command into its words and runs it without a shell,
+  refusing a line that needs one; semgrep's CI scan had flagged the shell. Run again, it took 2.4 s,
+  and a test now keeps the README's quoted total equal to the committed evidence.
 * **Change**: the `generate-demo` skill (1.2.0) takes the creative rules of `/brag`
   (latent-spaces/brag, MIT), on the owner's choice to enhance the skill rather than make the demo
   with `/brag`: a new `references/craft.md` (the hook planned first, the result before the setup,
