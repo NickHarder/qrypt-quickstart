@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Qrypt is said "crypt", as the owner said. The demo's voice settings take a
+  `pronunciations` map (`demo/brand.json`, `{"Qrypt": "Crypt"}`): the text sent to the voice is
+  respelled, whole words only, and the captions and screens keep the name as written. A change of
+  pronunciation voices the line again.
 * **Change**: the demo's storyboard, on the owner's yes: 11 scenes, about 85 s, with the agent run
   still to come once a round has run. The quickstart site is a recorded take
   (`demo/takes/quickstart.take.ts`), and the terminal scenes show real output that

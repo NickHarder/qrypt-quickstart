@@ -278,6 +278,11 @@ export const brandSchema = z.strictObject({
     draft_words_per_minute: z.number().int().min(90).max(300),
     /** The Kokoro voice: the free draft voice everywhere, and the final voice when `.env` names kokoro. */
     kokoro_voice: z.string().min(1).default("af_heart"),
+    /**
+     * How the voice says a word the captions spell another way, whole words only, case kept:
+     * `{"Qrypt": "Crypt"}`. Only the text sent to the voice changes; captions and screens do not.
+     */
+    pronunciations: z.record(z.string().min(1), z.string().min(1)).optional(),
   }),
   /** Background music. The file must be listed in media.lock.json as licensed. */
   music: z
