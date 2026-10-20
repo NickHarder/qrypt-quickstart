@@ -13,6 +13,10 @@ command there against the mock. Two kinds of line are checked rather than run, a
   and with the features it names, must be what `rust/Cargo.toml` pins, so the reader's project
   builds what CI tested.
 
+A line that runs pip or Python from the virtual environment the page makes (`.venv/bin/...`) is
+checked as the same line without that prefix: each line runs in a folder of its own, where the
+test's own environment, which holds the packages, stands in for the reader's `.venv`.
+
 `cargo run` runs in a copy of the Rust crate, the reader's project after those steps, offline and
 with the crate's own build directory, after one build of the crate has fetched its crates.
 """
@@ -43,6 +47,8 @@ IMPORT_NAMES: Final = {"cryptography": "cryptography", "python-dotenv": "dotenv"
 RUST_CRATE: Final = REPOSITORY_ROOT / "rust"
 RUST_PROJECT_FILES: Final = ("Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "src/main.rs")
 PLACEHOLDER_VARIABLE: Final = re.compile(r"^(?P<name>[A-Z_]+)=/path/to/\S+ ")
+# The virtual environment the troubleshooting page has the reader make, named in its commands.
+VIRTUAL_ENVIRONMENT_PREFIX: Final = ".venv/bin/"
 
 
 def documented_commands() -> list[tuple[str, str]]:
@@ -100,17 +106,20 @@ def test_the_site_documents_at_least_the_install_and_both_runs() -> None:
 def test_each_documented_command_runs_as_written(
     tmp_path: Path, page_name: str, command: str
 ) -> None:
-    if command.startswith("pip install "):
+    environment_command = command.removeprefix(VIRTUAL_ENVIRONMENT_PREFIX)
+    if environment_command.startswith("pip install "):
         declared = (REPOSITORY_ROOT / "pyproject.toml").read_text()
-        for package in command.removeprefix("pip install ").split():
+        for package in environment_command.removeprefix("pip install ").split():
             assert find_spec(IMPORT_NAMES[package]) is not None, f"{package} is not installed"
             assert f'"{package}' in declared, f"{package} is not declared in pyproject.toml"
         return
-    if command.startswith("cargo add "):
-        check_cargo_add(command)
+    if environment_command.startswith("cargo add "):
+        check_cargo_add(environment_command)
         return
-    placeholder = PLACEHOLDER_VARIABLE.match(command)
-    runnable_command = command[placeholder.end() :] if placeholder else command
+    placeholder = PLACEHOLDER_VARIABLE.match(environment_command)
+    runnable_command = (
+        environment_command[placeholder.end() :] if placeholder else environment_command
+    )
     for file_name, snippet in SNIPPETS.items():
         shutil.copy(snippet, tmp_path / file_name)
     environment = {key: value for key, value in os.environ.items() if not key.startswith("QRYPT_")}

@@ -133,6 +133,20 @@
       <pre><code class="language-shell">pip install cryptography python-dotenv</code></pre>
     </section>
 
+    <section id="env-pip-refused" aria-labelledby="heading-pip-refused">
+      <h3 id="heading-pip-refused">pip refuses to install the packages</h3>
+      <p><strong>Symptom</strong>: <code>pip install cryptography python-dotenv</code> stops with
+        <code>error: externally-managed-environment</code>.</p>
+      <p><strong>Likely cause</strong>: your Python belongs to the operating system (Debian,
+        Ubuntu, Homebrew), which keeps packages out of it (PEP 668).</p>
+      <p><strong>Fix</strong>: make a virtual environment in the project folder, install the
+        packages there, run the program with its Python, and add <code>.venv/</code> to
+        <code>.gitignore</code>:</p>
+      <pre><code class="language-shell">python3 -m venv .venv
+.venv/bin/pip install cryptography python-dotenv
+.venv/bin/python quickstart.py</code></pre>
+    </section>
+
     <section id="env-proxy-tls" aria-labelledby="heading-proxy">
       <h3 id="heading-proxy">A corporate proxy or a certificate error</h3>
       <p><strong>Symptom</strong>: a line that starts <code>Could not get entropy</code> and names a

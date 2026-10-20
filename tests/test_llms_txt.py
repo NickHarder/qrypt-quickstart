@@ -55,6 +55,29 @@ def test_both_files_state_every_rule_the_snippets_follow(built_site: Path, file_
         assert rule in text, f"{file_name} does not say {rule!r}"
 
 
+@pytest.mark.parametrize("file_name", ["llms.txt", "llms-full.txt"])
+def test_both_files_install_python_packages_in_a_virtual_environment(
+    built_site: Path, file_name: str
+) -> None:
+    # Agent test round 1: every Python run had to find this out (a system Python refuses a bare
+    # `pip install` under PEP 668), so the agent-readable files say it first.
+    text = (built_site / file_name).read_text()
+    for rule in (
+        "python3 -m venv .venv",
+        ".venv/bin/pip install cryptography python-dotenv",
+        ".venv/bin/python quickstart.py",
+        "externally-managed-environment",
+        "`.venv/`",
+    ):
+        assert rule in text, f"{file_name} does not say {rule!r}"
+
+
+def test_the_troubleshooting_page_explains_a_refused_pip_install(built_site: Path) -> None:
+    page = (built_site / "troubleshooting.html").read_text()
+    assert "externally-managed-environment" in page
+    assert "python3 -m venv .venv" in page
+
+
 def test_the_snippets_use_the_endpoint_and_headers_llms_txt_names(built_site: Path) -> None:
     for snippet in SNIPPETS:
         source = snippet.read_text()

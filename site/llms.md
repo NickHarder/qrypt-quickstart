@@ -13,7 +13,7 @@
 - Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
 - Errors: make one request and stop; never retry in a loop. 429 means requests came too close together (Qrypt's docs say over 30 in 10 seconds; a trial key was refused at two within half a second): wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
 - On any failure, exit non-zero with one clear line, not a stack trace.
-- Python needs `pip install cryptography python-dotenv`. Node.js 20.12 or later needs nothing. Rust 1.89 or later needs five crates: `cargo add aes-gcm@0.11.1 base64@0.23.1 dotenvy@0.15.7 serde_json@1.0.151` and `cargo add ureq@3.4.2 -F platform-verifier`.
+- Python 3.10 or later needs two packages, installed in a virtual environment in the project folder: `python3 -m venv .venv`, then `.venv/bin/pip install cryptography python-dotenv`, and run with `.venv/bin/python quickstart.py`; add `.venv/` to `.gitignore`. A system Python often refuses a bare `pip install` with `externally-managed-environment` (PEP 668). Node.js 20.12 or later needs nothing. Rust 1.89 or later needs five crates: `cargo add aes-gcm@0.11.1 base64@0.23.1 dotenvy@0.15.7 serde_json@1.0.151` and `cargo add ureq@3.4.2 -F platform-verifier`.
 
 ## Docs
 

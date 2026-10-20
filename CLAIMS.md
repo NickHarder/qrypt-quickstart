@@ -66,6 +66,7 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-26 | If you must go through a proxy, Python and the Rust program read HTTPS_PROXY on their own. | `site/troubleshooting.html` | Python documentation: `urllib.request` reads proxy settings from the environment (`getproxies`); ureq 3.4.2's source: its default configuration reads `HTTPS_PROXY` and `NO_PROXY` (`Proxy::try_from_env`) |
 | Q-27 | Recent Node.js versions read it when started with --use-env-proxy (see node --help). | `site/troubleshooting.html` | `node --help` of Node.js 22.22.0 lists `--use-env-proxy`; checked 2026-10-20 |
 | Q-28 | point the runtime at it. Never turn certificate checks off. | `site/troubleshooting.html` | Python documentation: OpenSSL's default trust store honours `SSL_CERT_FILE`; Node.js documentation: `NODE_EXTRA_CA_CERTS` |
+| Q-38 | stops with error: externally-managed-environment. | `site/troubleshooting.html` | PEP 668, which marks an operating system's Python as externally managed so that pip refuses to install into it; agent round 1, run 5, got pip's "See PEP 668" (`evidence/transcripts/1-run-5.txt`), and `pip install cryptography` in the harness image (Debian 12.13, Python 3.11.2, pip 23.0.1) printed this error, checked 2026-10-20 |
 
 ## Fact-check of AI-drafted content
 

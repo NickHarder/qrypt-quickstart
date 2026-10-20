@@ -13,6 +13,7 @@
 - Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
 - Errors: make one request and stop; never retry in a loop. 429 means requests came too close together (Qrypt's docs say over 30 in 10 seconds; a trial key was refused at two within half a second): wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
 - On any failure, exit non-zero with one clear line, not a stack trace.
+- Python: install the packages in a virtual environment in the project folder, never into the system Python: `python3 -m venv .venv`, then `.venv/bin/pip install cryptography python-dotenv`, and run with `.venv/bin/python quickstart.py`; add `.venv/` to `.gitignore`. A system Python often refuses a bare `pip install` with `externally-managed-environment` (PEP 668).
 
 ## Step 1: the token
 
@@ -24,7 +25,7 @@ QRYPT_API_KEY=paste-your-token-here
 
 ## Step 2, Python: quickstart.py
 
-Python 3.10 or later. Install the two packages, save the program as `quickstart.py`, and run it:
+Python 3.10 or later. Install the two packages, save the program as `quickstart.py`, and run it. If `pip` refuses with `externally-managed-environment`, or for an agent working in a fresh project, use a virtual environment instead: `python3 -m venv .venv`, `.venv/bin/pip install cryptography python-dotenv`, `.venv/bin/python quickstart.py`, with `.venv/` in `.gitignore`.
 
 ```shell
 pip install cryptography python-dotenv

@@ -5,6 +5,16 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the docs revised from agent round 1, on the owner's go. All five runs succeeded in 4
+  to 6 turns, so the revision fixes the one friction they show: each of the three Python runs had
+  to find out for itself that the image's system Python refuses a bare `pip install`
+  (`externally-managed-environment`, PEP 668; run 5 hit it, runs 3 and 4 checked first), and made a
+  virtual environment and a `.gitignore` on its own. `llms.txt` and `llms-full.txt` now say to
+  install into `.venv` (`python3 -m venv .venv`, `.venv/bin/pip install ...`,
+  `.venv/bin/python quickstart.py`, `.venv/` in `.gitignore`), and the troubleshooting page gains an
+  entry for the refused install (claim Q-38, its error checked in the harness image). The human
+  pages keep `pip install` as the first step. The documented-commands test checks a `.venv/bin/`
+  line as the same line without the prefix, since each line runs in a folder of its own.
 * **Change**: the `invented-sdk` check no longer fires on a word in a comment, on the owner's go.
   Its tool-call pattern matched any "install" before any "qrypt" in a recorded command, so round 1's
   run 2, which wrote the documented no-SDK `quickstart.mjs` (its comment says "nothing to install"
