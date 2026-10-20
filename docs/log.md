@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the owner found that `portal.qrypt.com/register`, the sign-up link the brief gives,
+  shows a 404. Rendered in a browser, the portal's real routes are its login page and, from its
+  "Create trial account" link, `/trial` (full name and work email); `/signup` says to contact
+  sales. The newcomer's link is now `https://portal.qrypt.com/trial?ref=quickstart`, the claims
+  table records why, and the PRD's problem and risk rows name the 404. The demo's take was
+  recorded again.
 * **Change**: the quickstart page's "get a token" link and the agent docs now send a newcomer to
   the sign-up page the brief names, tagged as the PRD's attribution needs:
   `https://portal.qrypt.com/register?ref=quickstart`. It was the portal's front page, untagged,

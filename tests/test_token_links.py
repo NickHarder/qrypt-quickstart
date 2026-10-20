@@ -1,6 +1,7 @@
 """Every "get a token" link goes to the portal's sign-up page, tagged for the funnel (stage 1).
 
-The brief names the sign-up page (https://portal.qrypt.com/register). The PRD's attribution rests
+The brief names https://portal.qrypt.com/register, but the portal renders that as a 404
+(2026-10-20); its login page's "Create trial account" leads to /trial, the working sign-up. The PRD's attribution rests
 on the quickstart's links carrying `ref=quickstart`, which the portal stores as `signup_ref`; a
 link without it would make stage 1 unmeasurable. This keeps the pages and the PRD in agreement.
 
@@ -15,7 +16,7 @@ from typing import Final
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 SITE: Final = REPOSITORY_ROOT / "site"
-SIGN_UP_URL: Final = "https://portal.qrypt.com/register?ref=quickstart"
+SIGN_UP_URL: Final = "https://portal.qrypt.com/trial?ref=quickstart"
 
 
 def test_the_quickstart_pages_token_link_is_the_tagged_sign_up_page() -> None:
@@ -31,7 +32,7 @@ def test_the_agent_docs_send_people_to_the_same_page() -> None:
         # The programs' own messages, quoted in backticks, name the host only; everything else is
         # the tagged page.
         prose = re.sub(r"`[^`]*`", "", text)
-        assert not re.search(r"portal\.qrypt\.com(?!/register\?ref=quickstart)", prose), page_name
+        assert not re.search(r"portal\.qrypt\.com(?!/trial\?ref=quickstart)", prose), page_name
 
 
 def test_the_prd_and_the_metrics_name_the_tag_the_links_carry() -> None:
@@ -41,4 +42,5 @@ def test_the_prd_and_the_metrics_name_the_tag_the_links_carry() -> None:
 
 def test_the_claims_table_sources_the_sign_up_page() -> None:
     claims = (REPOSITORY_ROOT / "CLAIMS.md").read_text()
-    assert "portal.qrypt.com/register" in claims
+    assert "portal.qrypt.com/trial" in claims
+    assert "/register as a 404" in claims

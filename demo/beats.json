@@ -2,25 +2,25 @@
   {
     "take": "quickstart",
     "key": "landing",
-    "start": 0.356,
-    "end": 6.132
+    "start": 0.091,
+    "end": 5.868
   },
   {
     "take": "quickstart",
     "key": "tabs",
-    "start": 6.132,
-    "end": 11.828
+    "start": 5.868,
+    "end": 11.444
   },
   {
     "take": "quickstart",
     "key": "troubleshooting",
-    "start": 11.854,
-    "end": 16.955
+    "start": 11.467,
+    "end": 16.567
   },
   {
     "take": "quickstart",
     "key": "agents",
-    "start": 17.063,
-    "end": 26.318
+    "start": 16.599,
+    "end": 25.85
   }
 ]

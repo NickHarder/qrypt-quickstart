@@ -23,7 +23,9 @@ Qrypt sells quantum entropy as one REST endpoint. The first run is harder than t
 - **No Python or Node.js package exists** (the only SDK is C/C++, for key generation), so an agent
   that guesses `pip install qrypt` fails.
 - **There is no `llms.txt`** at docs.qrypt.com (HTTP 404), and no self-service step to a token is
-  documented: the page says to contact Qrypt.
+  documented: the page says to contact Qrypt. The sign-up link the brief gives,
+  `portal.qrypt.com/register`, shows a 404; the one self-service route, a trial account at
+  `portal.qrypt.com/trial`, is linked only from the portal's login page (seen 2026-10-20).
 
 The brief assumes a first key takes about 45 minutes from the reference docs today (an assumption,
 not a measurement). Developers who fail in their first session rarely return, and avoidable errors
@@ -150,7 +152,7 @@ accounts using a language we have no quickstart for.
 
 | Risk | Effect | What we do |
 |---|---|---|
-| No documented self-service path to a token | Stage 2 stalls before the quickstart can help | The page says to ask a Qrypt contact; the backlog ranks self-service tokens |
+| No documented self-service path to a token | Stage 2 stalls before the quickstart can help | The quickstart links the portal's trial sign-up and says to ask a Qrypt contact; the backlog ranks a documented self-service token, and the 404 at the brief's `/register` |
 | Cloudflare in front of the API may refuse some HTTP clients with a 403 | Looks like a used-up allotment | Each program sends a named `User-Agent`; the live check tests Python's default client |
 | The mock answers where Qrypt's docs are silent (error bodies, a missing `Accept`) | Tests pass on guessed behaviour | Each guess is marked in the mock; the live check records Qrypt's real answers |
 | The funnel's data lives in Qrypt's systems, unseen here | The specification may not fit them | Every event names its emitter; stage 1 needs no identifier |
