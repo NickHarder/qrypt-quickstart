@@ -27,7 +27,7 @@ const headers = { Accept: "application/json", Authorization: `Bearer ${apiKey}`,
   "User-Agent": "qrypt-quickstart-node/1.0" };
 // What to do about each error Qrypt documents; 500, 503 and any other status: try again shortly.
 /** @type {Record<number, string>} */
-const hints = { 400: "malformed request: size must be 1-512", 403: "allotment used up; ask Qrypt",
+const hints = { 400: "malformed request: size must be 1-512", 403: "wrong token or allotment spent",
   401: "the token is invalid or expired; get a new one at portal.qrypt.com",
   429: "too many requests in a short time; wait 10 seconds, then run once" };
 // size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.

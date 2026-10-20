@@ -5,6 +5,18 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the 403 message, on the owner's go. Live, Qrypt answers a wrong token with 403
+  `{"error": "Forbidden or entropy quota reached"}`, the answer it gives a used-up allotment, where
+  its docs say 401 (`evidence/live_probes.json`). The API is Qrypt's to fix; the message was ours:
+  the programs said "allotment used up; ask Qrypt", which sends a developer with a mistyped token
+  to ask for more entropy. They now print "wrong token or allotment spent" (the most that fits the
+  25-line snippets' lines, Node's at 100 characters), and the troubleshooting page, `llms.txt` and
+  `llms-full.txt` put the token check first and say how Qrypt's answer differs from its docs
+  (claims Q-13, Q-14 and Q-22 follow, new Q-39). The mock answers an unknown token with that live
+  403 and body instead of 401, so a test covers the mistyped token in each language. The PRD's
+  risks and the teardown carry the upstream ask: a documented 401, or at least a body of its own;
+  the backlog (Phase 9) is to rank it. The harness's `auth` category stays on 401, since the relay
+  also answers 403 when a run's budget is spent.
 * **Change**: agent round 2-live, the revised docs against Qrypt, on the owner's go: 5 of 5, median
   0.61 minutes, every run Python, every run's one 1 KiB request answered 200 (5 KiB; the ledger at
   45 KiB). It ran as round `2-live`, not `2`, so its transcripts sit beside the mock round's rather

@@ -154,6 +154,7 @@ accounts using a language we have no quickstart for.
 |---|---|---|
 | No documented self-service path to a token | Stage 2 stalls before the quickstart can help | The quickstart links the portal's trial sign-up and says to ask a Qrypt contact; the backlog ranks a documented self-service token, and the 404 at the brief's `/register` |
 | Cloudflare in front of the API may refuse some HTTP clients with a 403 | Looks like a used-up allotment | Each program sends a named `User-Agent`; the live check tests Python's default client |
+| Qrypt answers a wrong token with 403 and the body it gives a used-up allotment; its docs say 401 | A developer who mistyped the token is told to ask for more entropy, and stalls before stage 3 | The programs print "wrong token or allotment spent", and the troubleshooting page has the token checked first. Qrypt's fix, for the backlog: answer a bad token with the documented 401, or at least a body of its own |
 | The mock answers where Qrypt's docs are silent (error bodies, a missing `Accept`) | Tests pass on guessed behaviour | Each guess is marked in the mock; the live check records Qrypt's real answers |
 | The funnel's data lives in Qrypt's systems, unseen here | The specification may not fit them | Every event names its emitter; stage 1 needs no identifier |
 | Stage 4 rests on a `User-Agent` | A developer's own client is counted as `other` | Read stage 4 beside stage 3, never alone |

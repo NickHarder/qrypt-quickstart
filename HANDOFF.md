@@ -32,7 +32,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
 | Endpoint question | Settled 2026-10-20: a portal trial key works on the documented `api-eus` GET (Bearer), 200, the mock's shape; the portal's `eaas-aws` POST closed the connection unanswered. The quickstarts keep `api-eus`. Cloudflare refuses a default library User-Agent with 403 error 1010 (the quickstarts send their own); 4 KiB used | `evidence/portal_walkthrough.md`, `evidence/live_usage.csv` |
-| Next | Each on the owner's go: the 403 message for a wrong token (live, Qrypt answers a bad token with 403, which the snippets read as the allotment), the Cloudflare 1010 entry on the troubleshooting page, the Orus voice-over, the GitLab push | `make blockers` |
+| Next | Each on the owner's go: the Cloudflare 1010 entry on the troubleshooting page, the Orus voice-over, the GitLab push | `make blockers` |
 
 ## How to check your work
 
@@ -47,6 +47,9 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 
 ## Open, for the owner
 
+- For the backlog (Phase 9): ask Qrypt to answer a bad token with its documented 401, or a body of
+  its own; live it is 403 "Forbidden or entropy quota reached", as for a used-up allotment. The
+  quickstart's message and troubleshooting page already cover both (`PRD.md`, Risks).
 - Read and approve `docs/PLAN.md` (`make docs-approve DOC=docs/PLAN.md`, when you say so).
 - Get a Qrypt token: ask the program contact for an assessment token. It goes in `.env` as
   `QRYPT_API_KEY`, never committed. The plan's fallback starts if none comes by 2026-10-20 18:00 CDT.

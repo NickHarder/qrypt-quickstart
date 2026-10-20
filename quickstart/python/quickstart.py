@@ -27,7 +27,7 @@ api_url = os.environ.get("QRYPT_API_URL", "https://api-eus.qrypt.com/api/v1/quan
 headers = {"Accept": "application/json", "Authorization": f"Bearer {api_key}",
            "User-Agent": "qrypt-quickstart-python/1.0"}
 # What to do about each error Qrypt documents; 500, 503 and any other status: try again shortly.
-hints = {400: "malformed request: size must be 1-512", 403: "allotment used up; ask Qrypt",
+hints = {400: "malformed request: size must be 1-512", 403: "wrong token or allotment spent",
          401: "the token is invalid or expired; get a new one at portal.qrypt.com",
          429: "too many requests in a short time; wait 10 seconds, then run once"}
 # size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.

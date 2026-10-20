@@ -6,15 +6,17 @@ holding `n` base64 blocks of 1,024 bytes each, for `n` from 1 to 512.
 
 The token chooses the answer, so a test can ask for any status without touching the live API:
 `mock-200` gets entropy, `mock-400`, `mock-401`, `mock-403`, `mock-429`, `mock-500` and `mock-503`
-get that status, and any other token gets 401. Three tokens get a 200 whose body holds no usable
+get that status, and any other token gets 403, as Qrypt answered a wrong token live
+(`evidence/live_probes.json`; its docs say 401). Three tokens get a 200 whose body holds no usable
 block (`mock-not-json`, `mock-no-block`, `mock-short-block`), for the snippets' failure tests. Given
 a certificate, the mock serves HTTPS, so a client that does not trust it fails as it would behind
 a TLS-intercepting proxy.
 
-Two answers are this mock's guesses, not Qrypt's documented behavior, until the live check records
-what Qrypt does (docs/PLAN.md, Phase 7): the JSON shape of an error body, and a 400 to a request
-without `Accept: application/json`. Qrypt's page requires the header and names no status for its
-absence; the mock refuses it so that a snippet that forgets the header fails here first.
+Two answers differ from Qrypt's documentation, each on purpose. A wrong token gets 403
+`{"error": "Forbidden or entropy quota reached"}`, as the live check recorded (`evidence/
+live_probes.json`), where the docs say 401. A request without `Accept: application/json` gets 400:
+Qrypt's page requires the header, and live it still answered 200, but the mock refuses it so that
+a snippet that forgets the header fails here first.
 
 Run it on its own with `python -m qrypt_quickstart.mock_server --port 8765`.
 """
@@ -47,7 +49,8 @@ SHUTDOWN_POLL_SECONDS: Final = 0.05
 ERROR_REASONS: Final = {
     400: "Bad request",
     401: "Access token invalid or expired",
-    403: "Limit reached",
+    # Qrypt's live answer to a wrong token and, by its docs, to a used-up allotment alike.
+    403: "Forbidden or entropy quota reached",
     404: "Not found",
     429: "Rate limit reached",
     500: "Internal server error",
@@ -260,7 +263,7 @@ def choose_answer(*, path: str, size_kib: int | None, accept: str, token: str) -
     if "application/json" not in accept or size_kib is None or not is_size_in_range:
         return 400, b""
     is_known_success_token = token == SUCCESS_TOKEN or token in BAD_BODIES
-    status = STATUS_TOKENS.get(token, 200 if is_known_success_token else 401)
+    status = STATUS_TOKENS.get(token, 200 if is_known_success_token else 403)
     served_bytes = os.urandom(size_kib * BYTES_PER_KIB) if token == SUCCESS_TOKEN else b""
     return status, served_bytes
 

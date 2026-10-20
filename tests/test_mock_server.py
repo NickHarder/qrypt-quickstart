@@ -50,10 +50,12 @@ def test_a_status_token_gets_that_status(status_code: int) -> None:
     assert status == status_code
 
 
-def test_an_unknown_token_is_unauthorized() -> None:
+def test_an_unknown_token_is_refused_as_qrypt_refuses_it() -> None:
+    # Qrypt's docs say 401; live, a wrong token got 403 with this body (evidence/live_probes.json).
     with MockQryptServer() as server:
-        status, _ = fetch(server, "not-a-mock-token")
-    assert status == 401
+        status, body = fetch(server, "not-a-mock-token")
+    assert status == 403
+    assert json.loads(body) == {"error": "Forbidden or entropy quota reached"}
 
 
 @pytest.mark.parametrize("size", [0, 513])

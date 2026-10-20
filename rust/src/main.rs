@@ -29,7 +29,7 @@ use ureq::tls::{RootCerts, TlsConfig};
     // QRYPT_API_URL points the program at a local mock for testing; unset, it calls Qrypt.
     let api_url = env::var("QRYPT_API_URL").unwrap_or("https://api-eus.qrypt.com/api/v1/quantum-entropy".into());
     // What to do about each error Qrypt documents; 500, 503 and any other status: try again shortly.
-    let hint = |status| match status { 400 => "malformed request: size must be 1-512", 403 => "allotment used up; ask Qrypt",
+    let hint = |status| match status { 400 => "malformed request: size must be 1-512", 403 => "wrong token or allotment spent",
         401 => "the token is invalid or expired; get a new one at portal.qrypt.com",
         429 => "too many requests in a short time; wait 10 seconds, then run once", _ => "try again shortly" };
     // size is in KiB (1,024-byte blocks), not bytes: size=1 returns 1,024 bytes, plenty for one key.

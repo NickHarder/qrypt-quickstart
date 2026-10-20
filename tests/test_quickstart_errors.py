@@ -22,7 +22,8 @@ TROUBLESHOOTING_PAGE: Final = Path(__file__).resolve().parents[1] / "site" / "tr
 EXPECTED_PHRASES: Final = {
     400: ["HTTP 400", "size"],
     401: ["HTTP 401", "invalid or expired", "portal.qrypt.com"],
-    403: ["HTTP 403", "allotment"],
+    # Live, Qrypt answers a wrong token with 403 too, so the message names that first.
+    403: ["HTTP 403", "wrong token", "allotment"],
     # Not "30 requests": live, a trial key was refused at two within half a second.
     429: ["HTTP 429", "too many requests in a short time", "wait 10 seconds"],
     500: ["HTTP 500", "try again shortly"],
@@ -48,6 +49,18 @@ def test_each_documented_error_gets_its_own_message_after_one_request(
     assert request_count == 1
     for phrase in EXPECTED_PHRASES[status_code]:
         assert phrase in run.stderr, run.stderr
+
+
+@pytest.mark.parametrize("language", LANGUAGES)
+def test_a_mistyped_token_gets_a_message_that_names_the_token_first(
+    tmp_path: Path, language: str
+) -> None:
+    # Qrypt's docs say 401 for a bad token; live it answered 403 "Forbidden or entropy quota
+    # reached" (evidence/live_probes.json), and the mock now answers an unknown token the same way.
+    with MockQryptServer() as server:
+        run = run_snippet(language, tmp_path, api_url=server.url, token="a-mistyped-token")
+    assert run.exit_code != 0
+    assert "HTTP 403: wrong token" in run.stderr, run.stderr
 
 
 @pytest.mark.parametrize("language", LANGUAGES)

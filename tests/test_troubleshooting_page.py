@@ -35,6 +35,14 @@ def test_each_problem_has_a_symptom_a_likely_cause_and_a_fix(section_id: str) ->
         assert heading in section_text, f"{section_id} has no {heading}"
 
 
+def test_the_403_entry_puts_the_wrong_token_first_and_says_qrypt_documents_401() -> None:
+    section_text = sections()["error-403"]
+    assert "wrong token" in section_text
+    assert "QRYPT_API_KEY" in section_text
+    assert "Forbidden or entropy quota reached" in section_text
+    assert "401" in section_text
+
+
 def test_the_page_tells_the_rate_limit_from_the_allotment() -> None:
     page_sections = sections()
     assert "30 requests" in page_sections["error-429"]

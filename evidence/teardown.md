@@ -30,9 +30,12 @@ measured. Qrypt's side is this project's quickstart; every fact about Qrypt is a
 A mistyped key is the commonest first failure. At RANDOM.ORG it comes back as **HTTP 200**, with
 the error inside the body: `{"error": {"code": 400, "message": "The API key you specified does not
 exist"}}` [R6]. The error codes page lists it the same way [R3]. A client that checks only the HTTP
-status reads that as a success, and the message does not say where to get a key. With this
-quickstart, a wrong Qrypt token is an HTTP 401, and the program prints one line saying the token is
-invalid or expired and where to get a new one (Q-11).
+status reads that as a success, and the message does not say where to get a key. Qrypt does
+better on the status and worse on the meaning: its docs say a bad token gets HTTP 401, but live a
+wrong token got **HTTP 403** `{"error": "Forbidden or entropy quota reached"}`, the answer it also
+gives a used-up allotment (Q-39). So this quickstart's programs print one line naming both causes,
+the wrong token first, and the troubleshooting page has the token checked before Qrypt is asked
+for more entropy.
 
 ## What to borrow
 

@@ -70,7 +70,8 @@ def test_a_run_against_the_mock_records_runs_probes_and_every_request(tmp_path: 
     }
     assert probes["answer_shape"]["status"] == 200
     assert probes["answer_shape"]["decoded_block_bytes"] == [1024]
-    assert probes["bad_token_named_client"]["status"] == 401
+    # The mock answers a wrong token as Qrypt did live: 403, not the documented 401.
+    assert probes["bad_token_named_client"]["status"] == 403
 
 
 def test_it_pauses_before_every_request_but_the_first(tmp_path: Path) -> None:
