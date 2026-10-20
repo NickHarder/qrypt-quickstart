@@ -7,12 +7,14 @@ GitHub's does not: the owner's rule is never to force-push.
 """
 
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Final
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 SCRIPT: Final = REPOSITORY_ROOT / "scripts" / "mirror_to_gitlab.sh"
+GIT: Final = shutil.which("git") or "git"
 GIT_IDENTITY: Final = {
     "GIT_AUTHOR_NAME": "Test",
     "GIT_AUTHOR_EMAIL": "test@example.com",
@@ -23,7 +25,7 @@ GIT_IDENTITY: Final = {
 
 def git(*arguments: str, cwd: Path) -> str:
     completed = subprocess.run(
-        ["git", *arguments],
+        [GIT, *arguments],
         cwd=cwd,
         check=True,
         capture_output=True,
