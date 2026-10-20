@@ -24,7 +24,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 4, llms.txt | Done: `llms.txt` and `llms-full.txt`, built from `site/*.md` and the snippet files, linked from the quickstart | `tests/test_llms_txt.py` |
 | Phase 5, claims and quality | Done: `CLAIMS.md`, documented commands run as written, browser tests, Lighthouse (load p95 1,024 ms, accessibility 100) | `make lighthouse`, `tests/test_claims.py` |
 | Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
-| Phase 7, live check | Code ready and tested against the mock (`make live-check`); not run live: waits on the owner's token and go, 12 KiB | `tests/test_live_check.py` |
+| Phase 7, live check | Run once, 2026-10-20: Python and Node 3 of 5 each, median 0.54 s / 0.52 s; every failure a 429 after a few requests ~0.5 s apart, against the documented 30 in 10 s (claims Q-15, Q-16, Q-22 not borne out); a bad token got 403, not 401; Rust not yet in the check. 16 KiB used | `evidence/live_runs.csv`, `evidence/live_probes.json` |
 | Phase 8, agent harness | Built and proved with stand-in agents (`make agent-round ROUND=1`); the rounds need Docker, the agent's login and the owner's go; live rounds go through the recording relay (64 KiB a run) | `tests/test_agent_harness.py` |
 | Phase 10, Rust | Done against the mock: `rust/src/main.rs` (25 of 25 lines), a Rust tab and `llms-full.txt` section; its 5 live runs wait on the token (they make the live check 17 KiB) | `tests/test_quickstart_rust.py` |
 | Phase 11, submission | Begun: every README block runs as written (`tests/test_readme_commands.py`); the grader quick-start timed from a fresh clone, 18.1 s against the mock; the GitLab steps below; the teardown (`evidence/teardown.md`). Waits on the owner: the demo (`generate-demo`), the move to GitLab, the submission | `evidence/grader_quickstart.md` |
@@ -32,7 +32,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
 | Endpoint question | Settled 2026-10-20: a portal trial key works on the documented `api-eus` GET (Bearer), 200, the mock's shape; the portal's `eaas-aws` POST closed the connection unanswered. The quickstarts keep `api-eus`. Cloudflare refuses a default library User-Agent with 403 error 1010 (the quickstarts send their own); 4 KiB used | `evidence/portal_walkthrough.md`, `evidence/live_usage.csv` |
-| Next | Each on the owner's go: the live check (`make live-check`, 12 KiB, 17 KiB with Rust), the Cloudflare 1010 entry on the troubleshooting page with its claims row, round 1 (needs `CLAUDE_CODE_OAUTH_TOKEN` in the environment's settings and Docker), the Orus voice-over, the GitLab push | `make blockers` |
+| Next | Each on the owner's go: what to say about the rate limit (find the trial limit, pace the live check's runs, and correct the snippets' 429 message and Q-15/Q-16/Q-22), Rust in the live check, the Cloudflare 1010 and bad-token-403 entries on the troubleshooting page, round 1 (Docker; `CLAUDE_CODE_OAUTH_TOKEN` not visible in the session's environment), the Orus voice-over, the GitLab push | `make blockers` |
 
 ## How to check your work
 

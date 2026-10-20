@@ -3,3 +3,17 @@ occurred_at,purpose,kib_requested,status
 2026-10-20T17:11:39Z,endpoint-probe eaas-aws POST entropy 1x32 bytes X-API-Key,1,403
 2026-10-20T17:15:53Z,endpoint-probe-ua api-eus GET quantum-entropy size=1 Bearer,1,200
 2026-10-20T17:15:54Z,endpoint-probe-ua eaas-aws POST entropy 1x32 bytes X-API-Key,1,error:RemoteDisconnected
+2026-10-20T17:21:19Z,python run 1,1,exit 0
+2026-10-20T17:21:20Z,python run 2,1,exit 1
+2026-10-20T17:21:20Z,python run 3,1,exit 1
+2026-10-20T17:21:21Z,python run 4,1,exit 0
+2026-10-20T17:21:21Z,python run 5,1,exit 0
+2026-10-20T17:21:22Z,node run 1,1,exit 1
+2026-10-20T17:21:22Z,node run 2,1,exit 1
+2026-10-20T17:21:23Z,node run 3,1,exit 0
+2026-10-20T17:21:23Z,node run 4,1,exit 0
+2026-10-20T17:21:24Z,node run 5,1,exit 0
+2026-10-20T17:21:24Z,probe answer_shape,1,429
+2026-10-20T17:21:25Z,probe without_accept,1,429
+2026-10-20T17:21:25Z,probe bad_token_named_client,0,403
+2026-10-20T17:21:25Z,probe bad_token_python_default_client,0,403

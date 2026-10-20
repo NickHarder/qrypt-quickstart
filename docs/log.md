@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the first live check, on the owner's go (`evidence/live_runs.csv`,
+  `evidence/live_probes.json`; the ledger at 16 KiB). Python and Node each succeeded 3 of 5, median
+  0.54 s and 0.52 s, slowest 0.78 s, under the 3 s target. Every failure was a 429 after a few
+  requests about half a second apart, against the documented 30 requests in 10 seconds, so a trial
+  key's real limit is far lower and claims Q-15, Q-16 and Q-22 are not borne out live. A bad token
+  got 403 "Forbidden or entropy quota reached", not 401. Rust's runs are not in the live check yet.
 * **Change**: the endpoint question is settled, by the owner's approved probes (ledger
   `evidence/live_usage.csv`, 4 KiB). A portal trial key works on the documented
   `GET api-eus.qrypt.com/api/v1/quantum-entropy?size=1` with a Bearer token: 200, the same

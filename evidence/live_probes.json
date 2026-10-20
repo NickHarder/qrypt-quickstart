@@ -1,0 +1,38 @@
+{
+  "answer_shape": {
+    "status": 429,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9b2e10b7f2265-IAD"
+    },
+    "body_excerpt": "{\"error\": \"Rate limit exceeded\"}"
+  },
+  "without_accept": {
+    "status": 429,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9b2e2f98dad65-EWR"
+    },
+    "body_excerpt": "{\"error\": \"Rate limit exceeded\"}"
+  },
+  "bad_token_named_client": {
+    "status": 403,
+    "headers": {
+      "content-type": "application/json",
+      "server": "cloudflare",
+      "cf-ray": "a4d9b2e4ad6e05f1-IAD"
+    },
+    "body_excerpt": "{\"error\": \"Forbidden or entropy quota reached\"}"
+  },
+  "bad_token_python_default_client": {
+    "status": 403,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "server": "cloudflare",
+      "cf-ray": "a4d9b2e6395b9c85-IAD"
+    },
+    "body_excerpt": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1010/\", \"title\": \"Error 1010: Access denied\", \"status\": 403, \"detail\": \"The site owner has blocked access based on your browser's signature.\", \"instance\": \"a4d9b2e6395b9c85\", \"error_cod"
+  }
+}
