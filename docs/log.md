@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 11 begun. A test runs every shell block of the README in a reader's shell; it
+  found that the "Run the snippets" block started the mock with a bare `python`, which fails after
+  `make bootstrap` because the virtualenv is not activated, and the README now names
+  `.venv/bin/python`. `make grader-run` times the grader quick-start from a fresh clone against the
+  mock: 3.2 s of the 5 minutes. The steps of the move to GitLab are in the handoff
+  ([the plan](/PLAN.md)).
 * **Change**: Phase 10, the Rust quickstart: `rust/src/main.rs`, 25 counted lines, the crate's
   program in place of the kit's starter, with each crate pinned. It prints the same line as the
   Python and Node programs for every error, by test, and trusts the platform's certificates so the

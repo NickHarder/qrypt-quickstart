@@ -27,6 +27,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 7, live check | Code ready and tested against the mock (`make live-check`); not run live: waits on the owner's token and go, 12 KiB | `tests/test_live_check.py` |
 | Phase 8, agent harness | Built and proved with stand-in agents (`make agent-round ROUND=1`); the rounds need Docker, the agent's login and the owner's go; live rounds go through the recording relay (64 KiB a run) | `tests/test_agent_harness.py` |
 | Phase 10, Rust | Done against the mock: `rust/src/main.rs` (25 of 25 lines), a Rust tab and `llms-full.txt` section; its 5 live runs wait on the token (they make the live check 17 KiB) | `tests/test_quickstart_rust.py` |
+| Phase 11, submission | Begun: every README block runs as written (`tests/test_readme_commands.py`); the grader quick-start timed from a fresh clone, 3.2 s against the mock; the GitLab steps below. Waits on the owner: the demo (`generate-demo`), the move to GitLab, the submission | `evidence/grader_quickstart.md` |
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
 | Next | Run round 1 (owner's go: Docker, the agent's login; and the token for a live round); Phase 9 (the backlog) follows the rounds | `docs/PLAN.md` |
@@ -60,6 +61,28 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 - `.claude/skills/`: the skill behind each gate.
 - `scripts/gate.sh`: the one definition of what a push must pass.
 
+## The move to GitLab
+
+The owner's steps, at the very end (decided 2026-10-19). Nothing here has run yet.
+
+1. **What goes public.** `docs/brief/` holds the partner's brief and the owner's notes and stays out
+   of any public copy (above). If the GitLab project is public, push a branch without it; if it is
+   private with Pages open to everyone, it can stay.
+2. **The repository.** Create the project on GitLab, then from a clone of this one:
+   `git remote add gitlab <the project's URL>`, `git push gitlab --all`, `git push gitlab --tags`.
+3. **CI.** The kit writes GitLab CI when its `ci_provider` answer is `gitlab`
+   (`.copier-answers.yml` says `github` now): re-answer it with `copier update`, then put this
+   project's setup in `.gitlab/project-setup.yml`, as `.github/actions/project-setup/action.yml`
+   has it: uv, Node from `web/.nvmrc`, `rustup toolchain install 1.99`, and Playwright's Chromium
+   for the browser tests. Check that the project's own jobs of `.github/workflows/ci.yml` (`site`,
+   `rust`, `pytest` with Rust) have their GitLab twins, and that the first pipeline is green. CI
+   needs no secret: every check runs against the mock.
+4. **Pages.** Call `set-up-deploy` by name: it writes the deploy job in `.gitlab/deploy.yml`,
+   publishing `build/site` as the site builder writes it. Then set Pages access to "Everyone"
+   (Settings, General, Visibility) and open the URL.
+5. **After.** Put the Pages URL in the README and in `docs/DELIVERABLES.md` (RQ-05, RQ-33), and run
+   `make lighthouse` again if the host changes how the page loads.
+
 ## Do not commit
 
 In `AGENTS.md`.
@@ -80,7 +103,10 @@ In `AGENTS.md`.
 
 ## Known limitations
 
-Nothing yet.
+- The agent-harness image (`agent-harness/Dockerfile`) has never been built here: this container
+  has no Docker. The harness's container mode is proved with a stand-in `docker` only.
+- Every snippet run so far is against the mock, the timed grader run included. The live check, the
+  live agent rounds and Rust's 5 live runs wait on the owner's token.
 
 ## History
 

@@ -200,6 +200,12 @@ demo-record:
 lighthouse:
 	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.lighthouse_benchmark
 
+.PHONY: grader-run
+# Phase 11: the README's grader quick-start from a fresh clone, each command as written, timed, against
+# the mock: evidence/grader_quickstart.md (RQ-35). It downloads the two pip packages; it calls no Qrypt.
+grader-run:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.grader_run
+
 .PHONY: live-check
 # Phase 7, live: each snippet 5 times against Qrypt, and four probes; 12 KiB, ledger-guarded.
 # Only with the owner's approval: it spends the owner's entropy (src/qrypt_quickstart/live_check.py).

@@ -15,6 +15,7 @@ outside:
   - { path: AI_USAGE.md, read_by: "The grader, at the root, as the brief's AI usage disclosure; a test keeps its agent prompt and command equal to the harness's" }
   - { path: CLAIMS.md, read_by: "The grader, at the root, as the brief's claims-to-source table; tests/test_claims.py checks it against the site" }
   - { path: site/, read_by: "The site builder (src/qrypt_quickstart/site_builder.py), which renders llms.md and llms-full.md into the site's llms.txt and llms-full.txt for AI coding agents" }
+  - { path: evidence/, read_by: "The grader, as the brief's evidence; the commands that measure it (make grader-run, make lighthouse) write it there and tests/test_grader_run.py and tests/test_lighthouse_evidence.py read it back" }
   - { path: evals/out/, read_by: "Nobody. The reports of the last eval run, never committed" }
 ---
 

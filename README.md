@@ -30,7 +30,8 @@ line, reading `.env` from the repository's root.
 
 No token yet? `make bootstrap` then `make e2e` runs all three programs against a local mock of Qrypt's
 endpoint, builds the site and checks it shows the code that ran, in under a minute and offline.
-Something else printed? Every message is in `site/troubleshooting.html`.
+Something else printed? Every message is in `site/troubleshooting.html`. Timed from a fresh clone,
+these four commands took 3.2 s against the mock ([`evidence/grader_quickstart.md`](evidence/grader_quickstart.md), `make grader-run`).
 
 ## Where each deliverable is
 
@@ -53,10 +54,10 @@ Against Qrypt, with your token, as above. Against the local mock, which plays Qr
 answers by token (`mock-200`, `mock-401`, `mock-429`, `mock-503` and others):
 
 ```bash
-make bootstrap                                      # once per clone
-python -m qrypt_quickstart.mock_server --port 8765  # in one terminal
+make bootstrap                                                # once per clone
+.venv/bin/python -m qrypt_quickstart.mock_server --port 8765  # in one terminal
 QRYPT_API_URL=http://127.0.0.1:8765/api/v1/quantum-entropy QRYPT_API_KEY=mock-429 \
-  python quickstart/python/quickstart.py            # in another: prints the 429 message
+  .venv/bin/python quickstart/python/quickstart.py            # in another: prints the 429 message
 ```
 
 `make e2e` runs all three programs against the mock, counts their lines and builds the site, in one
@@ -95,7 +96,8 @@ refuses past 64 KiB a run or 8,192 KiB in all; it spends your entropy and needs 
 ## Checks
 
 `make gate` is everything a push must pass: lint, types, every test (including the browser tests
-and the e2e run), the eval suite and a secrets scan; $0 and offline. `make live-check` is the one
+and the e2e run), the eval suite and a secrets scan; $0 and offline. `make grader-run` times the
+grader quick-start from a fresh clone, against the mock. `make live-check` is the one
 check that calls Qrypt (12 KiB, refused past an 8,192 KiB ledger stop); run it only with a token
 and on purpose.
 
