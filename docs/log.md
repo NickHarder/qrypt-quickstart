@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: round 1 of the agent-readiness test, against the mock, on the owner's go
+  (`evidence/agent_runs.csv`, `evidence/transcripts/`). Claude Code in a fresh container per run:
+  the harness scored 4 of 5, median 0.49 minutes, one entropy request each. Run 2 is a false
+  positive: it wrote the documented no-SDK `quickstart.mjs` and got a key, but the `invented-sdk`
+  pattern for a shell command matched "install" in the file's "nothing to install" comment before
+  `QRYPT_API_KEY`. Read by hand, 5 of 5 succeeded; the evidence stays as the harness wrote it until
+  the owner decides on narrowing the pattern. Docker Hub refused the base image with 429, so it came
+  from `mirror.gcr.io` (the same digest) and was tagged under its usual name.
 * **Change**: the agent harness also takes the agent's login from
   `HARNESS_CLAUDE_CODE_OAUTH_TOKEN` and gives it to the container as `CLAUDE_CODE_OAUTH_TOKEN`.
   The owner saved the token under the usual name in the cloud environment's settings, and it did
