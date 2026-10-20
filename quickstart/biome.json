@@ -4,6 +4,7 @@
     "includes": ["node/**"]
   },
   "formatter": {
+    "enabled": false,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 100

@@ -11,10 +11,7 @@ import { createCipheriv, createDecipheriv } from "node:crypto";
 import { existsSync } from "node:fs";
 
 /** Print a message and stop with a non-zero exit code. @param {string} message @returns {never} */
-function exitWith(message) {
-  console.error(message);
-  process.exit(1);
-}
+function exitWith(message) { console.error(message); process.exit(1); }
 
 if (existsSync(".env")) process.loadEnvFile(); // a real environment variable wins over .env
 const apiKey = (process.env.QRYPT_API_KEY ?? "").trim();
@@ -38,7 +35,9 @@ const [aesKey, nonce] = [entropyBytes.subarray(0, 32), entropyBytes.subarray(32,
 const sampleText = Buffer.from("Hello from Qrypt quantum entropy");
 const cipher = createCipheriv("aes-256-gcm", aesKey, nonce);
 const ciphertext = Buffer.concat([cipher.update(sampleText), cipher.final()]);
-const decipher = createDecipheriv("aes-256-gcm", aesKey, nonce).setAuthTag(cipher.getAuthTag());
+// authTagLength makes decryption refuse a shortened tag, which GCM would otherwise accept.
+const decipher = createDecipheriv("aes-256-gcm", aesKey, nonce, { authTagLength: 16 });
+decipher.setAuthTag(cipher.getAuthTag());
 const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
 if (!decrypted.equals(sampleText)) exitWith("AES-GCM round trip failed: do not use this key.");
 console.log("Success: an AES-256 key from Qrypt quantum entropy passed AES-GCM (key not shown).");
