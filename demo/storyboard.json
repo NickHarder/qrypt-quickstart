@@ -84,12 +84,12 @@
       "component": "Terminal",
       "props": {
         "command": "python quickstart.py",
-        "output_file": "demo/terminal/quickstart-401.txt"
+        "output_file": "demo/terminal/quickstart-403-live.txt"
       },
       "lines": [
         {
           "key": "error",
-          "text": "A wrong token gets one line: what happened, and where to get a new one. No stack trace."
+          "text": "A wrong token gets one line naming the likely cause first. No stack trace."
         }
       ]
     },
@@ -118,6 +118,20 @@
         {
           "key": "agents",
           "text": "For AI coding agents, llms.txt carries the same rules: no SDK, both headers, size in KiB."
+        }
+      ]
+    },
+    {
+      "id": "agent-run",
+      "component": "Terminal",
+      "props": {
+        "command": "make agent-round ROUND=2-live TARGET=live",
+        "output_file": "demo/terminal/agent-round-2-live.txt"
+      },
+      "lines": [
+        {
+          "key": "agent-run",
+          "text": "Given only the Markdown and the brief's prompt, Claude Code got a key in five fresh containers out of five, against Qrypt."
         }
       ]
     },

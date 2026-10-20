@@ -55,7 +55,7 @@ export default defineTake({
     await page.goto(siteUrl("troubleshooting.html"));
     await beat("troubleshooting", async () => {
       await page.waitForTimeout(600);
-      await page.locator("#error-401").scrollIntoViewIfNeeded();
+      await page.locator("#error-403").scrollIntoViewIfNeeded();
       await page.waitForTimeout(1500);
     });
     await page.goto(siteUrl("llms.txt"));

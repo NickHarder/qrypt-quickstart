@@ -5,6 +5,10 @@
 # Python quickstart with a good token, the same program with a token Qrypt refuses (the mock answers
 # 401 to mock-401), and `make grader-run`, which times the README's grader quick-start from a fresh
 # clone. Run from the repository root after `make bootstrap`: demo/terminal/capture.sh
+#
+# Two files here come from runs against Qrypt itself and are not made by this script:
+# quickstart-403-live.txt, the Python line for a wrong token (evidence/live_wrong_token.json),
+# and agent-round-2-live.txt, the harness's lines for agent round 2-live (evidence/agent_runs.csv).
 set -eu
 
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)

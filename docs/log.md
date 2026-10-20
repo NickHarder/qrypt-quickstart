@@ -5,6 +5,14 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the demo, on the owner's go, with two changes to the approved storyboard that the
+  owner chose. The error scene shows the live 403 line ("wrong token or allotment spent"), which a
+  mistyped token gets, in place of the mock's 401, and its line now says so; the troubleshooting
+  beat lands on the 403 entry to match. A new `agent-run` scene, which the brief requires, shows
+  the harness's lines for agent round 2-live, five successes against Qrypt. Both terminals are the
+  recorded output of live runs (`evidence/live_wrong_token.json`, `evidence/agent_runs.csv`), not
+  made by `capture.sh`. The free draft is 93.4 s with the Kokoro stand-in voice; the Gemini Orus
+  voice-over is estimated at $0.02 and has not been sent.
 * **Change**: which agent settings keep the token file from an agent, checked in the harness image
   on the owner's go (`evidence/agent_token_guards.md`, the mock token only), and the
   troubleshooting page's line on it. Asked outright for the token, Claude Code 2.1.304 was refused
