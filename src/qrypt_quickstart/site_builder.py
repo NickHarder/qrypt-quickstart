@@ -6,6 +6,10 @@ text, escaped, so the site shows exactly the code CI runs: one source for each s
 (docs/PLAN.md). The eval target renders pages the same way, so a model is shown the page a
 developer sees.
 
+A Markdown page in `site/` (`llms.md`, `llms-full.md`) becomes a plain-text file of the same name
+(`llms.txt`, `llms-full.txt`), for AI coding agents: its includes are filled with the raw text of
+the files they name, not escaped, and the Markdown source itself is not published.
+
 Run `python -m qrypt_quickstart.site_builder --out build/site`.
 """
 
@@ -28,15 +32,16 @@ class SiteBuildError(Exception):
     """A page names a file the builder cannot include."""
 
 
-def included_text(included_path: str, *, repository_root: Path) -> str:
-    """Return the escaped text of a file a page includes.
+def included_text(included_path: str, *, repository_root: Path, escape_html: bool = True) -> str:
+    """Return the text of a file a page includes.
 
     Args:
         included_path: The path the include line names, from the repository's root.
         repository_root: The repository's root directory.
+        escape_html: Escape the text for an HTML page; False for a plain-text page.
 
     Returns:
-        The file's text, escaped for HTML.
+        The file's text, escaped for HTML unless `escape_html` is False.
 
     Raises:
         SiteBuildError: If the path leaves `quickstart/` or names no file.
@@ -49,7 +54,8 @@ def included_text(included_path: str, *, repository_root: Path) -> str:
     if not resolved_path.is_file():
         message = f"a page includes a file that does not exist: {included_path}"
         raise SiteBuildError(message)
-    return html.escape(resolved_path.read_text())
+    file_text = resolved_path.read_text()
+    return html.escape(file_text) if escape_html else file_text
 
 
 def render_page(page_text: str, *, repository_root: Path = REPOSITORY_ROOT) -> str:
@@ -64,6 +70,24 @@ def render_page(page_text: str, *, repository_root: Path = REPOSITORY_ROOT) -> s
     """
     return INCLUDE_PATTERN.sub(
         lambda match: included_text(match["path"], repository_root=repository_root), page_text
+    )
+
+
+def render_text(page_text: str, *, repository_root: Path = REPOSITORY_ROOT) -> str:
+    """Replace each include line of a plain-text page with the raw text of the file it names.
+
+    Args:
+        page_text: The page's Markdown, with include lines.
+        repository_root: The directory include paths are read from.
+
+    Returns:
+        The page's text, with every include filled in as it is in the file.
+    """
+    return INCLUDE_PATTERN.sub(
+        lambda match: included_text(
+            match["path"], repository_root=repository_root, escape_html=False
+        ),
+        page_text,
     )
 
 
@@ -86,6 +110,12 @@ def build_site(*, output_directory: Path, repository_root: Path = REPOSITORY_ROO
             rendered_page = render_page(source_file.read_text(), repository_root=repository_root)
             output_file.write_text(rendered_page)
             written_files.append(output_file)
+        elif source_file.suffix == ".md":
+            text_file = output_directory / f"{source_file.stem}.txt"
+            text_file.write_text(
+                render_text(source_file.read_text(), repository_root=repository_root)
+            )
+            written_files.append(text_file)
         elif source_file.suffix in STATIC_SUFFIXES:
             shutil.copyfile(source_file, output_file)
             written_files.append(output_file)

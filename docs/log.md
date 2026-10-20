@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 4: the agent-readable quickstart. `site/llms.md` and `site/llms-full.md` build
+  into `llms.txt` and `llms-full.txt`, filled from the snippet files, linked from the quickstart
+  page; tests hold their rules to the snippets and to every troubleshooting message. RQ-38 is met
+  in [the deliverables](/DELIVERABLES.md); `site/` joins
+  [the list of Markdown outside the bundle](/references/outside-the-bundle.md).
 * **Change**: Phase 3: each snippet prints one actionable line, the same in both languages, for
   every HTTP error Qrypt documents, a refused connection, an untrusted certificate and an answer
   without a usable block, after one request and with no trace; the troubleshooting page quotes each

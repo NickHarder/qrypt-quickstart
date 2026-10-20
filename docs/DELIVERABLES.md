@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:37:12Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:40:36Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -94,7 +94,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 
 | Id | Requirement | Where in the brief | Status | Where | Proof |
 |---|---|---|---|---|---|
-| RQ-38 | A plain-Markdown `llms.txt` of the quickstart, linked from the site | Stretch | Not yet | Phase 4 | The built site holds `/llms.txt`; a test checks the link and that its rules match the snippets |
+| RQ-38 | A plain-Markdown `llms.txt` of the quickstart, linked from the site | Stretch | Met | Phase 4 | `tests/test_llms_txt.py`: the built site holds `llms.txt` (llmstxt.org shape, every rule the snippets follow) and `llms-full.txt` (both snippets word for word, every troubleshooting message); the quickstart page links to it |
 | RQ-39 | A third language | Stretch | Not yet | Phase 10 | The Rust snippet in `make e2e` and CI |
 | RQ-40 | Privacy-respecting analytics wired to the observable funnel stages | Stretch | Not yet | Not built (see the plan's "Not doing") | The plan's reason |
 | RQ-41 | A competitive teardown of one other security or randomness API's quickstart against the funnel | Stretch | Not yet | Phase 11 | `evidence/teardown.md` |

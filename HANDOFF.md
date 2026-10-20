@@ -3,8 +3,8 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after Phase 3: both quickstarts run end to end against the mock and
-fail with one clear line on every error; the troubleshooting page quotes each line.
+Last updated: 2026-10-20, after Phase 4: both quickstarts run end to end against the mock, fail
+with one clear line on every error, and the site carries `llms.txt` for AI coding agents.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -20,8 +20,9 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 1, tracer bullet | Done: `quickstart/python/quickstart.py` (19 of 25 lines), the mock, the site builder, CI on push with the site as an artifact | `make e2e` |
 | Phase 2, Node and tabs | Done: `quickstart/node/quickstart.mjs`, the site's run step in Python and Node.js tabs | `make e2e` |
 | Phase 3, errors | Done: both snippets at 25 of 25 lines, one message per failure, `site/troubleshooting.html` | `tests/test_quickstart_errors.py` |
-| Eval cases AC-01 to AC-03 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.15 for all three) | `tests/test_agent_target.py` |
-| Next | Phase 4: `llms.txt`, the agent-readable quickstart | `docs/PLAN.md` |
+| Phase 4, llms.txt | Done: `llms.txt` and `llms-full.txt`, built from `site/*.md` and the snippet files, linked from the quickstart | `tests/test_llms_txt.py` |
+| Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
+| Next | Phase 5: claims, accessibility and speed (needs the Lighthouse and Playwright install approved) | `docs/PLAN.md` |
 
 ## How to check your work
 

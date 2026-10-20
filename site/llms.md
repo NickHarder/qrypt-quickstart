@@ -1,0 +1,26 @@
+# Qrypt Quickstart: an AES-256 key from Qrypt quantum entropy
+
+> How to generate an AES-256 key from Qrypt's Quantum Entropy REST API in a new project, in Python or Node.js, with no SDK: one request for 1 KiB of entropy, a key proven with AES-GCM, and the key never printed.
+
+## Rules for AI coding agents
+
+- No SDK: Qrypt publishes no Python or Node.js package for this API. Do not install one (no `pip install qrypt`, no `npm install qrypt`); call the REST endpoint with the language's own HTTP client.
+- Endpoint: `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
+- Headers, both required: `Accept: application/json` and `Authorization: Bearer <QRYPT_API_KEY>`.
+- `size` counts KiB (1,024-byte blocks), from 1 to 512, not bytes. Send `size=1`: it returns 1,024 bytes, and one key needs 32.
+- Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at portal.qrypt.com and put `QRYPT_API_KEY=<token>` in `.env`.
+- Answer: `{"random": ["<base64 of 1,024 bytes>"], "size": 1}`. Base64-decode `random[0]` first; then bytes 0-31 are the AES-256 key and bytes 32-43 the AES-GCM nonce. Never reuse entropy bytes for two purposes.
+- Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
+- Errors: make one request and stop; never retry in a loop. 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.
+- On any failure, exit non-zero with one clear line, not a stack trace.
+- Python needs `pip install cryptography python-dotenv`. Node.js 20.12 or later needs nothing.
+
+## Docs
+
+- [Quickstart, with complete Python and Node.js programs](llms-full.txt): the rules, both programs and every error message, in one file
+- [Quickstart page](index.html): the same path for people, with language tabs and copy buttons
+- [Troubleshooting](troubleshooting.html): every message the quickstart can print, its cause and its fix
+
+## Optional
+
+- [Qrypt's API reference](https://docs.qrypt.com/eaas/): the upstream documentation of the endpoint

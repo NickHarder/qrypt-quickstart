@@ -15,7 +15,7 @@ from typing import Final
 
 from ..config import REPOSITORY_ROOT
 from ..prompts import load_prompt
-from ..site_builder import render_page
+from ..site_builder import render_page, render_text
 from .clients import ModelClient
 from .models import CaseInput, PromptVersion, TargetOutput
 
@@ -34,7 +34,10 @@ def agent_user_message(document: str, task_prompt: str) -> str:
     Returns:
         The user message the model is sent.
     """
-    rendered_page = render_page((REPOSITORY_ROOT / document).read_text())
+    page_source = (REPOSITORY_ROOT / document).read_text()
+    # A Markdown page is what an agent reads as llms.txt: plain text, snippets filled in raw.
+    is_plain_text_page = document.endswith(".md")
+    rendered_page = render_text(page_source) if is_plain_text_page else render_page(page_source)
     return f"Documentation page ({document}):\n\n{rendered_page}\n\nTask: {task_prompt}"
 
 

@@ -51,3 +51,11 @@ def test_the_agent_contract_case_names_the_brief_prompt_word_for_word() -> None:
     case = load_case(REPOSITORY_ROOT / "evals" / "pending" / "AC-01.yaml")
     assert case.input.prompt == BRIEF_PROMPT
     assert case.input.document == "site/index.html"
+
+
+async def test_a_markdown_document_is_given_as_plain_text_with_the_snippets_filled_in() -> None:
+    client = CapturingClient()
+    await run_target(CaseInput(prompt=BRIEF_PROMPT, document="site/llms-full.md"), client)
+    user_message = client.user_messages[0]
+    assert 'api_key = os.environ.get("QRYPT_API_KEY", "").strip()' in user_message
+    assert "<!-- include:" not in user_message
