@@ -33,14 +33,27 @@ def test_it_runs_only_after_ci_passes_on_main(workflow: dict[Any, Any]) -> None:
     assert "github.event.workflow_run.conclusion == 'success'" in deploy_job["if"]
 
 
-def test_it_deploys_the_commit_ci_passed_into_the_protected_pages_environment(
+def test_it_deploys_the_site_ci_built_into_the_protected_pages_environment(
     workflow: dict[Any, Any],
 ) -> None:
+    # The site CI built and tested, from CI's own run, and no code checked out or run here: a
+    # workflow_run job that checks out the triggering commit can run it with this job's rights
+    # (semgrep's workflow-run-target-code-checkout).
     deploy_job = workflow["jobs"]["deploy"]
     assert deploy_job["environment"]["name"] == "github-pages"
-    checkout = next(step for step in deploy_job["steps"] if "checkout" in step.get("uses", ""))
-    assert checkout["with"]["ref"] == "${{ github.event.workflow_run.head_sha }}"
-    assert workflow["permissions"] == {"contents": "read", "pages": "write", "id-token": "write"}
+    actions = [step.get("uses", "") for step in deploy_job["steps"]]
+    assert not any("actions/checkout" in action for action in actions)
+    download = next(
+        step for step in deploy_job["steps"] if "download-artifact" in step.get("uses", "")
+    )
+    assert download["with"]["name"] == "quickstart-site"
+    assert download["with"]["run-id"] == "${{ github.event.workflow_run.id }}"
+    assert workflow["permissions"] == {
+        "actions": "read",
+        "contents": "read",
+        "pages": "write",
+        "id-token": "write",
+    }
 
 
 def test_every_action_is_pinned_to_a_commit(workflow: dict[Any, Any]) -> None:

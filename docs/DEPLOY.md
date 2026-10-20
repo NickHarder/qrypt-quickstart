@@ -12,13 +12,15 @@ The site is the static files the site builder writes to `build/site` (`index.htm
 `troubleshooting.html`, `llms.txt`, `llms-full.txt`, a stylesheet and the copy script). It holds
 nothing from `docs/`, so the repository can stay private while the site is public.
 
-**Claim:** the site deploys to GitHub Pages from `.github/workflows/deploy.yml`, which builds it
-from the commit CI passed on `main` and deploys it into the `github-pages` environment, which the
-owner protects with themselves as required reviewer.
+**Claim:** the site deploys to GitHub Pages from `.github/workflows/deploy.yml`, which takes the
+site CI built and tested on `main` (CI's `quickstart-site` artifact, from that run) and deploys it
+into the `github-pages` environment, which the owner protects with themselves as required reviewer.
+The deploy job checks out and runs no code: semgrep's `workflow-run-target-code-checkout` rule
+flagged a first version that checked out the triggering commit.
 **Evidence:** the owner's choice of 2026-10-20 ("just use pages and push to github"), after it
 became unclear whether Gauntlet's internal GitLab serves Pages ([the architecture](ARCHITECTURE.md),
 DV-06); `tests/test_deploy_workflow.py` holds the workflow to running only after CI passes on
-`main`, on the commit CI checked, with every action pinned and a smoke test.
+`main`, from CI's own artifact with no checkout, with every action pinned and a smoke test.
 **Alternative considered:** GitLab Pages on Gauntlet's GitLab, as the plan had it.
 **Why rejected:** whether that instance offers Pages is unknown until the project exists there, and
 only its administrators can turn Pages on; the deadline leaves no time to wait for them.
@@ -30,7 +32,7 @@ none (Settings, Pages); for GitLab Pages, the `set-up-deploy` skill writes `.git
 | Step | Where | What |
 |---|---|---|
 | Preview | CI, every push | The `site` job builds the site and keeps it as the `quickstart-site` artifact |
-| Production | `Deploy` workflow, after CI succeeds on a push to `main` | Builds the site from that commit, uploads it with `actions/upload-pages-artifact` and deploys it with `actions/deploy-pages`, once the owner approves the `github-pages` environment |
+| Production | `Deploy` workflow, after CI succeeds on a push to `main` | Downloads that run's `quickstart-site` artifact, uploads it with `actions/upload-pages-artifact` and deploys it with `actions/deploy-pages`, once the owner approves the `github-pages` environment |
 | Smoke test | The same job | Requests the page and `llms.txt` at the deployed URL, five tries ten seconds apart, and fails on anything but success or a page without its heading |
 
 GitHub Pages serves one site per repository, so the preview is CI's artifact rather than a second

@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: CI's three red jobs on the pull request, each a check the offline gate does not run.
+  `rust`: RUSTSEC-2026-0382, published today, in `rustls-webpki` 0.103.15; the lock now takes
+  0.103.16. `demo-check`: new `vite` advisories; `npm audit fix` takes the non-breaking fix, and
+  `npm audit` finds none. `semgrep`: `workflow-run-target-code-checkout` on the new deploy
+  workflow, which checked out the commit that triggered it; it now deploys CI's own
+  `quickstart-site` artifact from that run and checks out no code, and its test says so.
 * **Change**: `tests/test_mirror_to_gitlab.py` no longer inherits git's own variables. Pushing the
   `public` branch from its worktree, the pre-push hook's gate ran this test with the hook's
   `GIT_DIR`, so its git commands reached the live repository: they set `core.bare=true` in its
