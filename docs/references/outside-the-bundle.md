@@ -11,6 +11,7 @@ outside:
   - { path: AGENTS.md, read_by: "Claude Code and Cursor, directly, at the start of every session" }
   - { path: HANDOFF.md, read_by: "Every session, first. It is the state of the work, not knowledge" }
   - { path: src/qrypt_quickstart/prompts/, read_by: "The service, which loads each prompt by its name and its version" }
+  - { path: CLAIMS.md, read_by: "The grader, at the root, as the brief's claims-to-source table; tests/test_claims.py checks it against the site" }
   - { path: site/, read_by: "The site builder (src/qrypt_quickstart/site_builder.py), which renders llms.md and llms-full.md into the site's llms.txt and llms-full.txt for AI coding agents" }
   - { path: evals/out/, read_by: "Nobody. The reports of the last eval run, never committed" }
 ---

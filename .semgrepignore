@@ -1,0 +1,13 @@
+# Semgrep's own default ignores (a .semgrepignore replaces them, so they are repeated here) ...
+:include .gitignore
+.git/
+node_modules/
+build/
+dist/
+vendor/
+.venv/
+*.min.js
+test/
+tests/
+# ... and the committed Lighthouse reports: minified third-party HTML and JavaScript, not source.
+evidence/lighthouse/

@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 5: `CLAIMS.md`, the claims-to-source table (28 claims) with the fact-check of
+  24 AI-drafted claims; every documented command run as written; browser tests in Playwright for
+  keyboard, copy and 200% zoom; Lighthouse 10 runs, load p95 1,024 ms and accessibility 100. Two
+  claims drafted here were narrowed to their source. Lighthouse runs locally, its CI job cut
+  ([the plan](/PLAN.md)); six requirements are met in [the deliverables](/DELIVERABLES.md).
 * **Change**: Phase 4: the agent-readable quickstart. `site/llms.md` and `site/llms-full.md` build
   into `llms.txt` and `llms-full.txt`, filled from the snippet files, linked from the quickstart
   page; tests hold their rules to the snippets and to every troubleshooting message. RQ-38 is met

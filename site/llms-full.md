@@ -4,7 +4,7 @@
 
 ## Rules for AI coding agents
 
-- No SDK: Qrypt publishes no Python or Node.js package for this API. Do not install one (no `pip install qrypt`, no `npm install qrypt`); call the REST endpoint with the language's own HTTP client.
+- No SDK: Qrypt's documentation lists no Python or Node.js package for this API (its SDK is a C/C++ library for key generation). Do not install one (no `pip install qrypt`, no `npm install qrypt`); call the REST endpoint with the language's own HTTP client.
 - Endpoint: `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
 - Headers, both required: `Accept: application/json` and `Authorization: Bearer <QRYPT_API_KEY>`.
 - `size` counts KiB (1,024-byte blocks), from 1 to 512, not bytes. Send `size=1`: it returns 1,024 bytes, and one key needs 32.

@@ -194,3 +194,8 @@ demo-assets:
 demo-record:
 	@cd demo && npm run --silent demo -- record --file "$(FILE)" --provenance "$(PROVENANCE)" --note "$(NOTE)"
 
+
+.PHONY: lighthouse
+# Lighthouse's mobile preset, 10 runs on the built site: evidence/lighthouse/ (RQ-20, RQ-21).
+lighthouse:
+	@$(SERVICE_DIR)/.venv/bin/python -m qrypt_quickstart.lighthouse_benchmark

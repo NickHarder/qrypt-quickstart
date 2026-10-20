@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:18:04Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:54:57Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -255,8 +255,11 @@ Tuesday 2026-10-20, 15:00 to 17:00 CDT.
   at 200% zoom shows no clipped code; Lighthouse's mobile preset, 10 runs: accessibility at least
   95 and load p95 under 1.5 s.
 - **Files:** `CLAIMS.md` (with the count of corrected AI-drafted claims), `site/` pages,
-  `web/scripts/lighthouse.ts`, `evidence/lighthouse/`, a CI job for Lighthouse.
-- **Verify:** `make e2e`, `make gate`, `npm --prefix web run lighthouse`.
+  `src/qrypt_quickstart/lighthouse_benchmark.py` (`make lighthouse`), `evidence/lighthouse/`,
+  `tests/test_site_in_a_browser.py` (Python Playwright, so the browser tests share pytest and the
+  site builder). Lighthouse runs locally and its evidence is committed, with a test holding it to
+  the targets; the Lighthouse CI job is cut (the cut order's item 6).
+- **Verify:** `make e2e`, `make gate`, `make lighthouse`.
 - **Effort:** 2 hours. **Cost:** $0.
 
 **You act:** approve adding Lighthouse and Playwright as `web/` dev dependencies (install)
@@ -395,7 +398,7 @@ make e2e                     # the mock, every snippet, the site built, its code
 make check C=snippet-lines   # each snippet at most 25 counted lines
 make trace                   # the north star down to the eval cases
 make live-check              # live: each snippet 5 times, timed, with the running KiB total
-npm --prefix web run lighthouse   # 10 mobile runs: accessibility and load p95
+make lighthouse             # 10 mobile runs: accessibility and load p95
 ```
 
 And the CI run of the last push, green; `AGENT_READINESS.md` with both rounds; the GitLab Pages URL

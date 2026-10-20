@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:40:36Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:54:57Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -43,7 +43,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-04 | Each snippet handles a missing token with a helpful message | Core 1 | Met | Phases 1, 2 | `tests/test_quickstart_python.py` and `tests/test_quickstart_node.py`, the missing-token cases: the message names `QRYPT_API_KEY`, `.env` and portal.qrypt.com, no request is sent, no trace |
 | RQ-05 | ⛔ Deployed site: one path from "get a token" to "first key", language tabs, copy buttons, a stated time target; the URL loads | Core 2 | Owner to do | Phases 1–5 build it; Phase 11 deploys it after the move to GitLab | The site artifact of the CI run; the GitLab Pages URL, opened |
 | RQ-06 | Troubleshooting page: 400, 401, 403, 429, 500, 503 as symptom → likely cause → fix, and the common mistakes (`size` is KiB, base64 must be decoded, no loop faster than the rate limit) | Core 2 | Met | Phase 3 | `site/troubleshooting.html`; `tests/test_troubleshooting_page.py` checks a symptom, a cause and a fix for each code, mistake and environment issue |
-| RQ-07 | Every documented command runs as written | Core 2, Accept | Not yet | Phase 5 | A test pulls every shell block from the site's pages and runs it against the mock |
+| RQ-07 | Every documented command runs as written | Core 2, Accept | Met | Phase 5 | `tests/test_documented_commands.py` runs every shell line of the site's pages and `llms-full.txt` as written, against the mock; `pip install` lines are checked (packages installed and declared), not run |
 | RQ-08 | Onboarding PRD: problem, personas and jobs-to-be-done, the funnel (landing → token created → first successful call → first key → return within 7 days), a target and a measurement for each stage, scope, out of scope, risks, the tradeoff not made; an engineer can build the instrumentation without a question | Core 3 | Not yet | Gates 2 and 4, Phase 6 | `PRD.md`; a test checks each stage has an event, a trigger, a payload, a join key and a formula, and that they match `docs/KEY_METRICS.md` |
 | RQ-09 | ⛔ Agent-readiness test: only the quickstart URL or its Markdown and the prompt "Generate an AES-256 key using Qrypt quantum entropy in a new project", a fresh environment, 5 runs; success, wall-clock time and failure reason each; revise the docs and repeat; at least 4 of 5 succeed after revision; both rounds logged | Core 4; Benchmarks | Not yet | Phase 8 | `AGENT_READINESS.md` and `evidence/agent_runs.csv`, both rounds |
 | RQ-10 | ⛔ Ten follow-up items from the agent findings and a review of the first-run experience, each with a RICE score and its evidence | Core 5 | Not yet | Phase 9 | `BACKLOG.md` and `BACKLOG.csv`; a test checks ten items, the RICE arithmetic and an evidence link on each |
@@ -57,20 +57,20 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-13 | 503 and 500: a clean exit with a "try again shortly" message and a non-zero exit code | Edge cases | Met | Phase 3 | `tests/test_quickstart_errors.py`: 500 and 503 print "try again shortly", exit non-zero, no trace |
 | RQ-14 | Impossible to miss that `size` is KiB; the snippet requests only what it needs | Edge cases | Not yet | Phases 1, 3 | The snippet asks for `size=1` (the mock records it); the quickstart and troubleshooting pages state the unit next to every `size` |
 | RQ-15 | Docs warn against printing, logging or committing keys and against reusing entropy bytes for two keys; the snippets show the safe pattern | Edge cases | Not yet | Phases 1, 3 | The key-handling section; key and nonce taken from separate, non-overlapping byte ranges; a test that the key never reaches the output |
-| RQ-16 | Every factual claim about Qrypt is traceable to the official docs; no superlatives; a claims-to-source table | Edge cases | Not yet | Phase 5 | `CLAIMS.md`; a test that every claim id on the site is in the table and that no listed superlative appears |
+| RQ-16 | Every factual claim about Qrypt is traceable to the official docs; no superlatives; a claims-to-source table | Edge cases | Met | Phase 5 | `CLAIMS.md` (28 claims, each quoted from its page with its source); `tests/test_claims.py` fails on a stale quote, an unquoted Qrypt fact or a superlative |
 | RQ-17 | First-run environment: a missing runtime version, a missing `.env`, corporate proxy and TLS errors, each with a fix | Edge cases | Met | Phase 3 | `tests/test_quickstart_errors.py`: a refused connection and an untrusted certificate each give a message, not a trace; the page's environment sections |
-| RQ-18 | Keyboard only; code readable at 200% zoom; copy buttons with accessible labels | Edge cases | Not yet | Phases 2, 5 | A Playwright test drives the tabs and copy buttons by keyboard and at 200% zoom; the Lighthouse report |
+| RQ-18 | Keyboard only; code readable at 200% zoom; copy buttons with accessible labels | Edge cases | Met | Phases 2, 5 | `tests/test_site_in_a_browser.py` (Playwright, Chromium): tabs by arrow keys and Home, every control reached by Tab with a visible focus ring, copy by Enter, no sideways scroll at 200% zoom; Lighthouse accessibility 100 |
 
 # Benchmarks and AI metrics
 
 | Id | Requirement | Where in the brief | Status | Where | Proof |
 |---|---|---|---|---|---|
 | RQ-19 | Agent time-to-first-key: median at most 10 minutes over the successful runs of the revised round | Benchmarks | Not yet | Phase 8 | `evidence/agent_runs.csv`, Round 2 |
-| RQ-20 | Site load under 1.5 s p95 on mobile, Lighthouse mobile preset, 10 runs | Benchmarks | Not yet | Phase 5 | `evidence/lighthouse/`, with the script that ran it |
-| RQ-21 | Lighthouse accessibility at least 95, report committed | Benchmarks | Not yet | Phase 5 | `evidence/lighthouse/` |
+| RQ-20 | Site load under 1.5 s p95 on mobile, Lighthouse mobile preset, 10 runs | Benchmarks | Met | Phase 5 | `make lighthouse`: 10 mobile runs, load (Largest Contentful Paint) p95 1,024 ms; `evidence/lighthouse/summary.json`, `runs.csv`; `tests/test_lighthouse_evidence.py` |
+| RQ-21 | Lighthouse accessibility at least 95, report committed | Benchmarks | Met | Phase 5 | `evidence/lighthouse/index-run.report.html` and `troubleshooting-run.report.html`: accessibility 100 on every run |
 | RQ-22 | Snippet runtime under 3 s end to end against the live API, 5 runs | Benchmarks | Not yet | Phase 7 | `evidence/live_runs.csv` |
 | RQ-23 | Agent failure taxonomy: each failed run categorized, with the doc change that addressed it | AI metrics | Not yet | Phase 8 | `AGENT_READINESS.md`, its taxonomy table, each row with the commit of its fix |
-| RQ-24 | Fact-check of AI-drafted content: how many AI-drafted claims had to be corrected | AI metrics | Not yet | Phase 5 | `CLAIMS.md`, its count, starting from `docs/brief/research-review.md` |
+| RQ-24 | Fact-check of AI-drafted content: how many AI-drafted claims had to be corrected | AI metrics | Met | Phase 5 | `CLAIMS.md`, its fact-check: 24 AI-drafted claims checked, 3 verified, 1 relabelled, 20 corrected or dropped |
 
 # Security, code quality and submission
 

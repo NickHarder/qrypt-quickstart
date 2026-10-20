@@ -3,8 +3,8 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after Phase 4: both quickstarts run end to end against the mock, fail
-with one clear line on every error, and the site carries `llms.txt` for AI coding agents.
+Last updated: 2026-10-20, after Phase 5: both quickstarts work end to end against the mock; the
+site has troubleshooting, `llms.txt`, a claims table, browser tests and Lighthouse evidence.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -21,8 +21,9 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 2, Node and tabs | Done: `quickstart/node/quickstart.mjs`, the site's run step in Python and Node.js tabs | `make e2e` |
 | Phase 3, errors | Done: both snippets at 25 of 25 lines, one message per failure, `site/troubleshooting.html` | `tests/test_quickstart_errors.py` |
 | Phase 4, llms.txt | Done: `llms.txt` and `llms-full.txt`, built from `site/*.md` and the snippet files, linked from the quickstart | `tests/test_llms_txt.py` |
+| Phase 5, claims and quality | Done: `CLAIMS.md`, documented commands run as written, browser tests, Lighthouse (load p95 1,024 ms, accessibility 100) | `make lighthouse`, `tests/test_claims.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
-| Next | Phase 5: claims, accessibility and speed (needs the Lighthouse and Playwright install approved) | `docs/PLAN.md` |
+| Next | Phase 6: the onboarding PRD (Phase 7, the live check, waits on the Qrypt token) | `docs/PLAN.md` |
 
 ## How to check your work
 

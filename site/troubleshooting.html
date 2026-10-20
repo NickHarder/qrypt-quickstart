@@ -34,8 +34,8 @@
       <h3 id="heading-400">400: malformed request</h3>
       <p><strong>Symptom</strong></p>
       <pre><code class="language-text">Qrypt answered HTTP 400: malformed request: size must be 1-512.</code></pre>
-      <p><strong>Likely cause</strong>: Qrypt could not read the request. Most often <code>size</code>
-        is outside 1 to 512, or not a whole number.</p>
+      <p><strong>Likely cause</strong>: Qrypt reads the request as a malformed URL or invalid
+        parameters, such as a <code>size</code> outside 1 to 512 or not a whole number.</p>
       <p><strong>Fix</strong>: send <code>size</code> as a whole number of KiB from 1 to 512;
         <code>size=1</code> is enough for one key. Send both headers Qrypt's documentation requires,
         <code>Accept: application/json</code> and <code>Authorization: Bearer &lt;token&gt;</code>.

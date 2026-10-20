@@ -233,6 +233,9 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
       - run: uv sync --frozen
+      # The browser tests (tests/test_site_in_a_browser.py) drive the Chromium build that the
+      # locked Playwright names, with the system libraries it needs.
+      - run: uv run playwright install --with-deps chromium
       - run: uv run pytest -q
 
   # Known vulnerabilities in the locked dependencies. No path filter: new advisories land without
