@@ -60,6 +60,14 @@ def test_the_cloudflare_1010_entry_names_the_body_the_cause_and_the_fix() -> Non
     assert 'href="#mistake-default-user-agent"' in raw_sections["error-403"]
 
 
+def test_the_key_handling_section_says_what_keeps_the_token_from_an_ai_agent() -> None:
+    # Verified in the harness image (evidence/agent_token_guards.md): Claude Code's deny rules
+    # stopped its file tool and its shell; Gemini CLI got the token through its shell regardless.
+    section_text = sections()["key-handling"]
+    for phrase in ("Read(./.env)", ".claude/settings.json", ".geminiignore", "cat", "new key"):
+        assert phrase in section_text, phrase
+
+
 def test_the_page_tells_the_rate_limit_from_the_allotment() -> None:
     page_sections = sections()
     assert "30 requests" in page_sections["error-429"]

@@ -144,9 +144,12 @@ reach it: in each, Gemini's second tool call asked for `.env` in the same turn a
 asked for the docs, 30 to 45 ms after it and before the docs' content had returned to the model.
 It decided to look at the token file before it had read a word of the quickstart; its own
 workspace check refused every read again. So the rule fixes what an agent does after reading,
-and only the agent's own configuration can stop what it does first, such as a rule in the
-project that its tools never open `.env`. The round used about 2.3 million input tokens (1.8
-million cached) and 15,600 output tokens.
+and only the agent's own configuration can stop what it does first. A check of those settings
+(`evidence/agent_token_guards.md`) found that the workspace refusal protects nothing on purpose:
+asked outright, Gemini CLI got the token through its shell every time (`cat`, `env`, a Node.js
+one-liner), whether `.geminiignore` or `.gitignore` named the file, while Claude Code's deny
+rules held for its file tool and its shell. The troubleshooting page says so. The round used
+about 2.3 million input tokens (1.8 million cached) and 15,600 output tokens.
 
 ## Failure taxonomy
 

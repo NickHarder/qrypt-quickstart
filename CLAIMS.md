@@ -69,6 +69,8 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-27 | Recent Node.js versions read it when started with --use-env-proxy (see node --help). | `site/troubleshooting.html` | `node --help` of Node.js 22.22.0 lists `--use-env-proxy`; checked 2026-10-20 |
 | Q-28 | point the runtime at it. Never turn certificate checks off. | `site/troubleshooting.html` | Python documentation: OpenSSL's default trust store honours `SSL_CERT_FILE`; Node.js documentation: `NODE_EXTRA_CA_CERTS` |
 | Q-38 | stops with error: externally-managed-environment. | `site/troubleshooting.html` | PEP 668, which marks an operating system's Python as externally managed so that pip refuses to install into it; agent round 1, run 5, got pip's "See PEP 668" (`evidence/transcripts/1-run-5.txt`), and `pip install cryptography` in the harness image (Debian 12.13, Python 3.11.2, pip 23.0.1) printed this error, checked 2026-10-20 |
+| Q-41 | was refused both its file tool and head in its shell by these deny rules | `site/troubleshooting.html` | The owner-approved check in the harness image, 2026-10-20: Claude Code 2.1.304, cases C1 and C2 (`evidence/agent_token_guards.md`) |
+| Q-42 | got the token through its shell every time | `site/troubleshooting.html` | The same check: Gemini CLI 0.63.0, cases G0 to G2, by `cat`, by `env` and by a Node.js one-liner (`evidence/agent_token_guards.md`) |
 
 ## Fact-check of AI-drafted content
 

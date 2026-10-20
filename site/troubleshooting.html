@@ -248,6 +248,18 @@ SSL_CERT_FILE=/path/to/company-ca.pem cargo run</code></pre>
         <li>Never commit the token either: keep it in <code>.env</code>, and keep <code>.env</code>
           in <code>.gitignore</code>. Never show it in a screenshot, a recording or an AI agent's
           chat.</li>
+        <li>An AI coding agent can read <code>.env</code> itself, and what it reads goes to its
+          model's provider. In a test with this quickstart's project, Claude Code 2.1.304, asked
+          outright for the token, was refused both its file tool and <code>head</code> in its
+          shell by these deny rules in the project's <code>.claude/settings.json</code>:
+          <code>{"permissions": {"deny": ["Read(./.env)", "Bash(cat .env)"]}}</code>. Gemini CLI
+          0.63.0, asked the same, got the token through its shell every time: with
+          <code>cat</code>, with <code>env</code> (it loads the project's <code>.env</code> into its
+          own environment), and, when <code>.gitignore</code> named the file and its policy refused
+          <code>cat</code>, with a Node.js one-liner; <code>.geminiignore</code> did not stop it
+          either. So do not rely on a setting alone: if an agent may have read the token, create a new key on the portal's API
+          Keys page, use it, and have the old one revoked (ask Qrypt if the portal offers no
+          way).</li>
         <li>Never reuse entropy bytes for two purposes: the quickstart takes bytes 0 to 31 for the
           key and bytes 32 to 43 for the nonce, and makes one key per request.</li>
         <li>With AES-GCM, never encrypt two messages with the same key and the same nonce.</li>

@@ -5,6 +5,18 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: which agent settings keep the token file from an agent, checked in the harness image
+  on the owner's go (`evidence/agent_token_guards.md`, the mock token only), and the
+  troubleshooting page's line on it. Asked outright for the token, Claude Code 2.1.304 was refused
+  by deny rules in `.claude/settings.json` (`Read(./…)` and `Bash(cat …)` of the token file) both
+  for its file tool and for `head` in its shell, which no rule names. Gemini CLI 0.63.0 got the
+  token every time through its shell: `cat` with no setting, `env` with `.geminiignore` (it loads
+  the project's token file into its own environment), and a Node.js one-liner with `.gitignore`,
+  after its policy refused `cat`. So its file tool's refusal in rounds `b07-gemini` and
+  `b07-gemini-2` was incidental, which the report now says. The page names what was tested and
+  says to replace a token an agent may have read; claims Q-41 and Q-42 cite the check. A first
+  draft of the line said Claude Code's shell could still read the file; case C2 showed otherwise,
+  and the line was corrected before the commit.
 * **Change**: Gemini CLI again, on the docs with the token-file rule, on the owner's go (round
   `b07-gemini-2`, against the mock, about 2.3 million input tokens): 2 of 5, median 2.62 minutes.
   Every run made one entropy request (11 in the round before) and none printed its environment.
