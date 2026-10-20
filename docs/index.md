@@ -2,6 +2,10 @@
 okf_version: "0.2"
 ---
 
+# Audit
+
+* [Audit: Qrypt's first-run path, before any product code](AUDIT.md) - What a first-time developer or agent meets in Qrypt's documented entropy API, and in this repository before its first slice, with a reproduction for each finding and the decision it forces in the plan.
+
 # Deliverables
 
 * [Deliverables of the Qrypt quickstart take-home](DELIVERABLES.md) - Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
@@ -16,6 +20,7 @@ okf_version: "0.2"
 
 # Subdirectories
 
+* [audit](audit/index.md) - 5 concepts: Audit Area.
 * [brief](brief/index.md) - 7 concepts: Brief, Guide, Review.
 * [computations](computations/index.md) - 1 concept: Attested Computation.
 * [guides](guides/index.md) - 2 concepts: Guide.

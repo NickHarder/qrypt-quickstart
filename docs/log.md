@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Creation**: [the audit](/AUDIT.md), Gate 1, as a draft for the owner, with its five areas
+  under `audit/` and [the profile of Qrypt's documented contract](/audit/qrypt_docs_profile.py),
+  because the ladder names the audit next and no product code may come before it. It read
+  docs.qrypt.com only; the findings that change the plan are the examples' missing `Accept`
+  header, the mock's undocumented edges, the Cloudflare edge in front of the API, the token's
+  exposure in the agent test and the funnel's token stage.
 * **Kickoff**: [the plan](/PLAN.md), [the deliverables](/DELIVERABLES.md) (43 requirements, RQ-01
   to RQ-43) and [the ladder](/METHOD.md) adjusted, from the assessment's text, because the owner
   called `kickoff`. The owner decided: interview in CDT; build on private GitHub with CI and the
