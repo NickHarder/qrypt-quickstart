@@ -243,6 +243,43 @@ def test_the_container_command_isolates_the_run_and_maps_the_api_to_the_mock(
     assert "QRYPT_API_URL" not in joined
 
 
+def test_the_host_network_mode_reaches_the_proxy_and_keeps_qrypt_on_the_mock(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Behind an egress proxy on the host's loopback (a cloud session), the container shares the
+    # host's network: the agent reaches its model and package indexes through the proxy, and
+    # api-eus.qrypt.com still resolves to the recording server, never through the proxy.
+    monkeypatch.setenv("NO_PROXY", "localhost,127.0.0.1")
+    command = container_command(
+        project_directory=tmp_path,
+        image="qrypt-agent-harness",
+        agent_arguments=["claude", "-p", BRIEF_PROMPT],
+        map_api_to_host=True,
+        certificate_authority=tmp_path / "ca.pem",
+        network="host",
+        extra_authority=tmp_path / "proxy-ca.pem",
+    )
+    assert "--network=host" in command
+    assert "--add-host=api-eus.qrypt.com:127.0.0.1" in command
+    assert "--add-host=api-eus.qrypt.com:host-gateway" not in command
+    assert "--env=HTTPS_PROXY" in command
+    assert "--env=NO_PROXY=localhost,127.0.0.1,api-eus.qrypt.com" in command
+    assert "--env=no_proxy=localhost,127.0.0.1,api-eus.qrypt.com" in command
+    assert f"--volume={tmp_path / 'proxy-ca.pem'}:/harness/extra-ca.pem:ro" in command
+
+
+def test_the_bridge_mode_passes_no_proxy_setting(tmp_path: Path) -> None:
+    command = container_command(
+        project_directory=tmp_path,
+        image="qrypt-agent-harness",
+        agent_arguments=["claude"],
+        map_api_to_host=True,
+        certificate_authority=None,
+    )
+    assert not any("PROXY" in argument.upper() for argument in command)
+    assert "--network=host" not in command
+
+
 # A stand-in `docker`: it records its arguments, then plays a good agent in the mounted project.
 FAKE_DOCKER: Final = """#!{python}
 import json, pathlib, re, subprocess, sys

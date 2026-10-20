@@ -90,6 +90,11 @@ export CLAUDE_CODE_OAUTH_TOKEN=...      # from `claude setup-token`, or set ANTH
 make agent-round ROUND=1                # 5 runs against the mock, logged to evidence/agent_runs.csv
 ```
 
+Behind a proxy that inspects TLS, such as a Claude Code cloud session's, build with the proxy's
+authority as a secret (`docker build --secret id=extra_ca,src=<its file> ...`) and run with
+`HARNESS_OPTIONS='--network host --extra-ca <its file>'`: the container then shares the host's
+network, reaches its model and PyPI through the proxy, and still finds `api-eus.qrypt.com` at the mock.
+
 Against the mock, `api-eus.qrypt.com` maps to the mock inside the container, so the agent's program
 calls Qrypt's real URL unchanged. `make agent-round ROUND=1 TARGET=live` runs the same round against
 Qrypt through a recording relay, which passes every request through unchanged, records it, and

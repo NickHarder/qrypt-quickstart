@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the agent harness runs in a cloud session. Docker is installed there, only not
+  started. Behind its TLS-inspecting egress proxy, the image takes the proxy's authority as a build
+  secret, and the harness gains `--network host` and `--extra-ca`: the container shares the host's
+  network, reaches its model and PyPI through the proxy, and still resolves `api-eus.qrypt.com` to
+  the mock. A stand-in agent in the real image got a key from the mock, judged a success, in no
+  log. A real round waits on a login for the agent and the owner's go ([the plan](/PLAN.md)).
 * **Change**: the grader run splits each README command into its words and runs it without a shell,
   refusing a line that needs one; semgrep's CI scan had flagged the shell. Run again, it took 2.4 s,
   and a test now keeps the README's quoted total equal to the committed evidence.

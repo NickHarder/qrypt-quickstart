@@ -220,6 +220,8 @@ def run_agent_once(
     isolation: str = "folder",
     image: str = "qrypt-agent-harness",
     certificate_authority: Path | None = None,
+    network: str = "bridge",
+    extra_authority: Path | None = None,
 ) -> AgentRun:
     """Run the agent once in a fresh project and judge the run.
 
@@ -239,6 +241,8 @@ def run_agent_once(
         image: The container image, for the container mode.
         certificate_authority: The authority that signed the recording server's certificate, for
             the container mode.
+        network: The container's network, "bridge" or "host" (see `container_command`).
+        extra_authority: Another authority the container trusts, such as an egress proxy's.
 
     Returns:
         The judged run.
@@ -263,11 +267,20 @@ def run_agent_once(
                 agent_arguments=agent_arguments,
                 map_api_to_host=True,
                 certificate_authority=certificate_authority,
+                network=network,
+                extra_authority=extra_authority,
             )
-            # docker passes the agent's login through by name (`--env=NAME`), from this process.
+            # docker passes the agent's login and the proxy through by name (`--env=NAME`), from
+            # this process.
             environment = {
                 name: os.environ[name]
-                for name in ("PATH", "HOME", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN")
+                for name in (
+                    "PATH",
+                    "HOME",
+                    "ANTHROPIC_API_KEY",
+                    "CLAUDE_CODE_OAUTH_TOKEN",
+                    *PROXY_VARIABLES,
+                )
                 if name in os.environ
             }
         else:
@@ -342,6 +355,10 @@ def write_runs(log: Path, runs: list[AgentRun]) -> None:
         writer.writerows(run.model_dump() for run in runs)
 
 
+# The proxy settings a container in the host network mode is given, by name.
+PROXY_VARIABLES: Final = ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy")
+
+
 def container_command(
     *,
     project_directory: Path,
@@ -349,6 +366,8 @@ def container_command(
     agent_arguments: list[str],
     map_api_to_host: bool,
     certificate_authority: Path | None,
+    network: str = "bridge",
+    extra_authority: Path | None = None,
 ) -> list[str]:
     """Return the `docker run` command for one run in a fresh container (the `container` mode).
 
@@ -364,6 +383,10 @@ def container_command(
         agent_arguments: The agent's command line inside the container.
         map_api_to_host: Route Qrypt's host name to the recording server on the host.
         certificate_authority: The authority that signed the recording server's certificate.
+        network: "bridge", Docker's own network, or "host", for a machine whose only way out is an
+            egress proxy on its loopback (a cloud session): the container shares the host's
+            network, the proxy settings pass in, and Qrypt's host name stays off the proxy.
+        extra_authority: Another authority to trust, such as the egress proxy's.
 
     Returns:
         The command's arguments.
@@ -377,10 +400,26 @@ def container_command(
         "--env=ANTHROPIC_API_KEY",
         "--env=CLAUDE_CODE_OAUTH_TOKEN",
     ]
+    is_host_network = network == "host"
+    if is_host_network:
+        no_proxy = ",".join(
+            entry for entry in (os.environ.get("NO_PROXY", ""), QRYPT_HOST) if entry
+        )
+        command.extend(
+            [
+                "--network=host",
+                *(f"--env={name}" for name in PROXY_VARIABLES),
+                f"--env=NO_PROXY={no_proxy}",
+                f"--env=no_proxy={no_proxy}",
+            ]
+        )
     if map_api_to_host:
-        command.append(f"--add-host={QRYPT_HOST}:host-gateway")
+        api_address = "127.0.0.1" if is_host_network else "host-gateway"
+        command.append(f"--add-host={QRYPT_HOST}:{api_address}")
     if certificate_authority is not None:
         command.append(f"--volume={certificate_authority}:/harness/ca.pem:ro")
+    if extra_authority is not None:
+        command.append(f"--volume={extra_authority}:/harness/extra-ca.pem:ro")
     return [*command, image, *agent_arguments]
 
 
@@ -410,6 +449,8 @@ def main() -> None:
     parser.add_argument("--agent-name", default="claude-code")
     parser.add_argument("--agent-command", default=DEFAULT_AGENT_COMMAND)
     parser.add_argument("--image", default="qrypt-agent-harness")
+    parser.add_argument("--network", choices=["bridge", "host"], default="bridge")
+    parser.add_argument("--extra-ca", type=Path, default=None, dest="extra_authority")
     parser.add_argument("--timeout-minutes", type=float, default=DEFAULT_TIMEOUT_SECONDS / 60)
     arguments = parser.parse_args()
     is_live = arguments.target == "live"
@@ -454,6 +495,8 @@ def main() -> None:
                     isolation=arguments.isolation,
                     image=arguments.image,
                     certificate_authority=authority,
+                    network=arguments.network,
+                    extra_authority=arguments.extra_authority,
                 )
                 write_runs(EVIDENCE_DIRECTORY / "agent_runs.csv", [run])
                 verdict = "success" if run.succeeded else f"failed: {run.failure_category}"

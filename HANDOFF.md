@@ -103,8 +103,10 @@ In `AGENTS.md`.
 
 ## Known limitations
 
-- The agent-harness image (`agent-harness/Dockerfile`) has never been built here: this container
-  has no Docker. The harness's container mode is proved with a stand-in `docker` only.
+- The agent-harness image is built and proved in a cloud session (Docker is installed there; start
+  it with `dockerd &`): a stand-in agent in the real image installed packages through the egress
+  proxy and got a key from the mock. A real round needs a login for the agent in the container:
+  `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`) in the cloud environment's settings.
 - Every snippet run so far is against the mock, the timed grader run included. The live check, the
   live agent rounds and Rust's 5 live runs wait on the owner's token.
 

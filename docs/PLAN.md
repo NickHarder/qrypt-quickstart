@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T03:54:04Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T04:14:45Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -328,6 +328,11 @@ Tuesday 2026-10-20, 19:00 to 22:00 CDT.
   and answer through unchanged, records them so the same judge decides, writes a ledger row for
   each, and answers 403 itself, without forwarding, past 64 KiB in a run or the ledger's 8,192 KiB.
   Proved with the mock upstream (`tests/test_recording_relay.py`).
+- **Where it runs:** a cloud session will do, with no machine of the owner's: Docker is installed
+  there (start it with `dockerd &`). Its egress proxy inspects TLS, so the image is built with the
+  proxy's authority as a secret and the round runs with `HARNESS_OPTIONS='--network host --extra-ca
+  /root/.ccr/ca-bundle.crt'`. Proved with a stand-in agent in the real image. The agent in the
+  container still needs its own login, `CLAUDE_CODE_OAUTH_TOKEN`, set in the environment's settings.
 - **Files:** `src/qrypt_quickstart/agent_harness.py`, `src/qrypt_quickstart/recording_relay.py`,
   `src/qrypt_quickstart/harness_certificates.py`,
   `agent-harness/`, `evidence/agent_runs.csv`, `evidence/transcripts/`, `AGENT_READINESS.md`, the

@@ -7,8 +7,12 @@ RUN apt-get update \
  && apt-get install --yes --no-install-recommends python3 python3-pip python3-venv ca-certificates curl \
  && rm -rf /var/lib/apt/lists/*
 
-# The agent under test, pinned so both rounds run the same version.
-RUN npm install --global @anthropic-ai/claude-code@2.1.304
+# The agent under test, pinned so both rounds run the same version. Behind a TLS-inspecting proxy,
+# give its authority as a build secret (docker build --secret id=extra_ca,src=<file>); without one,
+# npm trusts only the public authorities.
+RUN --mount=type=secret,id=extra_ca,required=false \
+    if [ -f /run/secrets/extra_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/extra_ca; fi \
+ && npm install --global @anthropic-ai/claude-code@2.1.304
 
 COPY entrypoint.sh /usr/local/bin/harness-entrypoint
 RUN chmod 755 /usr/local/bin/harness-entrypoint \
