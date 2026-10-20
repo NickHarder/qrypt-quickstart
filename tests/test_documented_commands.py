@@ -14,7 +14,7 @@ command there against the mock. Two kinds of line are checked rather than run, a
   builds what CI tested.
 
 `cargo run` runs in a copy of the Rust crate, the reader's project after those steps, offline and
-with the crate's own build directory, so it builds in seconds from what `make bootstrap` fetched.
+with the crate's own build directory, after one build of the crate has fetched its crates.
 """
 
 import html
@@ -31,6 +31,7 @@ from typing import Final
 import pytest
 
 from qrypt_quickstart.mock_server import MockQryptServer
+from snippet_runner import built_rust_quickstart
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 SITE: Final = REPOSITORY_ROOT / "site"
@@ -75,6 +76,9 @@ def check_cargo_add(command: str) -> None:
 
 def copy_rust_project(project_directory: Path) -> dict[str, str]:
     """Copy the crate as the reader's project, and return the environment that builds it fast."""
+    # Building the crate first fetches its crates, as the reader's `cargo add` does, so the
+    # offline run finds them on a fresh machine too.
+    built_rust_quickstart()
     for file_name in RUST_PROJECT_FILES:
         (project_directory / file_name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(RUST_CRATE / file_name, project_directory / file_name)
