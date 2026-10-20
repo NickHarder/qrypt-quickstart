@@ -3,7 +3,7 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after round 1 of the agent test (5 of 5 against the mock) and Phase 10: the three quickstarts, the site, the claims table, the
+Last updated: 2026-10-20, after both rounds of the agent test (5 of 5, then 5 of 5 on the revised docs, against the mock) and Phase 10: the three quickstarts, the site, the claims table, the
 onboarding PRD and the agent harness are done against the mock; the token works on the documented
 endpoint, and the live check passed 15 of 15.
 
@@ -25,14 +25,14 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 5, claims and quality | Done: `CLAIMS.md`, documented commands run as written, browser tests, Lighthouse (load p95 1,024 ms, accessibility 100) | `make lighthouse`, `tests/test_claims.py` |
 | Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
 | Phase 7, live check | Done 2026-10-20: 15 of 15 (Python, Node, Rust), medians 0.42 / 0.51 / 0.51 s, slowest 0.66 s, with requests 2 s apart. A trial key's real rate limit is far below the documented 30 in 10 s (a 429 at 0.36 s; cleared within 1.5 s; no `Retry-After`): the snippets' 429 message, the troubleshooting page, `llms.md` and claims follow it. Without `Accept`, still 200 JSON. A wrong token gets 403, not 401. Ledger at 40 KiB | `evidence/live_runs.csv`, `evidence/live_rate_limit.json` |
-| Phase 8, agent harness | Round 1 against the mock ran 2026-10-20: 5 of 5, median 0.49 minutes, one entropy request each (run 2 re-judged after the `invented-sdk` check was fixed to ignore a comment's "install"); next, the doc revision and round 2; live rounds go through the recording relay (64 KiB a run) | `tests/test_agent_harness.py` |
+| Phase 8, agent test | Done against the mock 2026-10-20: round 1 5 of 5 (median 0.49 minutes), the docs revised from it (Python packages in a virtual environment, `7272405`), round 2 5 of 5 (median 0.54); live rounds go through the recording relay (64 KiB a run), on the owner's go | `AGENT_READINESS.md`, `tests/test_agent_readiness.py` |
 | Phase 10, Rust | Done against the mock: `rust/src/main.rs` (25 of 25 lines), a Rust tab and `llms-full.txt` section; its 5 live runs wait on the token (they make the live check 17 KiB) | `tests/test_quickstart_rust.py` |
 | Phase 11, submission | Begun: every README block runs as written (`tests/test_readme_commands.py`); the grader quick-start timed from a fresh clone, 18.1 s against the mock; the GitLab steps below; the teardown (`evidence/teardown.md`). Waits on the owner: the demo (`generate-demo`), the move to GitLab, the submission | `evidence/grader_quickstart.md` |
 | Portal walkthrough | Begun by the owner: the trial sign-up and the temporary-password email; first login and the token's screen to come | `evidence/portal_walkthrough.md` |
 | README and AI usage | Done: `README.md` with the grader quick-start (runs as written against the mock), `AI_USAGE.md` | `tests/test_readme_and_ai_usage.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
 | Endpoint question | Settled 2026-10-20: a portal trial key works on the documented `api-eus` GET (Bearer), 200, the mock's shape; the portal's `eaas-aws` POST closed the connection unanswered. The quickstarts keep `api-eus`. Cloudflare refuses a default library User-Agent with 403 error 1010 (the quickstarts send their own); 4 KiB used | `evidence/portal_walkthrough.md`, `evidence/live_usage.csv` |
-| Next | Each on the owner's go: the 403 message for a wrong token (live, Qrypt answers a bad token with 403, which the snippets read as the allotment), the Cloudflare 1010 entry on the troubleshooting page, round 2 after the doc revision (Docker started with `dockerd &`; the login comes from `HARNESS_CLAUDE_CODE_OAUTH_TOKEN`), the Orus voice-over, the GitLab push | `make blockers` |
+| Next | Each on the owner's go: the 403 message for a wrong token (live, Qrypt answers a bad token with 403, which the snippets read as the allotment), the Cloudflare 1010 entry on the troubleshooting page, a live agent round (`TARGET=live`; Docker started with `dockerd &`, the base image from `mirror.gcr.io` if Docker Hub answers 429, the login from `HARNESS_CLAUDE_CODE_OAUTH_TOKEN`), the Orus voice-over, the GitLab push | `make blockers` |
 
 ## How to check your work
 

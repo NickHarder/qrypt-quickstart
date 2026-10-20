@@ -5,6 +5,15 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: agent round 2, on the revised docs, against the mock, on the owner's go: 5 of 5,
+  median 0.54 minutes (round 1: 0.49). All four Python runs went straight to the virtual
+  environment the docs now name, with no refused or probed install; the median rose with the
+  share of Python runs, whose path builds a virtual environment. `AGENT_READINESS.md` reports both
+  rounds, the revision and the taxonomy (no failed run; round 1's run 2, misjudged by the harness,
+  is its one row), and `tests/test_agent_readiness.py` keeps it equal to `evidence/agent_runs.csv`:
+  5 runs a round with a time, a result and a category; the counts and medians; a taxonomy row for
+  each failed run; no transcript with the token. RQ-09, RQ-19 and RQ-23 are met against the mock;
+  DR-04 and GR-02 name the log and the harness that writes it (`make agent-round`).
 * **Change**: the docs revised from agent round 1, on the owner's go. All five runs succeeded in 4
   to 6 turns, so the revision fixes the one friction they show: each of the three Python runs had
   to find out for itself that the image's system Python refuses a bare `pip install`
