@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: draft
-generated: { by: claude-code/2.1.304, at: 2026-10-20T18:14:58Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-20T19:14:09Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -46,7 +46,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-07 | Every documented command runs as written | Core 2, Accept | Met | Phase 5 | `tests/test_documented_commands.py` runs every shell line of the site's pages and `llms-full.txt` as written, against the mock; `pip install` lines are checked (packages installed and declared), not run |
 | RQ-08 | Onboarding PRD: problem, personas and jobs-to-be-done, the funnel (landing → token created → first successful call → first key → return within 7 days), a target and a measurement for each stage, scope, out of scope, risks, the tradeoff not made; an engineer can build the instrumentation without a question | Core 3 | Met | Gates 2 and 4, Phase 6 | `PRD.md`; `tests/test_prd.py` checks every section the brief lists, the funnel and its common rules equal to `docs/KEY_METRICS.md` cell for cell, and every illustrative figure labelled an assumption. Its targets wait for the owner's approval |
 | RQ-09 | ⛔ Agent-readiness test: only the quickstart URL or its Markdown and the prompt "Generate an AES-256 key using Qrypt quantum entropy in a new project", a fresh environment, 5 runs; success, wall-clock time and failure reason each; revise the docs and repeat; at least 4 of 5 succeed after revision; both rounds logged | Core 4; Benchmarks | Met | Phase 8 | `AGENT_READINESS.md` and `evidence/agent_runs.csv`: round 1 5 of 5, the revision (`7272405`), round 2 5 of 5 against the mock and 5 of 5 against Qrypt (round 2-live); `tests/test_agent_readiness.py` keeps the report equal to the log |
-| RQ-10 | ⛔ Ten follow-up items from the agent findings and a review of the first-run experience, each with a RICE score and its evidence | Core 5 | Not yet | Phase 9 | `BACKLOG.md` and `BACKLOG.csv`; a test checks ten items, the RICE arithmetic and an evidence link on each |
+| RQ-10 | ⛔ Ten follow-up items from the agent findings and a review of the first-run experience, each with a RICE score and its evidence | Core 5 | Met | Phase 9 | `BACKLOG.md` and `BACKLOG.csv`: ten items, each with reach, impact, confidence, effort and evidence; `tests/test_backlog.py` checks ten items, the RICE arithmetic, each evidence link and the page's order |
 
 # Edge cases and failure modes
 
@@ -80,12 +80,12 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-26 | Generated keys never printed, logged or written to disk | Security | Met | Phases 1, 2, 10 | `tests/test_quickstart_python.py` and `tests/test_quickstart_node.py`: the key's raw, hex and base64 forms are absent from the output, and the run writes no file |
 | RQ-27 | Analytics, if used: no cookies or personal identifiers, disclosed on the site | Security | Not yet | Not built (see the plan's "Not doing"); applies only if RQ-40 is built | The plan's reason; revisited only if time is left |
 | RQ-28 | Docs versioned in the repo; the site builds from the repo on push | Code quality | Met | Phase 1 | CI run 39350395398 on push of `9fd2119`, green; its `site` job uploaded the `quickstart-site` artifact |
-| RQ-29 | PRD, agent-readiness report and backlog in plain language a busy engineering lead reads in 10 minutes | Code quality | Not yet | Phases 6, 8, 9 | A test caps each file's word count at 2,500 words |
+| RQ-29 | PRD, agent-readiness report and backlog in plain language a busy engineering lead reads in 10 minutes | Code quality | Met | Phases 6, 8, 9 | `tests/test_prd.py`, `tests/test_agent_readiness.py` and `tests/test_backlog.py` cap each file at 2,500 words |
 | RQ-30 | README: how to run the snippets, build the site and reproduce the agent-readiness test | Code quality | Met | Phase 11 | `README.md`: run the snippets, build the site, reproduce the agent-readiness test; `tests/test_readme_and_ai_usage.py` runs its grader quick-start as written against the mock |
 | RQ-31 | `AI_USAGE.md`: the AI tools, what for, the prompts and configuration that shaped the work, and the exact prompt and agent of the readiness test | AI disclosure | Met | Phase 11 | `AI_USAGE.md`: the tools, what each did, the prompts and decisions that shaped the work, and the agent test's exact prompt, command and pinned agent version, held to the harness by `tests/test_readme_and_ai_usage.py` |
 | RQ-32 | A repository with README, `AI_USAGE.md`, snippets, site source and CI | Submission | Owner to do | Phase 11 | Built on GitHub; the owner moves it to GitLab and shares it |
 | RQ-33 | The deployed site's URL | Submission | Owner to do | Phase 11 | The GitLab Pages URL |
-| RQ-34 | `PRD.md`, `AGENT_READINESS.md` (both rounds), `BACKLOG.md`, the claims-to-source table | Submission | Not yet | Phases 5, 6, 8, 9 | The four files at the repository's root |
+| RQ-34 | `PRD.md`, `AGENT_READINESS.md` (both rounds), `BACKLOG.md`, the claims-to-source table | Submission | Met | Phases 5, 6, 8, 9 | The four files at the repository's root: `PRD.md`, `AGENT_READINESS.md` (round 1, round 2, round 2-live), `BACKLOG.md` with `BACKLOG.csv`, `CLAIMS.md` |
 | RQ-35 | Grader quick-start: set a token, run each snippet, see the success line in under 5 minutes | Submission | Not yet | Phase 11 | A timed run from a fresh clone, logged in `evidence/grader_quickstart.md`: 18.1 s against the mock, each README command as written (`tests/test_grader_run.py`); the run against Qrypt waits on the token |
 | RQ-36 | A one-line description of at most 120 characters | Submission | Met | Phase 11 | The line under the README's title, 120 characters; `tests/test_readme_and_ai_usage.py` caps it at 120 |
 | RQ-37 | A demo video of at most 5 minutes: a fresh run, one troubleshooting path, the PRD's funnel, one agent-readiness run | Submission | Owner to do | Phase 11 | The `generate-demo` skill, which the owner calls |

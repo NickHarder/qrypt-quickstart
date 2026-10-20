@@ -4,7 +4,7 @@ title: What lives outside the bundle
 description: The Markdown files of this repository that are not concepts of the bundle, each with who reads it where it is.
 tags: [layout]
 status: stable
-generated: { by: claude-code/2.1.304, at: 2026-10-20T18:05:30Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-20T19:14:09Z }
 outside:
   - { path: README.md, read_by: "The code host, as the front page of the repository" }
   - { path: "**/README.md", read_by: "The code host, when a directory is browsed. It points at a concept and holds no knowledge of its own" }
@@ -14,6 +14,7 @@ outside:
   - { path: PRD.md, read_by: "The grader and Qrypt's engineering lead, at the root, as the brief's onboarding PRD; tests/test_prd.py keeps its funnel equal to docs/KEY_METRICS.md" }
   - { path: AI_USAGE.md, read_by: "The grader, at the root, as the brief's AI usage disclosure; a test keeps its agent prompt and command equal to the harness's" }
   - { path: CLAIMS.md, read_by: "The grader, at the root, as the brief's claims-to-source table; tests/test_claims.py checks it against the site" }
+  - { path: BACKLOG.md, read_by: "The grader, at the root, as the brief's RICE-scored backlog; tests/test_backlog.py keeps it equal to BACKLOG.csv" }
   - { path: AGENT_READINESS.md, read_by: "The grader, at the root, as the brief's agent-readiness report; tests/test_agent_readiness.py keeps it equal to evidence/agent_runs.csv" }
   - { path: site/, read_by: "The site builder (src/qrypt_quickstart/site_builder.py), which renders llms.md and llms-full.md into the site's llms.txt and llms-full.txt for AI coding agents" }
   - { path: evidence/, read_by: "The grader, as the brief's evidence; the commands that measure it (make grader-run, make lighthouse) write it there and tests/test_grader_run.py and tests/test_lighthouse_evidence.py read it back" }

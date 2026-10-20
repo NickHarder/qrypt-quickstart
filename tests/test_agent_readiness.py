@@ -23,6 +23,8 @@ TRANSCRIPTS: Final = REPOSITORY_ROOT / "evidence" / "transcripts"
 # Round 2 ran twice on the revised docs: against the mock, then against Qrypt ("2-live").
 ROUNDS: Final = ["1", "2", "2-live"]
 RUNS_PER_ROUND: Final = 5
+# RQ-29: a busy engineering lead reads it in 10 minutes, the PRD's own cap (tests/test_prd.py).
+WORD_LIMIT: Final = 2500
 # One row of the report's summary table: | Round 1 | 5 of 5 | 0.49 | ...
 SUMMARY_ROW: Final = re.compile(
     r"^\| Round (?P<round_name>[\w-]+) \| (?P<succeeded>\d) of (?P<runs>\d)"
@@ -100,3 +102,8 @@ def test_no_transcript_holds_the_runs_token(round_name: str) -> None:
     for run_number in range(1, RUNS_PER_ROUND + 1):
         transcript = (TRANSCRIPTS / f"{round_name}-run-{run_number}.txt").read_text()
         assert SUCCESS_TOKEN not in transcript, f"{round_name}-run-{run_number}"
+
+
+def test_a_busy_engineering_lead_reads_it_in_ten_minutes() -> None:
+    word_count = len(REPORT.read_text().split())
+    assert word_count <= WORD_LIMIT, f"{REPORT.name} is {word_count} words"

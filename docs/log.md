@@ -5,6 +5,16 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the backlog (Phase 9), on the owner's go: ten items in `BACKLOG.csv`, ranked by RICE
+  in `BACKLOG.md`, each with its evidence: the portal walkthrough, the live probes, the audit of
+  Qrypt's docs and the agent rounds. Nine are Qrypt's to fix. Reach rests on the PRD's assumed 400
+  signups a quarter and its funnel targets, each item's share stated as an assumption, and no
+  confidence is above 80%; Qrypt's efforts are estimates from outside its code. Two of the
+  walkthrough's frictions (the portal's other API, and "API key" against "token") are one item, and
+  "deploy the site" is left out, since the plan already does it. A "what to do first" section
+  orders the work by its dependencies without changing the scores. `tests/test_backlog.py` checks
+  the arithmetic, the scales, the evidence links and the page's order; the agent report and the
+  backlog now share the PRD's 2,500-word cap (RQ-29).
 * **Change**: the troubleshooting page's Cloudflare 1010 entry, on the owner's go. Live, Python's
   default `Python-urllib/3.x` User-Agent got Cloudflare's 403 `Error 1010: Access denied` before
   Qrypt read the token (`evidence/live_probes.json`). The programs send their own User-Agent, so

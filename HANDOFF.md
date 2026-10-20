@@ -26,6 +26,7 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
 | Phase 7, live check | Done 2026-10-20: 15 of 15 (Python, Node, Rust), medians 0.42 / 0.51 / 0.51 s, slowest 0.66 s, with requests 2 s apart. A trial key's real rate limit is far below the documented 30 in 10 s (a 429 at 0.36 s; cleared within 1.5 s; no `Retry-After`): the snippets' 429 message, the troubleshooting page, `llms.md` and claims follow it. Without `Accept`, still 200 JSON. A wrong token gets 403, not 401. Ledger at 40 KiB | `evidence/live_runs.csv`, `evidence/live_rate_limit.json` |
 | Phase 8, agent test | Done 2026-10-20: round 1 against the mock 5 of 5 (median 0.49 minutes), the docs revised from it (Python packages in a virtual environment, `7272405`), round 2 against the mock 5 of 5 (0.54), and round 2-live against Qrypt through the recording relay 5 of 5 (0.61; 5 KiB, the ledger at 45 KiB) | `AGENT_READINESS.md`, `tests/test_agent_readiness.py` |
+| Phase 9, backlog | Done 2026-10-20: ten RICE-scored items, nine of them Qrypt's to fix; reach rests on the PRD's assumed 400 signups a quarter; its scores and wording wait on the owner's review | `BACKLOG.md`, `BACKLOG.csv`, `tests/test_backlog.py` |
 | Phase 10, Rust | Done against the mock: `rust/src/main.rs` (25 of 25 lines), a Rust tab and `llms-full.txt` section; its 5 live runs wait on the token (they make the live check 17 KiB) | `tests/test_quickstart_rust.py` |
 | Phase 11, submission | Begun: every README block runs as written (`tests/test_readme_commands.py`); the grader quick-start timed from a fresh clone, 18.1 s against the mock; the GitLab steps below; the teardown (`evidence/teardown.md`). Waits on the owner: the demo (`generate-demo`), the move to GitLab, the submission | `evidence/grader_quickstart.md` |
 | Portal walkthrough | Begun by the owner: the trial sign-up and the temporary-password email; first login and the token's screen to come | `evidence/portal_walkthrough.md` |
@@ -47,9 +48,6 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 
 ## Open, for the owner
 
-- For the backlog (Phase 9): ask Qrypt to answer a bad token with its documented 401, or a body of
-  its own; live it is 403 "Forbidden or entropy quota reached", as for a used-up allotment. The
-  quickstart's message and troubleshooting page already cover both (`PRD.md`, Risks).
 - Read and approve `docs/PLAN.md` (`make docs-approve DOC=docs/PLAN.md`, when you say so).
 - Get a Qrypt token: ask the program contact for an assessment token. It goes in `.env` as
   `QRYPT_API_KEY`, never committed. The plan's fallback starts if none comes by 2026-10-20 18:00 CDT.
