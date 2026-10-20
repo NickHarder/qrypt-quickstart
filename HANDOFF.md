@@ -110,7 +110,10 @@ In `AGENTS.md`.
 - The agent-harness image is built and proved in a cloud session (Docker is installed there; start
   it with `dockerd &`): a stand-in agent in the real image installed packages through the egress
   proxy and got a key from the mock. A real round needs a login for the agent in the container:
-  `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`) in the cloud environment's settings.
+  `HARNESS_CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`), a plain environment variable in
+  the cloud environment's settings, read at session start. A token saved as
+  `CLAUDE_CODE_OAUTH_TOKEN` did not reach the session on 2026-10-20; the harness hands the value
+  to the container under that name.
 - Every snippet run so far is against the mock, the timed grader run included. The live check, the
   live agent rounds and Rust's 5 live runs wait on the owner's token.
 

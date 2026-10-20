@@ -19,6 +19,7 @@ from qrypt_quickstart.agent_harness import (
     BRIEF_PROMPT,
     DOCUMENT_FILE_NAME,
     AgentRun,
+    agent_login_environment,
     container_command,
     judge_run,
     run_agent_once,
@@ -329,6 +330,29 @@ def test_the_container_mode_runs_docker_with_the_project_mounted_and_judges_the_
     assert docker_arguments[-3:-1] == ["claude", "-p"]
     assert docker_arguments[-1].startswith(BRIEF_PROMPT)
     assert not any(PLANTED_TOKEN in argument for argument in docker_arguments)
+
+
+def test_the_login_comes_from_the_harness_name_when_the_reserved_name_is_absent() -> None:
+    login = agent_login_environment({"HARNESS_CLAUDE_CODE_OAUTH_TOKEN": "stand-in-login"})
+    assert login == {"CLAUDE_CODE_OAUTH_TOKEN": "stand-in-login"}
+
+
+def test_the_reserved_login_name_wins_over_the_harness_name() -> None:
+    login = agent_login_environment(
+        {
+            "CLAUDE_CODE_OAUTH_TOKEN": "reserved-login",
+            "HARNESS_CLAUDE_CODE_OAUTH_TOKEN": "harness-login",
+            "ANTHROPIC_API_KEY": "stand-in-key",
+        }
+    )
+    assert login == {
+        "CLAUDE_CODE_OAUTH_TOKEN": "reserved-login",
+        "ANTHROPIC_API_KEY": "stand-in-key",
+    }
+
+
+def test_no_login_gives_an_empty_environment() -> None:
+    assert agent_login_environment({"PATH": "/usr/bin"}) == {}
 
 
 def test_a_run_through_the_relay_is_judged_like_a_mock_run_and_ledgered(tmp_path: Path) -> None:

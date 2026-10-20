@@ -332,7 +332,9 @@ Tuesday 2026-10-20, 19:00 to 22:00 CDT.
   there (start it with `dockerd &`). Its egress proxy inspects TLS, so the image is built with the
   proxy's authority as a secret and the round runs with `HARNESS_OPTIONS='--network host --extra-ca
   /root/.ccr/ca-bundle.crt'`. Proved with a stand-in agent in the real image. The agent in the
-  container still needs its own login, `CLAUDE_CODE_OAUTH_TOKEN`, set in the environment's settings.
+  container still needs its own login, set in the environment's settings as
+  `HARNESS_CLAUDE_CODE_OAUTH_TOKEN`: the session keeps `CLAUDE_CODE_OAUTH_TOKEN` for its own login
+  and does not pass it through, and the harness gives the container the value under the usual name.
 - **Files:** `src/qrypt_quickstart/agent_harness.py`, `src/qrypt_quickstart/recording_relay.py`,
   `src/qrypt_quickstart/harness_certificates.py`,
   `agent-harness/`, `evidence/agent_runs.csv`, `evidence/transcripts/`, `AGENT_READINESS.md`, the

@@ -90,6 +90,10 @@ export CLAUDE_CODE_OAUTH_TOKEN=...      # from `claude setup-token`, or set ANTH
 make agent-round ROUND=1                # 5 runs against the mock, logged to evidence/agent_runs.csv
 ```
 
+In a Claude Code cloud session, set the login as `HARNESS_CLAUDE_CODE_OAUTH_TOKEN` in the
+environment's settings: the session keeps `CLAUDE_CODE_OAUTH_TOKEN` for its own login, and the
+harness hands the value to the container under that name.
+
 Behind a proxy that inspects TLS, such as a Claude Code cloud session's, build with the proxy's
 authority as a secret (`docker build --secret id=extra_ca,src=<its file> ...`) and run with
 `HARNESS_OPTIONS='--network host --extra-ca <its file>'`: the container then shares the host's

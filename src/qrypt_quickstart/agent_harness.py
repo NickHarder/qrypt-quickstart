@@ -35,6 +35,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Final
 
@@ -273,15 +274,12 @@ def run_agent_once(
             # docker passes the agent's login and the proxy through by name (`--env=NAME`), from
             # this process.
             environment = {
-                name: os.environ[name]
-                for name in (
-                    "PATH",
-                    "HOME",
-                    "ANTHROPIC_API_KEY",
-                    "CLAUDE_CODE_OAUTH_TOKEN",
-                    *PROXY_VARIABLES,
-                )
-                if name in os.environ
+                **{
+                    name: os.environ[name]
+                    for name in ("PATH", "HOME", *PROXY_VARIABLES)
+                    if name in os.environ
+                },
+                **agent_login_environment(os.environ),
             }
         else:
             command = agent_arguments
@@ -357,6 +355,28 @@ def write_runs(log: Path, runs: list[AgentRun]) -> None:
 
 # The proxy settings a container in the host network mode is given, by name.
 PROXY_VARIABLES: Final = ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy")
+# A cloud session keeps CLAUDE_CODE_OAUTH_TOKEN for its own login and may not pass the owner's
+# through, so the owner's login can also arrive under this name; the container gets the usual one.
+HARNESS_LOGIN_VARIABLE: Final = "HARNESS_CLAUDE_CODE_OAUTH_TOKEN"
+
+
+def agent_login_environment(source_environment: Mapping[str, str]) -> dict[str, str]:
+    """Give the agent in the container its login, under the names Claude Code reads.
+
+    Args:
+        source_environment: This process's environment, or a stand-in for one in a test.
+
+    Returns:
+        ANTHROPIC_API_KEY and CLAUDE_CODE_OAUTH_TOKEN, each only when there is a value for it;
+        CLAUDE_CODE_OAUTH_TOKEN comes from HARNESS_CLAUDE_CODE_OAUTH_TOKEN when it is not set
+        itself.
+    """
+    oauth_token = source_environment.get("CLAUDE_CODE_OAUTH_TOKEN") or source_environment.get(
+        HARNESS_LOGIN_VARIABLE
+    )
+    api_key = source_environment.get("ANTHROPIC_API_KEY")
+    candidate_login = {"CLAUDE_CODE_OAUTH_TOKEN": oauth_token, "ANTHROPIC_API_KEY": api_key}
+    return {name: value for name, value in candidate_login.items() if value}
 
 
 def container_command(

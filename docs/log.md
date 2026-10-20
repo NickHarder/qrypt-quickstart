@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the agent harness also takes the agent's login from
+  `HARNESS_CLAUDE_CODE_OAUTH_TOKEN` and gives it to the container as `CLAUDE_CODE_OAUTH_TOKEN`.
+  The owner saved the token under the usual name in the cloud environment's settings, and it did
+  not reach the session (checked by name only); the session uses that name for its own login, so
+  the owner's login now has a name of its own. Docker started and the image built in the session.
 * **Change**: `scripts/mirror_to_gitlab.sh`, for the owner's Mac: it clones or reuses a clone of
   the GitHub repository, fetches a branch and pushes it to a GitLab branch, never forcing, so the
   owner's personal access token stays on the owner's machine. Tested on two local bare
