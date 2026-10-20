@@ -4,7 +4,7 @@ title: Python conventions
 description: How names, single assignment, types, documentation, data at the boundaries, errors and suppressions are written and checked in this project's Python.
 tags: [python, conventions]
 status: stable
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:22Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T01:36:48Z }
 ---
 # Python conventions
 
@@ -90,3 +90,7 @@ each because the limit or the reader requires it (docs/PLAN.md, review item C10)
   `pyproject.toml` for `quickstart/**` only.
 - It parses Qrypt's answer with `json`, not a Pydantic model: one more dependency and a model class
   would cost lines the limit does not have.
+- It is laid out by hand: `ruff format` skips `quickstart/` (`pyproject.toml`) so that its short
+  message table fits the 25 lines; `ruff check` still holds it to every lint rule.
+- One `except` clause catches every failure that is not an HTTP status (network, TLS, an answer
+  without a usable block) and prints one line; it is not "catch, log and carry on": it stops.

@@ -5,8 +5,11 @@ endpoint does (docs.qrypt.com/eaas, read 2026-10-19): a JSON body `{"random": [.
 holding `n` base64 blocks of 1,024 bytes each, for `n` from 1 to 512.
 
 The token chooses the answer, so a test can ask for any status without touching the live API:
-`mock-200` gets entropy, `mock-401`, `mock-403`, `mock-429`, `mock-500` and `mock-503` get that
-status, and any other token gets 401.
+`mock-200` gets entropy, `mock-400`, `mock-401`, `mock-403`, `mock-429`, `mock-500` and `mock-503`
+get that status, and any other token gets 401. Three tokens get a 200 whose body holds no usable
+block (`mock-not-json`, `mock-no-block`, `mock-short-block`), for the snippets' failure tests. Given
+a certificate, the mock serves HTTPS, so a client that does not trust it fails as it would behind
+a TLS-intercepting proxy.
 
 Two answers are this mock's guesses, not Qrypt's documented behavior, until the live check records
 what Qrypt does (docs/PLAN.md, Phase 7): the JSON shape of an error body, and a 400 to a request
@@ -20,8 +23,10 @@ import argparse
 import base64
 import json
 import os
+import ssl
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from types import TracebackType
 from typing import Final, Self
 from urllib.parse import parse_qs, urlsplit
@@ -32,7 +37,13 @@ ENTROPY_PATH: Final = "/api/v1/quantum-entropy"
 BYTES_PER_KIB: Final = 1024
 LARGEST_SIZE_KIB: Final = 512
 SUCCESS_TOKEN: Final = "mock-200"  # noqa: S105  a mock token, not a secret
-STATUS_TOKENS: Final = {f"mock-{status}": status for status in (401, 403, 429, 500, 503)}
+STATUS_TOKENS: Final = {f"mock-{status}": status for status in (400, 401, 403, 429, 500, 503)}
+BAD_BODIES: Final = {
+    "mock-not-json": b"<html><body>Service temporarily unavailable</body></html>",
+    "mock-no-block": b'{"random": [], "size": 1}',
+    "mock-short-block": b'{"random": ["AAAA"], "size": 1}',
+}
+SHUTDOWN_POLL_SECONDS: Final = 0.05
 ERROR_REASONS: Final = {
     400: "Bad request",
     401: "Access token invalid or expired",
@@ -80,25 +91,37 @@ class MockQryptServer:
     it answers is appended to `recorded_requests`.
     """
 
-    def __init__(self, port: int = 0) -> None:
+    def __init__(self, port: int = 0, tls_certificate: tuple[Path, Path] | None = None) -> None:
         """Create the server; `port` 0 lets the system choose a free one.
 
         Args:
             port: The port to listen on.
+            tls_certificate: A certificate and its private key (PEM) to serve HTTPS with, or None
+                for plain HTTP.
         """
         self.recorded_requests: list[RecordedRequest] = []
         self._recording_lock = threading.Lock()
         handler_class = self._handler_class()
         self._http_server = ThreadingHTTPServer(("127.0.0.1", port), handler_class)
+        self._scheme = "http" if tls_certificate is None else "https"
+        if tls_certificate is not None:
+            tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            tls_context.load_cert_chain(*tls_certificate)
+            self._http_server.socket = tls_context.wrap_socket(
+                self._http_server.socket, server_side=True
+            )
         self._serving_thread = threading.Thread(
-            target=self._http_server.serve_forever, name="mock-qrypt", daemon=True
+            target=self._http_server.serve_forever,
+            kwargs={"poll_interval": SHUTDOWN_POLL_SECONDS},
+            name="mock-qrypt",
+            daemon=True,
         )
 
     @property
     def url(self) -> str:
         """The endpoint's full URL, without the query string."""
         host, port = self._http_server.server_address[:2]
-        return f"http://{host!s}:{port}{ENTROPY_PATH}"
+        return f"{self._scheme}://{host!s}:{port}{ENTROPY_PATH}"
 
     def __enter__(self) -> Self:
         """Start serving in a background thread."""
@@ -157,7 +180,10 @@ class MockQryptServer:
                         served_bytes=served_bytes,
                     )
                 )
-                self._send_answer(status, served_bytes, size_kib)
+                if status == 200 and token in BAD_BODIES:
+                    self._send_body(status, BAD_BODIES[token])
+                else:
+                    self._send_answer(status, served_bytes, size_kib)
 
             def _send_answer(self, status: int, served_bytes: bytes, size_kib: int | None) -> None:
                 """Write the status line, the headers and the JSON body."""
@@ -172,7 +198,10 @@ class MockQryptServer:
                     }
                 else:
                     body = {"error": ERROR_REASONS.get(status, "Error")}
-                encoded_body = json.dumps(body).encode()
+                self._send_body(status, json.dumps(body).encode())
+
+            def _send_body(self, status: int, encoded_body: bytes) -> None:
+                """Write the status line, the headers and a body given as bytes."""
                 self.send_response(status)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Content-Length", str(len(encoded_body)))
@@ -204,15 +233,13 @@ def choose_answer(*, path: str, size_kib: int | None, accept: str, token: str) -
     """
     if path != ENTROPY_PATH:
         return 404, b""
-    if "application/json" not in accept:
+    is_size_in_range = size_kib is not None and 1 <= size_kib <= LARGEST_SIZE_KIB
+    if "application/json" not in accept or size_kib is None or not is_size_in_range:
         return 400, b""
-    if size_kib is None or not 1 <= size_kib <= LARGEST_SIZE_KIB:
-        return 400, b""
-    if token in STATUS_TOKENS:
-        return STATUS_TOKENS[token], b""
-    if token != SUCCESS_TOKEN:
-        return 401, b""
-    return 200, os.urandom(size_kib * BYTES_PER_KIB)
+    is_known_success_token = token == SUCCESS_TOKEN or token in BAD_BODIES
+    status = STATUS_TOKENS.get(token, 200 if is_known_success_token else 401)
+    served_bytes = os.urandom(size_kib * BYTES_PER_KIB) if token == SUCCESS_TOKEN else b""
+    return status, served_bytes
 
 
 def main() -> None:

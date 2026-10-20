@@ -2,10 +2,12 @@ import base64
 import json
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 import pytest
 
 from qrypt_quickstart.mock_server import MockQryptServer
+from tls_certificate import write_self_signed_certificate
 
 
 def fetch(
@@ -65,3 +67,26 @@ def test_a_request_without_accept_is_refused_by_the_mock() -> None:
     with MockQryptServer() as server:
         status, _ = fetch(server, "mock-200", accept=False)
     assert status == 400
+
+
+def test_a_400_token_gets_a_bad_request() -> None:
+    with MockQryptServer() as server:
+        status, _ = fetch(server, "mock-400")
+    assert status == 400
+
+
+def test_the_bad_body_tokens_get_a_200_with_no_usable_block() -> None:
+    with MockQryptServer() as server:
+        not_json = fetch(server, "mock-not-json")
+        no_block = fetch(server, "mock-no-block")
+        short_block = fetch(server, "mock-short-block")
+    assert [not_json[0], no_block[0], short_block[0]] == [200, 200, 200]
+    assert not not_json[1].startswith(b"{")
+    assert json.loads(no_block[1])["random"] == []
+    assert len(base64.b64decode(json.loads(short_block[1])["random"][0])) < 44
+
+
+def test_the_mock_can_serve_https_with_the_certificate_it_is_given(tmp_path: Path) -> None:
+    certificate_path, private_key_path = write_self_signed_certificate(tmp_path)
+    with MockQryptServer(tls_certificate=(certificate_path, private_key_path)) as server:
+        assert server.url.startswith("https://127.0.0.1:")

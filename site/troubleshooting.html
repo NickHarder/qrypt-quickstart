@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Troubleshooting the Qrypt Quickstart</title>
+  <meta name="description" content="Each error the Qrypt quickstart can print, what causes it, and how to fix it.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the troubleshooting guide</a>
+  <header>
+    <p class="eyebrow"><a href="index.html">Qrypt Quickstart</a> · Troubleshooting</p>
+    <h1>Troubleshooting</h1>
+    <p>Find the line your terminal printed. Each entry gives the symptom, the likely cause and the
+      fix. The quickstart never retries on its own: it makes one request, prints one line and stops.</p>
+  </header>
+
+  <main id="main">
+    <nav aria-label="On this page">
+      <ul>
+        <li><a href="#errors">HTTP errors from Qrypt</a>: <a href="#error-400">400</a>,
+          <a href="#error-401">401</a>, <a href="#error-403">403</a>, <a href="#error-429">429</a>,
+          <a href="#error-500">500</a>, <a href="#error-503">503</a></li>
+        <li><a href="#environment">Your machine and network</a></li>
+        <li><a href="#mistakes">Common mistakes in your own code</a></li>
+        <li><a href="#key-handling">Handling the key safely</a></li>
+      </ul>
+    </nav>
+
+    <h2 id="errors">HTTP errors from Qrypt</h2>
+
+    <section id="error-400" aria-labelledby="heading-400">
+      <h3 id="heading-400">400: malformed request</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 400: malformed request: size must be 1-512.</code></pre>
+      <p><strong>Likely cause</strong>: Qrypt could not read the request. Most often <code>size</code>
+        is outside 1 to 512, or not a whole number.</p>
+      <p><strong>Fix</strong>: send <code>size</code> as a whole number of KiB from 1 to 512;
+        <code>size=1</code> is enough for one key. Send both headers Qrypt's documentation requires,
+        <code>Accept: application/json</code> and <code>Authorization: Bearer &lt;token&gt;</code>.
+        The quickstart sends both; code you write yourself must too.</p>
+    </section>
+
+    <section id="error-401" aria-labelledby="heading-401">
+      <h3 id="heading-401">401: token invalid or expired</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 401: the token is invalid or expired; get a new one at portal.qrypt.com.</code></pre>
+      <p><strong>Likely cause</strong>: the access token is invalid or has expired. It may also have
+        been pasted with quotes or a space around it.</p>
+      <p><strong>Fix</strong>: generate a new access token for the <strong>Entropy</strong> service
+        in the Qrypt portal (<a href="https://portal.qrypt.com">portal.qrypt.com</a>), or ask your
+        Qrypt contact for one. Replace the line in <code>.env</code> with
+        <code>QRYPT_API_KEY=&lt;token&gt;</code>: no quotes, no spaces. Run the quickstart once.</p>
+    </section>
+
+    <section id="error-403" aria-labelledby="heading-403">
+      <h3 id="heading-403">403: entropy allotment used up</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 403: allotment used up; ask Qrypt.</code></pre>
+      <p><strong>Likely cause</strong>: the account has retrieved its maximum entropy allotment for
+        the current period. This is not the rate limit (that is <a href="#error-429">429</a>):
+        waiting a few seconds does not help.</p>
+      <p><strong>Fix</strong>: stop sending requests. Ask Qrypt to change the account's limit. Check
+        that your code asks only for what it needs: <code>size=1</code> is 1 KiB, and
+        <code>size=512</code> uses 512 times as much.</p>
+    </section>
+
+    <section id="error-429" aria-labelledby="heading-429">
+      <h3 id="heading-429">429: rate limit</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 429: over 30 requests in 10 seconds; wait 10 seconds, then run once.</code></pre>
+      <p><strong>Likely cause</strong>: the token sent more than 30 requests in 10 seconds, usually
+        from a loop or several scripts sharing one token. Unlike <a href="#error-403">403</a>, it
+        passes on its own.</p>
+      <p><strong>Fix</strong>: wait 10 seconds, then run once. Never retry in a tight loop: each
+        retry counts against the same limit. If you need more entropy, ask for more in one request
+        (up to 512 KiB) instead of making many small ones.</p>
+      <table>
+        <caption>429 or 403?</caption>
+        <thead><tr><th scope="col"></th><th scope="col">429 rate limit</th><th scope="col">403 allotment</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">What it limits</th><td>Requests: 30 per 10 seconds per token</td><td>Entropy: a total per account per period</td></tr>
+          <tr><th scope="row">Does waiting fix it?</th><td>Yes, after 10 seconds</td><td>No: ask Qrypt</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="error-500" aria-labelledby="heading-500">
+      <h3 id="heading-500">500: Qrypt internal error</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 500: try again shortly.</code></pre>
+      <p><strong>Likely cause</strong>: an error inside Qrypt's service, not in your request.</p>
+      <p><strong>Fix</strong>: run the quickstart again in a minute. If it keeps failing, contact
+        Qrypt support.</p>
+    </section>
+
+    <section id="error-503" aria-labelledby="heading-503">
+      <h3 id="heading-503">503: not enough entropy right now</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Qrypt answered HTTP 503: try again shortly.</code></pre>
+      <p><strong>Likely cause</strong>: Qrypt's entropy supply is temporarily insufficient.</p>
+      <p><strong>Fix</strong>: run the quickstart again in a minute, asking for <code>size=1</code>
+        rather than a large size.</p>
+    </section>
+
+    <h2 id="environment">Your machine and network</h2>
+
+    <section id="env-missing-dotenv" aria-labelledby="heading-dotenv">
+      <h3 id="heading-dotenv">The token is not found</h3>
+      <p><strong>Symptom</strong></p>
+      <pre><code class="language-text">Set QRYPT_API_KEY=&lt;token&gt; in .env (Entropy tokens: portal.qrypt.com)</code></pre>
+      <p><strong>Likely cause</strong>: there is no <code>.env</code> file in the folder you ran the
+        quickstart from, or it has no <code>QRYPT_API_KEY</code> line.</p>
+      <p><strong>Fix</strong>: in a text editor, create a file named <code>.env</code> next to the
+        quickstart with the line <code>QRYPT_API_KEY=&lt;token&gt;</code>, and run the quickstart from
+        that folder. Add <code>.env</code> to <code>.gitignore</code> so it is never committed.</p>
+    </section>
+
+    <section id="env-runtime" aria-labelledby="heading-runtime">
+      <h3 id="heading-runtime">The runtime is missing or too old</h3>
+      <p><strong>Symptom</strong>: Python prints
+        <code>ModuleNotFoundError: No module named 'cryptography'</code> (or
+        <code>'dotenv'</code>). Node.js prints
+        <code>TypeError: process.loadEnvFile is not a function</code> or
+        <code>ReferenceError: fetch is not defined</code>.</p>
+      <p><strong>Likely cause</strong>: the packages are not installed, or Node.js is older than
+        20.12.</p>
+      <p><strong>Fix</strong>: check the versions with <code>python3 --version</code> (3.10 or later)
+        and <code>node --version</code> (20.12 or later), then install what the quickstart needs:</p>
+      <pre><code class="language-shell">pip install cryptography python-dotenv</code></pre>
+    </section>
+
+    <section id="env-proxy-tls" aria-labelledby="heading-proxy">
+      <h3 id="heading-proxy">A corporate proxy or a certificate error</h3>
+      <p><strong>Symptom</strong>: a line that starts <code>Could not get entropy</code> and names a
+        certificate, such as <code>CERTIFICATE_VERIFY_FAILED</code>,
+        <code>SELF_SIGNED_CERT_IN_CHAIN</code> or <code>UNABLE_TO_GET_ISSUER_CERT_LOCALLY</code>.</p>
+      <p><strong>Likely cause</strong>: your network inspects HTTPS traffic with its own root
+        certificate, which your runtime does not trust yet.</p>
+      <p><strong>Fix</strong>: ask your IT team for the company's root certificate file (PEM) and
+        point the runtime at it. Never turn certificate checks off.</p>
+      <pre><code class="language-shell">SSL_CERT_FILE=/path/to/company-ca.pem python quickstart.py
+NODE_EXTRA_CA_CERTS=/path/to/company-ca.pem node quickstart.mjs</code></pre>
+      <p>If you must go through a proxy, Python reads <code>HTTPS_PROXY</code> on its own. Recent
+        Node.js versions read it when started with <code>--use-env-proxy</code> (see
+        <code>node --help</code>).</p>
+    </section>
+
+    <section id="env-network" aria-labelledby="heading-network">
+      <h3 id="heading-network">No connection, or a timeout</h3>
+      <p><strong>Symptom</strong>: a line that starts <code>Could not get entropy</code> and names
+        <code>Connection refused</code>, <code>ECONNREFUSED</code>, <code>ENOTFOUND</code> or a
+        timeout.</p>
+      <p><strong>Likely cause</strong>: no network, a firewall that blocks
+        <code>api-eus.qrypt.com</code>, or a <code>QRYPT_API_URL</code> left pointing at a test
+        server.</p>
+      <p><strong>Fix</strong>: check the network, remove any <code>QRYPT_API_URL</code> line from
+        <code>.env</code> and your shell, and run once more.</p>
+    </section>
+
+    <h2 id="mistakes">Common mistakes in your own code</h2>
+
+    <section id="mistake-size-is-kib" aria-labelledby="heading-size">
+      <h3 id="heading-size"><code>size</code> counts KiB, not bytes</h3>
+      <p><strong>Symptom</strong>: the allotment runs out (403) after a few runs, or the answer holds
+        far more data than you expected.</p>
+      <p><strong>Likely cause</strong>: <code>size=32</code> was sent to get a 32-byte key. Qrypt
+        reads it as 32 KiB: 32 blocks of 1,024 bytes.</p>
+      <p><strong>Fix</strong>: send <code>size=1</code> (1,024 bytes) and take the 32 bytes you need
+        from it.</p>
+    </section>
+
+    <section id="mistake-base64" aria-labelledby="heading-base64">
+      <h3 id="heading-base64">The base64 block was not decoded</h3>
+      <p><strong>Symptom</strong>: the key is rejected as the wrong length, or it is made of
+        letters and digits rather than raw bytes.</p>
+      <p><strong>Likely cause</strong>: each block in <code>random</code> is base64 text. Used as it
+        is, it is text, not 1,024 random bytes.</p>
+      <p><strong>Fix</strong>: decode the block first (<code>base64.b64decode</code> in Python,
+        <code>Buffer.from(block, "base64")</code> in Node.js), then take bytes 0 to 31 as the key.</p>
+    </section>
+
+    <section id="mistake-loop" aria-labelledby="heading-loop">
+      <h3 id="heading-loop">A retry loop faster than the rate limit</h3>
+      <p><strong>Symptom</strong>: a run of 429 answers, then possibly a 403.</p>
+      <p><strong>Likely cause</strong>: code that retries at once on any error. Every retry counts
+        against the 30-requests-in-10-seconds limit.</p>
+      <p><strong>Fix</strong>: on 429, wait at least 10 seconds before one more try. On 403, stop.
+        On 500 or 503, wait a minute.</p>
+    </section>
+
+    <h2 id="key-handling-heading">Handling the key safely</h2>
+
+    <section id="key-handling" aria-labelledby="key-handling-heading">
+      <ul>
+        <li>Never print, log or commit the key, and never write it to a file the quickstart does not
+          need. The quickstart keeps it in memory only.</li>
+        <li>Never commit the token either: keep it in <code>.env</code>, and keep <code>.env</code>
+          in <code>.gitignore</code>. Never show it in a screenshot, a recording or an AI agent's
+          chat.</li>
+        <li>Never reuse entropy bytes for two purposes: the quickstart takes bytes 0 to 31 for the
+          key and bytes 32 to 43 for the nonce, and makes one key per request.</li>
+        <li>With AES-GCM, never encrypt two messages with the same key and the same nonce.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Qrypt's own reference is at <a href="https://docs.qrypt.com/eaas/">docs.qrypt.com/eaas</a>.
+      This site sets no cookies and collects no data.</p>
+  </footer>
+</body>
+</html>

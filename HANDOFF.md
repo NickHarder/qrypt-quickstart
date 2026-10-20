@@ -3,8 +3,8 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after Phase 2: the Python and Node quickstarts run end to end
-against the mock, the site builds from it, and CI runs on every push.
+Last updated: 2026-10-20, after Phase 3: both quickstarts run end to end against the mock and
+fail with one clear line on every error; the troubleshooting page quotes each line.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -18,9 +18,10 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Gate | Green (6 lint checks, 3 test checks with `e2e`, evals, secrets) | `make gate` |
 | Plan and gates 1–4 | Drafts, all pushed, none approved yet: plan, audit, personas, architecture, key metrics | `docs/PLAN.md`, `make docs-status` |
 | Phase 1, tracer bullet | Done: `quickstart/python/quickstart.py` (19 of 25 lines), the mock, the site builder, CI on push with the site as an artifact | `make e2e` |
-| Phase 2, Node and tabs | Done: `quickstart/node/quickstart.mjs` (25 of 25 lines: Phase 3 must restructure its error handling to fit the per-code messages), the site's run step in Python and Node.js tabs | `make e2e` |
-| Eval cases AC-01, AC-02 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.10 for both) | `tests/test_agent_target.py` |
-| Next | Phase 3: every error, and the troubleshooting page | `docs/PLAN.md` |
+| Phase 2, Node and tabs | Done: `quickstart/node/quickstart.mjs`, the site's run step in Python and Node.js tabs | `make e2e` |
+| Phase 3, errors | Done: both snippets at 25 of 25 lines, one message per failure, `site/troubleshooting.html` | `tests/test_quickstart_errors.py` |
+| Eval cases AC-01 to AC-03 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.15 for all three) | `tests/test_agent_target.py` |
+| Next | Phase 4: `llms.txt`, the agent-readable quickstart | `docs/PLAN.md` |
 
 ## How to check your work
 

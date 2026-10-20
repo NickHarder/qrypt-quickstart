@@ -5,6 +5,13 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 3: each snippet prints one actionable line, the same in both languages, for
+  every HTTP error Qrypt documents, a refused connection, an untrusted certificate and an answer
+  without a usable block, after one request and with no trace; the troubleshooting page quotes each
+  line with its cause and fix. Semgrep's GCM finding made the Node decipher pin a 16-byte tag. The
+  snippets are laid out by hand to fit 25 lines ([Python rule](/rules/python-conventions.md),
+  [TypeScript rule](/rules/typescript-conventions.md)); seven requirements are marked met in
+  [the deliverables](/DELIVERABLES.md).
 * **Change**: Phase 2: the Node quickstart (25 of 25 lines), tested in pytest against the same mock,
   type-checked by `web/`'s tsc and linted by Biome; the site's run step became two language tabs.
   The keyboard test with Playwright moved to Phase 5, which installs Playwright

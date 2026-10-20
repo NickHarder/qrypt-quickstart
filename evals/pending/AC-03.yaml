@@ -1,0 +1,26 @@
+# A model given only the troubleshooting page and a 429 explains what to do: wait, run once, and
+# never loop; and it tells the rate limit from the allotment. It waits here, outside evals/cases/,
+# until its recording is made (a paid run the owner approves).
+id: AC-03
+category: agent-contract
+type: boundary
+tier: scenario
+difficulty: edge_case
+statement: >-
+  Given only the troubleshooting page and the line "Qrypt answered HTTP 429", a model tells the
+  developer to wait 10 seconds and run once, not to retry in a loop, and that 429 differs from 403.
+failure_mode: >-
+  The model advises a retry loop or exponential retries without a wait, or confuses the rate limit
+  (429) with the used-up allotment (403).
+input:
+  prompt: >-
+    I ran the Qrypt quickstart and it printed: Qrypt answered HTTP 429: over 30 requests in 10
+    seconds; wait 10 seconds, then run once. What should I do, and is this the same as running out
+    of my allotment?
+  document: site/troubleshooting.html
+expect:
+  contains: ["10 seconds", "403"]
+  must_not_contain: ["while True", "while (true)", "retry immediately"]
+  min_length: 100
+guards: [UC-02]
+metrics: [NS-01]
