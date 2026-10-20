@@ -1,6 +1,6 @@
 # Claims to sources
 
-Every factual claim the quickstart site makes about Qrypt, quoted word for word, with the page it
+Every factual claim the quickstart site and the PRD make about Qrypt, quoted word for word, with the page it
 is on and the source it rests on. `tests/test_claims.py` holds this table and the site to each
 other: a quote no longer on its page fails, a Qrypt fact on the site that no row quotes fails, and a
 marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on the site fails.
@@ -42,6 +42,18 @@ marketing superlative ("unbreakable", "perfectly secure" and others) anywhere on
 | Q-22 | 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. | `site/llms.md` | EaaS: 429, 403 and 401 |
 | Q-23 | the account has retrieved its maximum entropy for the period. | `site/llms-full.md` | EaaS: 403 |
 | Q-24 | Qrypt's entropy supply is temporarily insufficient. | `site/llms-full.md` | EaaS: 503 |
+
+## Claims about Qrypt in the PRD
+
+| Id | Claim, as the PRD says it | Page | Source |
+|---|---|---|---|
+| Q-29 | Three of Qrypt's four code examples leave out the Accept: application/json header that the same page says is required. | `PRD.md` | EaaS: the curl, Python and PowerShell examples send no `Accept`; the JavaScript example does |
+| Q-30 | None checks the HTTP status before reading the body, and the Python example puts the token in source code and prints every entropy byte. | `PRD.md` | EaaS: the four examples, as read 2026-10-19 (`docs/audit/data-quality.md`, `docs/audit/security.md`) |
+| Q-31 | A developer who asks for size=32 to get a 32-byte key gets 32 KiB | `PRD.md` | EaaS: `size` is KiB |
+| Q-32 | (the only SDK is C/C++, for key generation) | `PRD.md` | SDK |
+| Q-33 | There is no llms.txt at docs.qrypt.com (HTTP 404), and no self-service step to a token is documented: the page says to contact Qrypt. | `PRD.md` | `curl` of docs.qrypt.com/llms.txt, HTTP 404 on 2026-10-19; EaaS: tokens come from contacting Qrypt |
+| Q-34 | Qrypt sells quantum entropy as one REST endpoint. | `PRD.md` | EaaS: one endpoint, `GET /api/v1/quantum-entropy` |
+| Q-35 | Cloudflare in front of the API may refuse some HTTP clients with a 403 | `PRD.md` | `docs/audit/architecture.md`: the API answers through Cloudflare, and another Cloudflare-fronted site refused Python's default client; "may" until the live check |
 
 ## Claims about the tools the quickstart uses
 

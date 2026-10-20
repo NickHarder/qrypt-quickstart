@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 6: `PRD.md`, the onboarding PRD (2,217 words): problem from the audit's
+  evidence, personas and jobs-to-be-done, the funnel and its instrumentation shown cell for cell as
+  [the key metrics](/KEY_METRICS.md) specify them (a test keeps the two equal), scope, out of scope,
+  risks, and the tradeoff not made (no SDK this quarter, with its revisit trigger). Its claims about
+  Qrypt join `CLAIMS.md`; RQ-08 is met in [the deliverables](/DELIVERABLES.md), its targets
+  waiting for the owner.
 * **Change**: Phase 5: `CLAIMS.md`, the claims-to-source table (28 claims) with the fact-check of
   24 AI-drafted claims; every documented command run as written; browser tests in Playwright for
   keyboard, copy and 200% zoom; Lighthouse 10 runs, load p95 1,024 ms and accessibility 100. Two

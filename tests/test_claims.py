@@ -15,11 +15,14 @@ import pytest
 
 REPOSITORY_ROOT: Final = Path(__file__).resolve().parents[1]
 CLAIMS_TABLE: Final = REPOSITORY_ROOT / "CLAIMS.md"
-SITE_PAGES: Final = sorted((REPOSITORY_ROOT / "site").glob("*.html")) + sorted(
-    (REPOSITORY_ROOT / "site").glob("*.md")
-)
+# The site's pages, and PRD.md: the brief asks that AI-drafted docs and the PRD be covered too.
+SITE_PAGES: Final = [
+    *sorted((REPOSITORY_ROOT / "site").glob("*.html")),
+    *sorted((REPOSITORY_ROOT / "site").glob("*.md")),
+    REPOSITORY_ROOT / "PRD.md",
+]
 ROW_PATTERN: Final = re.compile(
-    r"^\| (?P<id>Q-\d{2}) \| (?P<quote>.+?) \| `(?P<page>site/[^`]+)` \| (?P<source>.+?) \|"
+    r"^\| (?P<id>Q-\d{2}) \| (?P<quote>.+?) \| `(?P<page>site/[^`]+|PRD\.md)` \| (?P<source>.+?) \|"
 )
 # Facts about Qrypt the site states; each one, where it appears, must be quoted by some row.
 QRYPT_FACT_MARKERS: Final = [
@@ -52,7 +55,8 @@ SUPERLATIVES: Final = [
 def page_text(page: Path) -> str:
     text = page.read_text()
     without_tags = re.sub(r"<[^>]+>", "", text) if page.suffix == ".html" else text
-    return " ".join(html.unescape(without_tags).replace("`", "").split())
+    plain_text = html.unescape(without_tags).replace("`", "").replace("**", "")
+    return " ".join(plain_text.split())
 
 
 def claim_rows() -> list[re.Match[str]]:

@@ -3,8 +3,8 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20, after Phase 5: both quickstarts work end to end against the mock; the
-site has troubleshooting, `llms.txt`, a claims table, browser tests and Lighthouse evidence.
+Last updated: 2026-10-20, after Phase 6: the quickstarts, the site, the claims table and the
+onboarding PRD are done against the mock; the live check waits on the owner's token.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -22,8 +22,9 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 | Phase 3, errors | Done: both snippets at 25 of 25 lines, one message per failure, `site/troubleshooting.html` | `tests/test_quickstart_errors.py` |
 | Phase 4, llms.txt | Done: `llms.txt` and `llms-full.txt`, built from `site/*.md` and the snippet files, linked from the quickstart | `tests/test_llms_txt.py` |
 | Phase 5, claims and quality | Done: `CLAIMS.md`, documented commands run as written, browser tests, Lighthouse (load p95 1,024 ms, accessibility 100) | `make lighthouse`, `tests/test_claims.py` |
+| Phase 6, PRD | Done, draft: `PRD.md`; its targets and its tradeoff wait for the owner's approval | `tests/test_prd.py` |
 | Eval cases AC-01 to AC-04 | Written, waiting in `evals/pending/` for their recording (a model key and the owner's yes, about $0.20 for all four) | `tests/test_agent_target.py` |
-| Next | Phase 6: the onboarding PRD (Phase 7, the live check, waits on the Qrypt token) | `docs/PLAN.md` |
+| Next | Phase 7: the live check, its code tested against the mock now and run live once the owner says the token is in | `docs/PLAN.md` |
 
 ## How to check your work
 
