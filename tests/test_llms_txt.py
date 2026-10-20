@@ -51,6 +51,10 @@ def test_both_files_state_every_rule_the_snippets_follow(built_site: Path, file_
         "Never print",
         "429",
         "403",
+        # Backlog item B-07: Gemini CLI tried to read the token file and ran both programs twice.
+        "Never open `.env`",
+        "never print the environment",
+        "Run the finished program once",
     ):
         assert rule in text, f"{file_name} does not say {rule!r}"
 
