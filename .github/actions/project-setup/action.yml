@@ -14,5 +14,10 @@ description: Installs what this project's own checks need.
 runs:
   using: composite
   steps:
+    # The virtualenv the snippet checks, the e2e run and the site builder use, from uv.lock.
+    - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
+      with:
+        enable-cache: true
+        cache-dependency-glob: uv.lock
     - shell: bash
-      run: echo "project setup - nothing to install yet (.github/actions/project-setup/action.yml)"
+      run: uv sync --frozen

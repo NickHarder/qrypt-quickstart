@@ -1,8 +1,11 @@
-"""The system under test: the one file a project replaces with its own.
+"""The system under test: the quickstart's docs, as a model acting for a developer reads them.
 
-`run_target` is what every eval case exercises. The version shipped with the kit is the smallest
-thing that goes end to end: it sends one versioned prompt and the case's input to a model and
-returns the reply. Replace its body with a call into the real system, and keep two things:
+A case that names a `document` plays the agent-readiness test in one turn (docs/PLAN.md): the
+model gets the `agent` prompt, the page rendered as a developer sees it (`site_builder`), and the
+case's prompt, and the program it writes is scored. Changing the page changes the request, so a
+change to the docs needs the case recorded again, which is the point: the eval measures the docs.
+
+A case with no `document` keeps the kit's `answer` prompt.
 
 - every model call goes through `model_client`, so the gate can replay it from a recording;
 - `prompts_used` names every prompt the answer depended on, so results carry prompt versions.
@@ -10,12 +13,29 @@ returns the reply. Replace its body with a call into the real system, and keep t
 
 from typing import Final
 
+from ..config import REPOSITORY_ROOT
 from ..prompts import load_prompt
+from ..site_builder import render_page
 from .clients import ModelClient
 from .models import CaseInput, PromptVersion, TargetOutput
 
 ANSWER_PROMPT_NAME: Final = "answer"
+AGENT_PROMPT_NAME: Final = "agent"
 REFUSAL_PREFIXES: Final = ("i don't know", "i do not know", "i can't", "i cannot")
+
+
+def agent_user_message(document: str, task_prompt: str) -> str:
+    """Return the page, rendered as a developer sees it, followed by the task.
+
+    Args:
+        document: The page's path under `site/`, from the repository's root.
+        task_prompt: The case's prompt.
+
+    Returns:
+        The user message the model is sent.
+    """
+    rendered_page = render_page((REPOSITORY_ROOT / document).read_text())
+    return f"Documentation page ({document}):\n\n{rendered_page}\n\nTask: {task_prompt}"
 
 
 async def run_target(case_input: CaseInput, model_client: ModelClient) -> TargetOutput:
@@ -28,9 +48,14 @@ async def run_target(case_input: CaseInput, model_client: ModelClient) -> Target
     Returns:
         The answer, whether it was a refusal, and the prompt versions it was produced with.
     """
-    answer_prompt = load_prompt(ANSWER_PROMPT_NAME)
+    if case_input.document is None:
+        system_prompt = load_prompt(ANSWER_PROMPT_NAME)
+        user_message = case_input.prompt
+    else:
+        system_prompt = load_prompt(AGENT_PROMPT_NAME)
+        user_message = agent_user_message(case_input.document, case_input.prompt)
     response_text = await model_client.complete(
-        system_prompt=answer_prompt.text, user_message=case_input.prompt
+        system_prompt=system_prompt.text, user_message=user_message
     )
     answer_text = response_text.strip()
     return TargetOutput(
@@ -38,7 +63,7 @@ async def run_target(case_input: CaseInput, model_client: ModelClient) -> Target
         refused=answer_text.lower().startswith(REFUSAL_PREFIXES),
         prompts_used=[
             PromptVersion(
-                name=answer_prompt.name, version=answer_prompt.version, sha256=answer_prompt.sha256
+                name=system_prompt.name, version=system_prompt.version, sha256=system_prompt.sha256
             )
         ],
     )

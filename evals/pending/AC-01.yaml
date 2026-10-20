@@ -1,0 +1,24 @@
+# The agent-readiness test in one turn: a model given only the quickstart page and the brief's
+# prompt writes the program. It waits here, outside evals/cases/, until its recording is made (a
+# paid run the owner approves): the runner refuses a case without one. It moves to
+# evals/cases/agent-contract/, in the core tier, in the change that adds its recording.
+id: AC-01
+category: agent-contract
+type: invariant
+tier: scenario
+difficulty: straightforward
+statement: >-
+  Given only the quickstart page and the brief's prompt, a model writes a program that asks for
+  size=1 with the Accept header, reads the token from QRYPT_API_KEY and does not print the key.
+failure_mode: >-
+  The model invents a Qrypt SDK, drops the Accept header, asks for size=32 as if size counted
+  bytes, hard-codes the token, or prints the key.
+input:
+  prompt: Generate an AES-256 key using Qrypt quantum entropy in a new project
+  document: site/index.html
+expect:
+  contains: ["application/json", "size=1", "QRYPT_API_KEY"]
+  must_not_contain: ["pip install qrypt", "npm install qrypt", "print(aes_key", "print(key", "size=32"]
+  min_length: 200
+guards: [UC-03]
+metrics: [DR-04]

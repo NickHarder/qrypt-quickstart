@@ -1,0 +1,63 @@
+/* The quickstart's one stylesheet: readable type, visible focus, code that reflows at 200% zoom. */
+:root {
+  --text: #1a1a1a;
+  --muted: #4a4a4a;
+  --background: #ffffff;
+  --code-background: #f3f4f6;
+  --accent: #0b5cad;
+  --warning: #8a4b00;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #ececec;
+    --muted: #c4c4c4;
+    --background: #121212;
+    --code-background: #1f2329;
+    --accent: #7ab7ff;
+    --warning: #ffc266;
+  }
+}
+
+body {
+  margin: 0 auto;
+  max-width: 46rem;
+  padding: 1.5rem 1rem 3rem;
+  font: 1.0625rem/1.6 system-ui, sans-serif;
+  color: var(--text);
+  background: var(--background);
+}
+
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -999px; }
+.skip-link:focus { position: static; }
+
+.eyebrow, footer { color: var(--muted); }
+.warning { color: var(--warning); }
+
+pre {
+  overflow-x: auto;
+  padding: 0.75rem 1rem;
+  background: var(--code-background);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+code { font: 0.9375rem/1.5 ui-monospace, monospace; }
+
+.code-block { position: relative; }
+
+.copy-button {
+  float: right;
+  margin: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  cursor: pointer;
+}

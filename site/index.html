@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Qrypt Quickstart: an AES-256 key from quantum entropy</title>
+  <meta name="description" content="Get from a Qrypt token to a working AES-256 key made from Qrypt quantum entropy.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the quickstart</a>
+  <header>
+    <p class="eyebrow">Qrypt Quantum Entropy · Quickstart</p>
+    <h1>An AES-256 key from quantum entropy</h1>
+    <p class="target"><strong>Target: your first key in under 10 minutes.</strong>
+      One run uses 1 KiB of your entropy allotment.</p>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="step-token">
+      <h2 id="step-token">1. Get a token</h2>
+      <p>Get an access token for the <strong>Entropy</strong> service from the Qrypt portal at
+        <a href="https://portal.qrypt.com">portal.qrypt.com</a>. If the portal does not let you sign
+        up, ask your Qrypt contact for a token.</p>
+      <p>Put it in a file named <code>.env</code> in the folder you will run the quickstart from:</p>
+      <pre><code class="language-text">QRYPT_API_KEY=paste-your-token-here</code></pre>
+      <p class="warning">Never commit <code>.env</code>: add it to <code>.gitignore</code>. Never
+        paste the token into a screenshot, a recording or a chat with an AI agent.</p>
+    </section>
+
+    <section aria-labelledby="step-install">
+      <h2 id="step-install">2. Install what the quickstart needs</h2>
+      <p>Python 3.10 or later, and two packages:</p>
+      <pre><code class="language-shell">pip install cryptography python-dotenv</code></pre>
+    </section>
+
+    <section aria-labelledby="step-run">
+      <h2 id="step-run">3. Run the quickstart</h2>
+      <p>Save this as <code>quickstart.py</code> next to your <code>.env</code>, then run
+        <code>python quickstart.py</code>.</p>
+      <div class="code-block">
+        <button type="button" class="copy-button" data-copy-target="python-snippet"
+          aria-label="Copy the Python quickstart">Copy</button>
+        <pre id="python-snippet"><code class="language-python"><!-- include: quickstart/python/quickstart.py --></code></pre>
+      </div>
+      <p role="status" aria-live="polite" class="copy-status"></p>
+    </section>
+
+    <section aria-labelledby="step-see">
+      <h2 id="step-see">4. What you should see</h2>
+      <pre><code class="language-text">Success: a 256-bit AES key from Qrypt quantum entropy passed AES-GCM. It was not shown.</code></pre>
+      <p>The script asks Qrypt for <code>size=1</code>. <strong><code>size</code> counts KiB
+        (1,024-byte blocks), not bytes</strong>: <code>size=1</code> returns 1,024 bytes, and an
+        AES-256 key needs 32 of them. It decodes the base64 block, takes bytes 0 to 31 as the key and
+        bytes 32 to 43 as the AES-GCM nonce, encrypts and decrypts a sample, and prints the result.
+        The key stays in memory: it is never printed, logged or saved.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>The API is documented at <a href="https://docs.qrypt.com/eaas/">docs.qrypt.com/eaas</a>.
+      This site sets no cookies and collects no data.</p>
+  </footer>
+  <script src="copy.js" defer></script>
+</body>
+</html>

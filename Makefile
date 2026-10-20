@@ -131,6 +131,11 @@ kit-update:
 		copier update --skip-answered --defaults; \
 	fi
 
+.PHONY: e2e
+# The tracer bullet end to end: the mock, the quickstart, its line count, the site (scripts/e2e.sh).
+e2e:
+	@scripts/e2e.sh
+
 .PHONY: evals evals-baseline prompt-manifest
 EVALS_BIN := $(SERVICE_DIR)/.venv/bin/$(EVALS_COMMAND)
 

@@ -20,6 +20,8 @@ dev = [
   "pytest>=8.3",
   "pytest-asyncio>=0.24",
   "types-PyYAML",
+  "cryptography>=50.0.2",
+  "python-dotenv>=1.2.4",
 ]
 
 [build-system]
@@ -66,7 +68,11 @@ ignore = [
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "D", "ANN", "PLR"]
+# S106, S310, S603: tests pass mock tokens to a local mock server and run the snippet with this Python.
+"tests/**" = ["S101", "D", "ANN", "PLR", "S106", "S310", "S603"]
+# The quickstart is a command-line script a developer copies: it prints its result (T201), and its
+# URL is Qrypt's https endpoint or, for tests, the local mock the developer chose (S310).
+"quickstart/**" = ["T201", "S310"]
 "src/qrypt_quickstart/evals/runner.py" = ["T20"]   # a command-line tool: it prints
 
 [tool.ruff.format]
@@ -78,7 +84,7 @@ strict = true
 warn_unreachable = true
 enable_error_code = ["ignore-without-code"]
 plugins = ["pydantic.mypy"]
-files = ["src", "tests"]
+files = ["src", "tests", "quickstart"]
 
 [tool.pydantic-mypy]
 init_forbid_extra = true

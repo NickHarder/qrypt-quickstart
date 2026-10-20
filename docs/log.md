@@ -5,6 +5,11 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: Phase 1, the tracer bullet: the Python quickstart, the mock, the site builder, the
+  e2e run and CI on every push, because the plan names it first. The builder moved from TypeScript
+  to Python (DV-05 in [the architecture](/ARCHITECTURE.md)); the snippet's exceptions to the Python
+  rules are in [the rule](/rules/python-conventions.md); the first eval case waits in
+  `evals/pending/` for its recording ([the evals guide](/guides/evals.md)).
 * **Creation**: [the key metrics](/KEY_METRICS.md), Gate 4, as a draft for the owner, on the
   owner's go, with seven metrics under `metrics/`: the north star is the brief's activation
   ([NS-01](/metrics/NS-01.md), stage 3); landing, token created and first key are drivers, with the

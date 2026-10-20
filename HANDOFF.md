@@ -3,8 +3,8 @@
 If you are picking this work up, human or model: read this file top to bottom first. The `handoff` skill
 refreshes it; it describes the current state.
 
-Last updated: 2026-10-20 00:15 UTC, after kickoff: `docs/PLAN.md`, `docs/DELIVERABLES.md` and the
-adjusted `docs/METHOD.md` are written, as drafts for the owner's approval.
+Last updated: 2026-10-20, after Phase 1 (the tracer bullet): the Python quickstart runs end to end
+against the mock, the site builds from it, and CI runs on every push.
 
 This is the Qrypt Developer Quickstart & Onboarding Funnel take-home (Product Manager role), due
 before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start with `docs/PLAN.md`.
@@ -15,9 +15,11 @@ before the interview on Wednesday 2026-10-21 at 13:30 CDT (18:30 UTC). Start wit
 |---|---|---|
 | Scaffold | Created from the kit | `.copier-answers.yml` |
 | The brief | Filed as concepts in `docs/brief/`: the portal brief, the assessment's full text, the partner notes, the AI research blueprint, the five design screenshots, and a review of where the research disagrees with the brief | `docs/brief/guide.md` |
-| Gate | Green on 2026-10-19 (lint, tests, evals, secrets) | `make gate` |
-| Plan | Written: a tracer bullet and ten slices, with the owner's decisions of 2026-10-19 | `docs/PLAN.md`, `docs/DELIVERABLES.md` |
-| Product code | None yet; Gates 1–4 (audit, personas, architecture, key metrics) come next | `make blockers` |
+| Gate | Green (6 lint checks, 3 test checks with `e2e`, evals, secrets) | `make gate` |
+| Plan and gates 1–4 | Drafts, all pushed, none approved yet: plan, audit, personas, architecture, key metrics | `docs/PLAN.md`, `make docs-status` |
+| Phase 1, tracer bullet | Done: `quickstart/python/quickstart.py` (19 of 25 lines), the mock, the site builder, CI on push with the site as an artifact | `make e2e` |
+| Eval case AC-01 | Written, waiting in `evals/pending/` for its recording (a model key and the owner's yes, about $0.05) | `tests/test_agent_target.py` |
+| Next | Phase 2: the Node quickstart and the language tabs | `docs/PLAN.md` |
 
 ## How to check your work
 
@@ -35,6 +37,8 @@ In `AGENTS.md`, this project's own included: every session reads that file.
 - Read and approve `docs/PLAN.md` (`make docs-approve DOC=docs/PLAN.md`, when you say so).
 - Get a Qrypt token: ask the program contact for an assessment token. It goes in `.env` as
   `QRYPT_API_KEY`, never committed. The plan's fallback starts if none comes by 2026-10-20 18:00 CDT.
+- Record AC-01: approve installing the `anthropic` SDK for the eval's model client, put a model key
+  in the root env file as `QRYPT_QUICKSTART_MODEL_API_KEY`, and approve the run, about $0.05.
 - Every other point where the plan needs you: `make blockers` lists its `**You act:**` lines.
 
 ## Where everything is

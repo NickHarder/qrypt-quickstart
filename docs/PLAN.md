@@ -4,7 +4,7 @@ title: "Plan: Qrypt quickstart, onboarding PRD and agent-readiness test"
 description: How the Qrypt Developer Quickstart take-home gets built by 2026-10-21 13:30 CDT, as a tracer bullet and ten vertical slices, with the owner's decisions, the live-entropy budget and the points where the owner acts.
 tags: [plan, brief]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:05:00Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:10Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -74,9 +74,10 @@ at 12:00 CDT (17:00 UTC). The plan starts on Monday 2026-10-19 at 19:00 CDT (00:
   the metrics. Reverse by moving them under `docs/` and linking from the README.
 - **Where the code lives.** The snippets a developer copies are single files:
   `quickstart/python/quickstart.py`, `quickstart/node/quickstart.mjs` and the Rust crate's
-  `rust/src/main.rs`. The mock server is Python, in the package (`src/qrypt_quickstart/`). The site
-  builder is TypeScript in `web/`, and the site's pages are Markdown in `site/`, listed outside the
-  bundle with the builder as their reader. Evidence (CSV logs, Lighthouse reports, transcripts)
+  `rust/src/main.rs`. The mock server and the site builder are Python, in the package
+  (`src/qrypt_quickstart/`); the site's pages are HTML with include lines, in `site/`. The builder
+  was planned in TypeScript; the tracer bullet moved it (deviation DV-05 in
+  `docs/ARCHITECTURE.md`). Evidence (CSV logs, Lighthouse reports, transcripts)
   goes in `evidence/`.
 - **One source for each snippet.** The site, `llms.txt` and the tests all read the same snippet
   file, so the page cannot show code that CI did not run.
@@ -188,8 +189,8 @@ site built and uploaded as a CI artifact).
     prompt writes a program that sends `size=1` and both headers, reads the token from the
     environment and does not print the key.
 - **Files:** `quickstart/python/quickstart.py`, `src/qrypt_quickstart/mock_server.py`,
-  `site/index.md` (the get-a-token-to-first-key path with the Python block and its copy button),
-  `web/src/build-site.ts`, `.github/workflows/ci.yml` (the push trigger, a job running the snippets
+  `site/index.html` (the get-a-token-to-first-key path with the Python block and its copy button),
+  `src/qrypt_quickstart/site_builder.py`, `.github/workflows/ci.yml` (the push trigger, a job running the snippets
   against the mock, a job building the site and uploading it), `scripts/checks.conf`
   (`snippet-lines`, `e2e`), `pyproject.toml` (`cryptography`, `python-dotenv`),
   `docs/references/outside-the-bundle.md` (`quickstart/`, `site/`, `evidence/`).
@@ -209,8 +210,8 @@ Tuesday 2026-10-20, 10:00 to 11:30 CDT.
   Phase 1 against the mock; the line count; a Playwright test that the tabs switch with the arrow
   keys and that each copy button has an accessible label and copies its block. An eval case: asked
   for a Node program, the model uses built-in `fetch` and `crypto` and installs no Qrypt package.
-- **Files:** `quickstart/node/quickstart.mjs`, `site/index.md`, `web/src/build-site.ts` (tabs,
-  copy buttons), `web/tsconfig.json` (`checkJs` over the snippet).
+- **Files:** `quickstart/node/quickstart.mjs`, `site/index.html`, `site/copy.js` (tabs, copy
+  buttons), `web/tsconfig.json` (`checkJs` over the snippet).
 - **Verify:** `make e2e`, `make gate`.
 - **Effort:** 1.5 hours. **Cost:** about $0.05.
 

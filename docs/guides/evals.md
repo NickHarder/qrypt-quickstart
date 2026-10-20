@@ -4,7 +4,7 @@ title: The eval suite
 description: How to run the eval suite, what each file in evals/ is, and how a case is added, recorded and changed.
 tags: [evals]
 status: stable
-generated: { by: ai-kit/v0.21.1 }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:22Z }
 ---
 
 # Evals
@@ -24,6 +24,7 @@ make evals TIER=all        # every case, not only the core tier
 |---|---|
 | `cases/<category>/<id>.yaml` | One case each. The `write-evals` skill has the schema and the rules. |
 | `cassettes/<id>.json` | The recorded model exchanges for a case. |
+| `pending/<id>.yaml` | A case written before its recording. The runner refuses a case with no recording, so it waits here and moves to `cases/` in the change that records it (a paid run the owner approves). |
 | `thresholds.yaml` | What the gate requires, and the model id the recordings were made with. |
 | `baseline.json` | What each case did on the last green run. |
 | `prompt_manifest.json` | Each prompt's version and content hash. |

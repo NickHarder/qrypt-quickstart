@@ -4,7 +4,7 @@ title: Python conventions
 description: How names, single assignment, types, documentation, data at the boundaries, errors and suppressions are written and checked in this project's Python.
 tags: [python, conventions]
 status: stable
-generated: { by: ai-kit/v0.21.1 }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:22Z }
 ---
 # Python conventions
 
@@ -76,3 +76,17 @@ rest is how code is written here.
 - Fix a finding rather than silence it. A suppression names its rule and gives its reason on the same
   line: `# noqa: S608  the table name comes from an enum`, `# type: ignore[arg-type]  # <why>`,
   `# ai-kit: ignore-assign  <why>`.
+
+## The quickstart snippets
+
+`quickstart/python/quickstart.py` is a file a developer copies and runs, held to the brief's 25
+lines excluding comments and imports (`make check C=snippet-lines`). It follows the rules above,
+which `make gate` checks on it too (`python-rules-quickstart`, ruff, mypy), with these exceptions,
+each because the limit or the reader requires it (docs/PLAN.md, review item C10):
+
+- It is a script, not a module of functions: a reader follows it top to bottom, so it has a module
+  docstring and no function docstrings.
+- It prints its result (ruff `T201`) and opens a URL the developer chose (`S310`), both allowed in
+  `pyproject.toml` for `quickstart/**` only.
+- It parses Qrypt's answer with `json`, not a Pydantic model: one more dependency and a model class
+  would cost lines the limit does not have.

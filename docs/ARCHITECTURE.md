@@ -4,7 +4,7 @@ title: "Architecture: snippets, mock, site builder, agent harness and CI"
 description: How the Qrypt quickstart is built from five small parts, where the token and the key may and may not go, what each dependency's failure looks like to the user, and the tracer bullet that proves the design first.
 tags: [architecture, gate]
 status: draft
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
+generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:53:10Z }
 sources:
   - id: audit
     resource: /AUDIT.md
@@ -175,6 +175,7 @@ follow the same steps with `fetch` and `node:crypto`, and with `ureq` and `doten
 | DV-01 | "Deployed quickstart site ... deployed URL loads" (RQ-05)[^assessment] | The owner locked building on private GitHub with the site as a CI artifact, moving to GitLab Pages at the very end ([the plan](PLAN.md), "Decisions locked with the owner") | Every push builds the site and uploads it; the owner deploys after the move, and the deliverable waits on that step |
 | DV-02 | "No tokens visible in ... agent-run logs"[^assessment] | The agent's program must read the token from `.env` in its container, so the agent can read it too, and what it reads goes to the model provider (SEC-01); a bare token passes gitleaks (SEC-02, its reproduction)[^audit] | Committed transcripts are scrubbed by exact value, with a planted-token test; the containers use a token the owner revokes after Phase 8; an exposed run is logged as `token-exposed`. The provider-side exposure is bounded by revocation, not prevented |
 | DV-03 | The audit's ARCH-02 mitigation: "Phase 7 sends one request with Python's default client" | A probe with the real token and `size=1` would take Phase 7 from 12 KiB to 13 ([the plan](PLAN.md), Phase 7's budget); the edge answers before the API reads the token, so a bad-token request shows the same refusal | The probe is a bad-token request with Python's default client, 0 KiB, beside the planned bad-token request with the named `User-Agent`; Phase 7 stays at 12 KiB |
+| DV-05 | The plan's site builder: `web/src/build-site.ts`, rendering `site/*.md` | The tracer bullet showed the eval target needs the same rendering as the site, and the target is Python (`src/qrypt_quickstart/evals/target.py`); a Markdown renderer would be one more install | `src/qrypt_quickstart/site_builder.py`, one function for the site and the eval; pages are HTML with include lines. `web/` keeps the Node snippet's tests and the browser checks (Phases 2 and 5) |
 | DV-04 | The agent test runs the quickstart against Qrypt, in a fresh environment[^assessment] | There is no Qrypt token yet ([the handoff](../HANDOFF.md), "Open, for the owner") | If none comes by 2026-10-20 18:00 CDT, both rounds run against the mock with its URL given to the agent, and `AGENT_READINESS.md` and the PRD say so (the plan's cut order, item 7) |
 
 # 8. Traceability matrix
@@ -262,8 +263,10 @@ a 429 and a 503 on demand.
 
 ### The site builder reads the snippet files
 
-**Claim:** `web/src/build-site.ts` renders `site/*.md` and inserts each snippet's file where its block
-goes, writing the site, `llms.txt` and `llms-full.txt`.
+**Claim:** `src/qrypt_quickstart/site_builder.py` renders `site/*.html` and replaces each include
+line with the escaped text of the snippet file it names, writing the site (and, from Phase 4,
+`llms.txt` and `llms-full.txt`). The eval target renders a page with the same function, so a model
+is shown the page a developer sees. It was planned in TypeScript; DV-05 says why it is Python.
 **Evidence:** the plan's "one source for each snippet"; RQ-07 asks that every documented command
 runs as written.[^plan] [^deliverables]
 **Alternative considered:** a static-site generator with the snippets pasted into its pages.
@@ -314,7 +317,7 @@ says so;[^ci] the brief asks for the snippets against a mock "on every push" (AR
 | Decision ([the plan](PLAN.md)) | Its evidence | What it fixes here |
 |---|---|---|
 | Private repository | `docs/brief/` holds the partner's brief ([the handoff](../HANDOFF.md)) | The site is built from `site/` only (CMP-01) |
-| Python at the root, Node in `web/`, Rust in `rust/` as the stretch | The owner, 2026-10-19 | Three snippets, one mock, one builder in TypeScript |
+| Python at the root, Node in `web/`, Rust in `rust/` as the stretch | The owner, 2026-10-19 | Three snippets, one mock, one builder (in Python: DV-05) |
 | Evals, demo video, semgrep, GitHub Actions | The owner, 2026-10-19 | Eval cases replayed in the gate; CI on Actions |
 | Build on private GitHub; GitLab Pages at the end | The owner's words, quoted in the plan | DV-01 |
 | Claude Code in a fresh container per run, only `.env` seeded, transcripts scrubbed | The owner's choice, quoted in the plan | The agent harness, and the SEC-01 decision |
