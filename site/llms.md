@@ -8,7 +8,7 @@
 - Endpoint: `GET https://api-eus.qrypt.com/api/v1/quantum-entropy?size=1`
 - Headers, both required: `Accept: application/json` and `Authorization: Bearer <QRYPT_API_KEY>`.
 - `size` counts KiB (1,024-byte blocks), from 1 to 512, not bytes. Send `size=1`: it returns 1,024 bytes, and one key needs 32.
-- Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at portal.qrypt.com and put `QRYPT_API_KEY=<token>` in `.env`.
+- Token: read `QRYPT_API_KEY` from a `.env` file in the project folder, or from the environment. Never hard-code, print or commit it; add `.env` to `.gitignore`. If it is missing, stop and tell the user to get an Entropy token at https://portal.qrypt.com/register?ref=quickstart and put `QRYPT_API_KEY=<token>` in `.env`.
 - Answer: `{"random": ["<base64 of 1,024 bytes>"], "size": 1}`. Base64-decode `random[0]` first; then bytes 0-31 are the AES-256 key and bytes 32-43 the AES-GCM nonce. Never reuse entropy bytes for two purposes.
 - Never print, log or write the key to disk. Prove it works by encrypting and decrypting a sample string with AES-GCM, and print only a success line.
 - Errors: make one request and stop; never retry in a loop. 429 means more than 30 requests in 10 seconds: wait 10 seconds. 403 means the account's entropy allotment is used up: waiting does not help. 401 means the token is invalid or expired. 500 and 503: try again shortly.

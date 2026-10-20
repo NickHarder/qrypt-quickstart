@@ -5,6 +5,12 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-20
+* **Change**: the quickstart page's "get a token" link and the agent docs now send a newcomer to
+  the sign-up page the brief names, tagged as the PRD's attribution needs:
+  `https://portal.qrypt.com/register?ref=quickstart`. It was the portal's front page, untagged,
+  so funnel stage 1 could not have been measured as the PRD specifies. The 401 fix keeps the
+  portal link, since that reader has an account. A test holds the links, the PRD and the claims
+  table together; the demo's site take was recorded again.
 * **Change**: Qrypt is said "crypt", as the owner said. The demo's voice settings take a
   `pronunciations` map (`demo/brand.json`, `{"Qrypt": "Crypt"}`): the text sent to the voice is
   respelled, whole words only, and the captions and screens keep the name as written. A change of
