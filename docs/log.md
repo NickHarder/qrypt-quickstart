@@ -4,6 +4,12 @@ What changed in this project and why, newest first. A commit shows the differenc
 gives the reason. The `handoff` skill adds to it at every checkpoint, and the `write-okf-concept`
 skill has the format.
 
+## 2026-10-21
+* **Change**: the owner's Partner Copilot notes (`docs/brief/partner-notes.md`) removed, on the
+  owner's word, now that the GitHub repository is public; a stub of the same name keeps every link
+  that cites them. The rest of `docs/brief/` stays public by the owner's choice. The notes remain
+  in the repository's history until that is rewritten, which is the owner's call.
+
 ## 2026-10-20
 * **Change**: CI's three red jobs on the pull request, each a check the offline gate does not run.
   `rust`: RUSTSEC-2026-0382, published today, in `rustls-webpki` 0.103.15; the lock now takes

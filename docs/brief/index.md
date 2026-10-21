@@ -1,6 +1,6 @@
 # Brief
 
-* [Partner notes on Qrypt](partner-notes.md) - The owner's Partner Copilot deep dive on Qrypt, covering the four briefs, the quickstart's real friction, the owner's fit and Qrypt's stack.
+* [Partner notes on Qrypt](partner-notes.md) - Removed from the repository at the owner's request; the owner holds the full text.
 * [Research blueprint for the quickstart](research-blueprint.md) - The owner's AI-drafted deep-research report on the task, the pedagogy for humans and agents, and an eight-block build plan, kept as given and not yet fact-checked.
 * [The assessment's full text](assessment-text.md) - The full text of pm_developer_quickstart_onboarding.md, attached to the brief, with its requirements, edge cases, benchmarks, rubric.
 * [The five design screenshots](screenshots.md) - What each of the owner's five design screenshots shows (the entropy-to-key pipeline, Diátaxis quadrants, agent failure taxonomy, funnel dashboard, RICE roadmap), transcribed and cited.
