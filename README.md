@@ -38,7 +38,7 @@ these four commands took 18.1 s against the mock ([`evidence/grader_quickstart.m
 | The brief asks for | Here |
 |---|---|
 | Quickstart code in two languages, at most 25 lines each | [`quickstart/python/quickstart.py`](quickstart/python/quickstart.py), [`quickstart/node/quickstart.mjs`](quickstart/node/quickstart.mjs); a third, Rust (stretch): [`rust/src/main.rs`](rust/src/main.rs) |
-| The quickstart site, with troubleshooting | [`site/`](site/index.html), built by `make e2e` into `build/site/`; [`site/troubleshooting.html`](site/troubleshooting.html) |
+| The quickstart site, with troubleshooting | Live at <https://nickharder.github.io/qrypt-quickstart/>; its source is [`site/`](site/index.html), built by `make e2e` into `build/site/`, with [`site/troubleshooting.html`](site/troubleshooting.html) |
 | Agent-readable docs | [`site/llms.md`](site/llms.md) and [`site/llms-full.md`](site/llms-full.md), built into `llms.txt` and `llms-full.txt` |
 | The onboarding PRD | [`PRD.md`](PRD.md) |
 | The claims-to-source table, with the fact-check of AI-drafted claims | [`CLAIMS.md`](CLAIMS.md) |

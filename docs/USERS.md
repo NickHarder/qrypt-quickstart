@@ -4,7 +4,7 @@ title: "Users: who the Qrypt quickstart serves, and when"
 description: The developer new to Qrypt, the AI coding agent acting for them, the internal stakeholders and the grader, with the users the quickstart refuses, the moments it serves and the use cases that trace to the audit and the deliverables.
 tags: [users, gate]
 status: stable
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:30:43Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-21T00:46:22Z }
 sources:
   - id: assessment
     resource: /brief/assessment-text.md
@@ -120,7 +120,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Field | Answer |
 |---|---|
 | Name and role | An internal engineering lead at Qrypt who builds the activation funnel's instrumentation from the PRD's metrics section "without asking you a question"[^assessment] |
-| The account they sign in with | Access to the submitted repository (GitHub now, GitLab at the end).[^plan] Their Qrypt-internal accounts (analytics, the API's logs): **open for the owner** |
+| The account they sign in with | Access to the submitted repository (GitHub).[^plan] Their Qrypt-internal accounts (analytics, the API's logs): **open for the owner** |
 | Setting | **Open for the owner** (team size, who else instruments). The partner notes describe Qrypt's stack as Rust first, AWS with Terraform[^partner-notes] |
 | Volume | One PRD, five funnel stages[^assessment] |
 | A full day, by the clock | **Open for the owner.** The brief says only that they are busy and read the PRD in 10 minutes[^assessment] |
@@ -366,7 +366,7 @@ Its need is the same funnel definition P-03 reads (UC-04). A persona of its own 
 | Show my usage against the allotment | Qrypt publishes no usage meter (CMP-03); the site cannot read an account[^audit] |
 | Try the call in the browser | It would put the token in a web page, against the `.env`-only rule[^assessment] |
 | A unit calculator for `size` | A sentence beside every `size` does it (RQ-14); a tool would not beat the sentence[^deliverables] |
-| A funnel dashboard for P-03 | Analytics (RQ-40) is not built: no deployed site to observe until the move to GitLab[^plan] |
+| A funnel dashboard for P-03 | Analytics (RQ-40) is not built: not built before the deadline; the site is deployed, so it could be added[^plan] |
 | A sales pitch page | No committed document says what sales needs beyond the funnel's definition, which UC-04 serves |
 | Seed an HSM or the kernel (`qseed`, rng-tools) | Out of the brief's first-run scope; the plan does not use them[^plan] |
 

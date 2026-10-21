@@ -5,6 +5,13 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-21
+* **Change**: no GitLab, on the owner's word: the repository and the site stay on GitHub, and
+  `main` is the only branch (the owner deleted the others). `scripts/mirror_to_gitlab.sh` and its
+  test are removed, and the handoff, the deploy decision, the architecture's DV-06, the compliance
+  audit's mitigation, the personas, the deliverables, the AI usage note, the agent report and the
+  README describe it as it is. The site is live at `https://nickharder.github.io/qrypt-quickstart/`
+  (deployed from `cf17b84`, smoke test passing; HTTP 200 for the page and `llms.txt` logged out),
+  so RQ-05, RQ-32 and RQ-33 are met. The plan keeps its original decisions as their record.
 * **Change**: the owner's Partner Copilot notes (`docs/brief/partner-notes.md`) removed, on the
   owner's word, now that the GitHub repository is public; a stub of the same name keeps every link
   that cites them. The rest of `docs/brief/` stays public by the owner's choice. The notes remain

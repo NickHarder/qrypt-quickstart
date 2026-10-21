@@ -179,5 +179,5 @@ because of the harness, not the agent:
 - **Every agent.** Claude Code (two models) and Gemini CLI ran; Cursor, Copilot and Codex did not,
   and the harness takes any agent's command with `--agent-command`. Gemini's runs are against the
   mock only.
-- **The site as a URL.** The agent got the Markdown, which the brief allows; the URL comes once
-  the site is deployed.
+- **The site as a URL.** The agent got the Markdown, which the brief allows; the site is now at
+  `https://nickharder.github.io/qrypt-quickstart/`, and no round has run from the URL.
