@@ -4,7 +4,7 @@ title: Deliverables of the Qrypt quickstart take-home
 description: Every requirement of the assessment, with its id, where in the brief it is stated, the phase of the plan that meets it and the command or file that will prove it.
 tags: [brief, requirements, plan]
 status: stable
-generated: { by: claude-code/2.1.304, at: 2026-10-21T00:46:22Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-21T00:55:33Z }
 sources:
   - id: assessment
     resource: brief/assessment-text.md
@@ -91,7 +91,7 @@ other files of the brief disagree with it.[^assessment] "Where" names a phase of
 | RQ-34 | `PRD.md`, `AGENT_READINESS.md` (both rounds), `BACKLOG.md`, the claims-to-source table | Submission | Met | Phases 5, 6, 8, 9 | The four files at the repository's root: `PRD.md`, `AGENT_READINESS.md` (round 1, round 2, round 2-live), `BACKLOG.md` with `BACKLOG.csv`, `CLAIMS.md` |
 | RQ-35 | Grader quick-start: set a token, run each snippet, see the success line in under 5 minutes | Submission | Not yet | Phase 11 | A timed run from a fresh clone, logged in `evidence/grader_quickstart.md`: 18.1 s against the mock, each README command as written (`tests/test_grader_run.py`); the run against Qrypt waits on the token |
 | RQ-36 | A one-line description of at most 120 characters | Submission | Met | Phase 11 | The line under the README's title, 120 characters; `tests/test_readme_and_ai_usage.py` caps it at 120 |
-| RQ-37 | A demo video of at most 5 minutes: a fresh run, one troubleshooting path, the PRD's funnel, one agent-readiness run | Submission | Owner to do | Phase 11 | The `generate-demo` skill, which the owner calls |
+| RQ-37 | A demo video of at most 5 minutes: a fresh run, one troubleshooting path, the PRD's funnel, one agent-readiness run | Submission | Met | Phase 11 | `https://nickharder.github.io/qrypt-quickstart/demo.mp4`, 121.9 s: a fresh run, a troubleshooting path (the live 403), the PRD's funnel and an agent-readiness round against Qrypt; made with the `generate-demo` skill from `demo/storyboard.json`, every scene approved by the owner |
 
 # Stretch
 

@@ -116,3 +116,11 @@ def test_the_built_page_shows_exactly_the_rust_snippet_ci_runs(tmp_path: Path) -
     page = (tmp_path / "index.html").read_text()
     code_blocks = [html.unescape(match["code"]) for match in RUST_BLOCK_PATTERN.finditer(page)]
     assert code_blocks == [RUST_SNIPPET.read_text()]
+
+
+def test_the_demo_video_is_published_with_the_site(tmp_path: Path) -> None:
+    # The owner links the demo straight from the site, which serves it as a video that plays.
+    build_site(output_directory=tmp_path)
+    published_video = tmp_path / "demo.mp4"
+    assert published_video.is_file()
+    assert published_video.read_bytes() == (REPOSITORY_ROOT / "site" / "demo.mp4").read_bytes()

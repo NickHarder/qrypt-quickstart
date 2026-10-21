@@ -5,6 +5,10 @@ gives the reason. The `handoff` skill adds to it at every checkpoint, and the `w
 skill has the format.
 
 ## 2026-10-21
+* **Change**: the demo video ships with the site, on the owner's word, so its link plays in a
+  browser: `site/demo.mp4` (121.9 s, H.264 and AAC, captions in the file), copied by the site
+  builder with the other static files and served at
+  `https://nickharder.github.io/qrypt-quickstart/demo.mp4`. The README links it, and RQ-37 is met.
 * **Change**: no GitLab, on the owner's word: the repository and the site stay on GitHub, and
   `main` is the only branch (the owner deleted the others). `scripts/mirror_to_gitlab.sh` and its
   test are removed, and the handoff, the deploy decision, the architecture's DV-06, the compliance
