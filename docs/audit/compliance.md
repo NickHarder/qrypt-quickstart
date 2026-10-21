@@ -4,7 +4,7 @@ title: "Audit area: compliance"
 description: What has to stay private, what reaches a model provider, how long agent transcripts are kept, and what the project can log of its own Qrypt usage when Qrypt publishes no meter.
 tags: [audit, compliance]
 status: stable
-generated: { by: claude-code/claude-opus-5-5, at: 2026-10-20T00:20:00Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-21T00:46:22Z }
 sources:
   - id: qrypt-eaas
     resource: https://docs.qrypt.com/eaas/
@@ -49,8 +49,9 @@ Qrypt token. The probes:
   Copilot asked that they stay out of a public repository. A site builder that globs Markdown
   widely, or a public copy made in a hurry at the deadline, publishes them.
 - **Mitigation:** the site builder reads `site/` only, and a Phase 1 test checks that the built site
-  holds no file from `docs/`; the move to GitLab (Phase 11) keeps the repository private, as the
-  owner decided.
+  holds no file from `docs/`. Since 2026-10-21 the repository is public on GitHub, by the owner's
+  choice, and the notes are a stub in it; they remain in its history until the owner has that
+  rewritten.
 
 ### [CMP-02] A committed transcript is kept for good
 - **Severity:** medium

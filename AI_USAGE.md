@@ -68,7 +68,7 @@ the site and the PRD make about Qrypt and its source.
   ```
 
 - **Prompt**, the brief's word for word, then one line naming the quickstart's Markdown (the brief
-  allows "the quickstart URL (or its Markdown)"; the site is not deployed until the move to GitLab):
+  allows "the quickstart URL (or its Markdown)"; the rounds ran before the site was deployed):
 
   ```text
   Generate an AES-256 key using Qrypt quantum entropy in a new project

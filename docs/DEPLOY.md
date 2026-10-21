@@ -4,13 +4,14 @@ title: Deploying the site to GitHub Pages
 description: How the quickstart site reaches its public URL, through CI and the owner's approval, and how to undo it.
 tags: [deploy, decision]
 status: draft
-generated: { by: claude-code/2.1.304, at: 2026-10-20T23:10:00Z }
+generated: { by: claude-code/2.1.304, at: 2026-10-21T00:46:22Z }
 ---
 # Deploying the site to GitHub Pages
 
 The site is the static files the site builder writes to `build/site` (`index.html`,
 `troubleshooting.html`, `llms.txt`, `llms-full.txt`, a stylesheet and the copy script). It holds
-nothing from `docs/`, so the repository can stay private while the site is public.
+nothing from `docs/`. The repository is public as well, by the owner's choice of 2026-10-21, and
+`main` is its only branch.
 
 **Claim:** the site deploys to GitHub Pages from `.github/workflows/deploy.yml`, which takes the
 site CI built and tested on `main` (CI's `quickstart-site` artifact, from that run) and deploys it
@@ -44,11 +45,9 @@ Run the `Deploy` workflow again on the previous good commit: in Actions, open th
 commit on `main` and re-run it, and the deploy follows it. To take the site down, set the Pages
 source to none in the repository's settings.
 
-## What the owner does
+## State
 
-- Turn Pages on with GitHub Actions as its source (Settings, Pages). A private repository needs a
-  paid GitHub plan for this; on the free plan the setting asks to make the repository public, and
-  then only a repository holding the `public` branch may be made public, never this one.
-- Protect the `github-pages` environment with themselves as required reviewer (Settings,
-  Environments).
-- Merge the work into `main`, and approve the first deploy in CI.
+Live at `https://nickharder.github.io/qrypt-quickstart/` since 2026-10-20. Pages is on with GitHub
+Actions as its source; the first deploy was `2529a0a` and the latest `cf17b84`, each with its smoke
+test passing. A merge into `main` is a deploy. The `github-pages` environment's required reviewer is
+the owner's setting in Settings, Environments.
