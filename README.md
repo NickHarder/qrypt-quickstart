@@ -45,6 +45,7 @@ these four commands took 18.1 s against the mock ([`evidence/grader_quickstart.m
 | The agent-readiness test, both rounds | [`AGENT_READINESS.md`](AGENT_READINESS.md) (5 of 5 in round 1, then 5 of 5 on the revised docs against the mock and again against Qrypt) and `evidence/agent_runs.csv`; the harness is [`src/qrypt_quickstart/agent_harness.py`](src/qrypt_quickstart/agent_harness.py) |
 | The prioritized backlog | [`BACKLOG.md`](BACKLOG.md), ten RICE-scored items with their evidence; the sheet is `BACKLOG.csv` |
 | AI usage | [`AI_USAGE.md`](AI_USAGE.md) |
+| The demo video | <https://nickharder.github.io/qrypt-quickstart/demo.mp4>, 2 minutes with captions; its storyboard is [`demo/storyboard.json`](demo/storyboard.json) |
 | Competitive teardown (stretch) | [`evidence/teardown.md`](evidence/teardown.md): RANDOM.ORG's API against the same funnel |
 | Timed grader run | [`evidence/grader_quickstart.md`](evidence/grader_quickstart.md) |
 | Lighthouse report | [`evidence/lighthouse/`](evidence/lighthouse/summary.json): load p95 1,024 ms on mobile, accessibility 100 |

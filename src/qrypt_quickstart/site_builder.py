@@ -26,7 +26,8 @@ SITE_DIRECTORY_NAME: Final = "site"
 # The snippets live in quickstart/, but the Rust quickstart is its crate's program, in rust/src/.
 INCLUDABLE_DIRECTORY_NAMES: Final = ("quickstart", "rust/src")
 INCLUDE_PATTERN: Final = re.compile(r"<!-- include: (?P<path>[^ ]+) -->")
-STATIC_SUFFIXES: Final = frozenset({".css", ".js", ".txt"})
+# The demo video ships with the site, so its link plays in a browser (README, "The demo").
+STATIC_SUFFIXES: Final = frozenset({".css", ".js", ".txt", ".mp4"})
 
 
 class SiteBuildError(Exception):
